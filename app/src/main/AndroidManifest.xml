@@ -17,7 +17,7 @@
         <!-- API key to have granted access to use google map service-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBZ0l09dSImjD_vZ2qkOn85_jE2WLzMA2E" />
+            android:value="AI...A2E" />
 
         <activity android:name=".HeatMapActivity">
             <intent-filter>
