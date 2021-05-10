@@ -18,6 +18,8 @@ import com.geotracer.geotracer.db.DatabaseConsolidator;
 import com.geotracer.geotracer.db.local.KeyValueManagement;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.geotracer.geotracer.utils.generics.RetStatus;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -63,11 +65,17 @@ public class NotificationSender extends Service {
                                         @Override
                                         public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value,
                                                             @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
-                                            assert value != null;
-                                            //  on receiving a not null update from database
-                                            value.getDocuments().forEach(s -> logger.info("notification: " + s.toString()));
 
-                                            logger.info("listeners!!");
+                                            assert value != null;
+                                            if(value.getMetadata().isFromCache()) return;
+
+                                            for (DocumentChange dc : value.getDocumentChanges())
+                                                if( dc.getType() == DocumentChange.Type.ADDED &&
+                                                        keyValueStore.beaconPresent(
+                                                                (String)dc.getDocument().getData().get("signature")) == OpStatus.PRESENT){
+                                                    infectionReaction();
+                                                    break;
+                                                }
                                         }
                                     })
                             );
@@ -147,12 +155,14 @@ public class NotificationSender extends Service {
             @Override
             public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value,
                                 @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
+
                 assert value != null;
-                logger.info("listeners!!");
-                //  on receiving a not null update from database
-                value.getDocuments().forEach(s -> logger.info("notification: " + s.toString()));
-
-
+                if(value.getMetadata().isFromCache()) return;
+                for (DocumentChange dc : value.getDocumentChanges())
+                    if( dc.getType() == DocumentChange.Type.ADDED && keyValueStore.beaconPresent( (String)dc.getDocument().getData().get("signature")) == OpStatus.PRESENT){
+                        infectionReaction();
+                        break;
+                    }
             }
         }));
         return OpStatus.OK;
@@ -165,5 +175,7 @@ public class NotificationSender extends Service {
         return result;
     }
 
-
+    public void infectionReaction(){
+        logger.info("INFECTED!!!!!");
+    }
 }

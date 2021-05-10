@@ -34,6 +34,8 @@ public class BaseLocation implements Comparable<BaseLocation>{
         return location;
     }
 
+    public Date getExpire(){ return expire; }
+
     public boolean isExpired(){
         return new Date().after(expire);
     }

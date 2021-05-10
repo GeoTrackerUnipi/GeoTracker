@@ -11,6 +11,7 @@
         android:theme="@style/Theme.GeoTracer">
         <service android:name=".db.local.KeyValueManagement"/>
         <service android:name=".notifications.NotificationSender"/>
+        <service android:name=".db.remote.FirestoreManagement"/>
         <activity android:name=".UsageTestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

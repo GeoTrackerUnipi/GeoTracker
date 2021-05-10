@@ -46,12 +46,6 @@ public class FirestoreManagement extends Service {
         return classBinder;
     }
 
-    @Override
-    public boolean onUnbind(Intent intent) {
-
-        return true;
-    }
-
     public void insertLocation(String bucket){
         FirebaseDatabase rtd = FirebaseDatabase.getInstance();
         DatabaseReference myRef = rtd.getReference("notifications");

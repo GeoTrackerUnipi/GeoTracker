@@ -3,10 +3,14 @@ package com.geotracer.geotracer.db.local;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 
 import io.paperdb.Paper;
+
+import androidx.annotation.RequiresApi;
 import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -27,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 
+@RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class KeyValueManagement extends Service {
 
     public class LocalBinder extends Binder {
@@ -45,18 +50,17 @@ public class KeyValueManagement extends Service {
     public void onCreate(){
         super.onCreate();
 
-        WorkManager manager = WorkManager.getInstance(this.getBaseContext());
-        manager.cancelAllWorkByTag("consolidator");
         Constraints.Builder constraint = new Constraints.Builder();
         constraint.setRequiresDeviceIdle(true);
 
-        PeriodicWorkRequest request =
-                new PeriodicWorkRequest.Builder(DatabaseConsolidator.class, 1, TimeUnit.HOURS)
-                        .setConstraints(constraint.build())
-                        .addTag("consolidator")
-                        .build();
-
-        manager.enqueue(request);
+        WorkManager
+                .getInstance(this.getBaseContext())
+                .enqueueUniquePeriodicWork(
+                        "consolidator",
+                          ExistingPeriodicWorkPolicy.KEEP,
+                          new PeriodicWorkRequest.Builder(DatabaseConsolidator.class, 1, TimeUnit.HOURS)
+                .setConstraints(constraint.build())
+                .build());
 
     }
 

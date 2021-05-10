@@ -30,6 +30,10 @@ public class Signature implements Comparable<Signature> {
         return signature;
     }
 
+    public Date getExpire(){
+        return expire;
+    }
+
     public boolean isExpired() {
         return new Date().after(expire);
     }
