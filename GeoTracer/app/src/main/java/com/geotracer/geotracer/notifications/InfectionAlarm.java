@@ -128,4 +128,5 @@ public class InfectionAlarm extends Worker {
             return new RetStatus<>(null, OpStatus.ERROR);
         }
     }
+
 }

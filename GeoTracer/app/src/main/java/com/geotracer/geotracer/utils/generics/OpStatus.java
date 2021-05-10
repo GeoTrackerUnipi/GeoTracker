@@ -6,6 +6,8 @@ public enum OpStatus {
     PRESENT,
     NOT_PRESENT,
     ERROR,
+    UPDATE_LOCATION,
+    COLLECTED,
     EMPTY;
 
     @Override
@@ -17,6 +19,8 @@ public enum OpStatus {
             case PRESENT:            return "BEACON_PRESENT";
             case NOT_PRESENT:        return "BEACON_NOT_PRESENT";
             case ERROR:              return "ERROR";
+            case UPDATE_LOCATION:    return "UPDATE_LOCATION";
+            case COLLECTED:          return "COLLECTED";
             case EMPTY:              return "EMPTY";
             default: throw new IllegalArgumentException();
 

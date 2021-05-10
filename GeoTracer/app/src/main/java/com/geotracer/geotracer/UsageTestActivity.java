@@ -15,7 +15,9 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.logging.Logger;
 import com.geotracer.geotracer.db.local.KeyValueManagement;
+import com.geotracer.geotracer.db.remote.FirestoreManagement;
 import com.geotracer.geotracer.notifications.NotificationSender;
+import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.geotracer.geotracer.utils.data.ExtSignature;
 import com.geotracer.geotracer.utils.data.Signature;
 import com.geotracer.geotracer.utils.generics.OpStatus;
@@ -28,6 +30,8 @@ public class UsageTestActivity extends AppCompatActivity {
 
         private KeyValueManagement keyValueStore;
         private NotificationSender notificationSender;
+        private FirestoreManagement firestore;
+
         private final Logger logger = Logger.getGlobal();
 
         private final ServiceConnection keyValueService = new ServiceConnection() {
@@ -66,12 +70,28 @@ public class UsageTestActivity extends AppCompatActivity {
             }
         };
 
+    private final ServiceConnection firestoreService = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+
+            FirestoreManagement.LocalBinder binder = (FirestoreManagement.LocalBinder) service;
+            firestore = binder.getService();
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+
+            firestore = null;
+
+        }
+    };
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
 
             super.onCreate(savedInstanceState);
-
-            FirebaseApp.initializeApp(getApplicationContext());
 
             setContentView(R.layout.activity_main);
             Intent intent = new Intent(this, KeyValueManagement.class);
@@ -79,6 +99,9 @@ public class UsageTestActivity extends AppCompatActivity {
 
             intent = new Intent(this, NotificationSender.class);
             bindService(intent, notificationService, Context.BIND_AUTO_CREATE);
+
+            intent = new Intent(this, FirestoreManagement.class);
+            bindService(intent, firestoreService, Context.BIND_AUTO_CREATE);
 
             logger.info("[TEST] KeyValueDb Service started");
 
@@ -130,7 +153,10 @@ public class UsageTestActivity extends AppCompatActivity {
         }
 
         public void sendAlert(View view){
+            RetStatus<List<BaseLocation>> positions = keyValueStore.getAllPositions();
             notificationSender.infectionAlert();
+            if( positions.getStatus() == OpStatus.OK)
+                firestore.insertInfectedLocations(positions.getValue());
         }
 
     }

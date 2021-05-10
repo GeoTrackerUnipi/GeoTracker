@@ -49,6 +49,7 @@ public class KeyValueManagement extends Service {
     @Override
     public void onCreate(){
         super.onCreate();
+        Paper.init(this.getBaseContext());
 
         Constraints.Builder constraint = new Constraints.Builder();
         constraint.setRequiresDeviceIdle(true);
@@ -67,7 +68,6 @@ public class KeyValueManagement extends Service {
     @Override
     public IBinder onBind(Intent intent) {
 
-        Paper.init(this.getBaseContext());
         return classBinder;
 
     }
