@@ -1,8 +1,6 @@
 package com.geotracer.geotracer.utils.data;
 
 import android.location.Location;
-import android.location.LocationManager;
-
 import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
 import com.geotracer.geotracer.utils.generics.OpStatus;
@@ -12,11 +10,14 @@ import com.google.gson.Gson;
 import java.util.Calendar;
 import java.util.Date;
 
+//// EXT LOCATION
+//   Bean class to store an heatmap point
+
 public class ExtLocation extends BaseLocation{
 
     private boolean infected;
     private int criticity;
-    private String geoHash;
+    private final String geoHash;
 
     public ExtLocation(GeoPoint location){
         super(location);

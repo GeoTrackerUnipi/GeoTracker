@@ -1,19 +1,27 @@
 package com.geotracer.geotracer.db.local;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.Binder;
-import android.os.Build;
-import android.os.IBinder;
-
-import io.paperdb.Paper;
-
-import androidx.annotation.RequiresApi;
-import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
+import androidx.annotation.RequiresApi;
 import java.util.concurrent.TimeUnit;
+import androidx.work.Constraints;
+import androidx.work.WorkManager;
+import android.content.Intent;
+import android.app.Service;
+import android.os.IBinder;
+import android.os.Binder;
+import android.os.Build;
+import io.paperdb.Paper;
+
+//   KEY-VALUE MANAGEMENT
+//   Class to manage the access to a local key-value database. The service is composed by several
+//   subclasses to better improve usability of the class giving a more logical separation between
+//   the function provided by the module
+//          - .signatures: functions to operate on user signatures
+//          - .positions: functions to operate on user's positions
+//          - .beacons: functions to operate on other application's signatures
+//          - .buckets: functions to add/remove bucket from which receive notifications
+
 
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class KeyValueManagement extends Service {
@@ -26,8 +34,8 @@ public class KeyValueManagement extends Service {
     }
 
     private final IBinder classBinder = new LocalBinder();  // maintains a reference to a global service class
-    public final SignatureUtility signatures = new SignatureUtility(Paper.book("signatures"));
-    public final PositionUtility positions = new PositionUtility(Paper.book("positions"));
+    public final SignatureUtility signatures = new SignatureUtility(Paper.book("signatures"));   //  functions to operate on signatures
+    public final PositionUtility positions = new PositionUtility(Paper.book("positions"));       //
     public final BeaconUtility beacons = new BeaconUtility(Paper.book("beacons"));
     public final BucketUtility buckets = new BucketUtility(Paper.book("buckets"));
 

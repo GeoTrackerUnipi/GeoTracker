@@ -1,32 +1,30 @@
 package com.geotracer.geotracer.notifications;
 
-import android.app.Service;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.geotracer.geotracer.db.local.KeyValueManagement;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.geotracer.geotracer.utils.generics.RetStatus;
+import com.geotracer.geotracer.utils.generics.OpStatus;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.EventListener;
+import android.content.ServiceConnection;
+import androidx.work.OneTimeWorkRequest;
 import android.content.ComponentName;
+import androidx.annotation.Nullable;
+import androidx.work.WorkManager;
+import java.util.logging.Logger;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.Binder;
-import android.os.IBinder;
-
-import androidx.annotation.Nullable;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
-
-import com.geotracer.geotracer.db.local.KeyValueManagement;
-import com.geotracer.geotracer.utils.generics.OpStatus;
-import com.geotracer.geotracer.utils.generics.RetStatus;
-import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.QuerySnapshot;
-
+import android.app.Service;
 import java.util.ArrayList;
+import android.os.IBinder;
 import java.util.HashMap;
-import java.util.List;
+import android.os.Binder;
 import java.util.Objects;
-import java.util.logging.Logger;
+import java.util.List;
+
 
 public class NotificationSender extends Service {
 

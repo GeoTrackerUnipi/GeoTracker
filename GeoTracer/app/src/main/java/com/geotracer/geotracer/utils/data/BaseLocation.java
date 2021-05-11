@@ -2,8 +2,15 @@ package com.geotracer.geotracer.utils.data;
 
 import com.google.firebase.firestore.GeoPoint;
 import com.google.gson.Gson;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Calendar;
 import java.util.Date;
+
+
+//// BASE LOCATION
+//   Bean class to store the user position
 
 public class BaseLocation implements Comparable<BaseLocation>{
 
@@ -41,7 +48,7 @@ public class BaseLocation implements Comparable<BaseLocation>{
     }
 
     @Override
-    public String toString(){
+    public @NotNull String toString(){
         Gson gson = new Gson();
         return gson.toJson(this);
     }

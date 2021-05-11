@@ -2,6 +2,9 @@ package com.geotracer.geotracer.utils.data;
 
 import com.google.gson.Gson;
 
+//// SIGNATURES
+//   Bean class to store the external user's beacons
+
 public class ExtSignature extends Signature{
 
     private double distance;

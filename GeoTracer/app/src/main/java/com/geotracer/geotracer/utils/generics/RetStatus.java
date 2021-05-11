@@ -1,9 +1,11 @@
 package com.geotracer.geotracer.utils.generics;
 
+//// OP STATUS
+//   Bean class to return a valud coupled with the status of the operation
 public class RetStatus<T>{
 
-    private T value;
-    private OpStatus result;
+    private final T value;
+    private final OpStatus result;
 
     public RetStatus(T value, OpStatus error){
         this.value = value;

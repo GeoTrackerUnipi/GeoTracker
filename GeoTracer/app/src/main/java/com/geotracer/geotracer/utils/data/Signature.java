@@ -5,6 +5,9 @@ import com.google.gson.Gson;
 import java.util.Calendar;
 import java.util.Date;
 
+//// SIGNATURES
+//   Bean class to store the user's beacons
+
 public class Signature implements Comparable<Signature> {
 
     protected String signature;

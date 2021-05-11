@@ -1,5 +1,9 @@
 package com.geotracer.geotracer.utils.generics;
 
+
+//// OP STATUS
+//   Enumerator used for return the logic result of a function
+
 public enum OpStatus {
 
     OK,

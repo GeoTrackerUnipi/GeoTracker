@@ -27,7 +27,14 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ea0b472-2ab6-4806-a1a1-f1653b5edd79" name="Default Changelist" comment="Merged Laura and mine components into a unique consistent application" />
+    <list default="true" id="6ea0b472-2ab6-4806-a1a1-f1653b5edd79" name="Default Changelist" comment="Merging projects">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/db/local/KeyValueManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/db/local/KeyValueManagement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/db/remote/FirestoreManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/db/remote/FirestoreManagement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/db/remote/LocationAggregator.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/db/remote/LocationAggregator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/notifications/InfectionAlarm.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/notifications/InfectionAlarm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/notifications/NotificationSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/notifications/NotificationSender.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -196,7 +203,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620728625839</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Merging projects">
+      <created>1620730745847</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1620730745847</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -219,12 +233,14 @@
     <MESSAGE value="Optimized Keyvalue and Notification systems&#10;     - only one periodic thread istantiated for keyvalue management&#10;     - completed mechanism for notification receive" />
     <MESSAGE value="Completed firestore management and all the interconnection between the components to generate the final behaviour" />
     <MESSAGE value="Merged Laura and mine components into a unique consistent application" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merged Laura and mine components into a unique consistent application" />
+    <MESSAGE value="Merging projects" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merging projects" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="480" y="293" width="960" height="533" key="#PSD" timestamp="1620414190964">
+    <state x="480" y="293" width="960" height="533" key="#PSD" timestamp="1620735240374">
       <screen x="0" y="31" width="1920" height="1049" />
     </state>
+    <state x="480" y="293" key="#PSD/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620735240374" />
     <state x="480" y="293" width="960" height="533" key="#PSD/0.31.1920.1049@0.31.1920.1049" timestamp="1620414190964" />
     <state x="768" y="264" width="384" height="590" key="#com.intellij.ide.util.MemberChooser" timestamp="1620683386341">
       <screen x="0" y="31" width="1920" height="1049" />
@@ -238,30 +254,30 @@
       <screen x="0" y="31" width="1920" height="1049" />
     </state>
     <state x="743" y="316" width="434" height="487" key="FileChooserDialogImpl/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620727434667" />
-    <state width="1874" height="277" key="GridCell.Tab.0.bottom" timestamp="1620728582472">
+    <state width="1874" height="277" key="GridCell.Tab.0.bottom" timestamp="1620736232309">
       <screen x="0" y="31" width="1920" height="1049" />
     </state>
-    <state width="1874" height="277" key="GridCell.Tab.0.bottom/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620728582472" />
+    <state width="1874" height="277" key="GridCell.Tab.0.bottom/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620736232309" />
     <state width="1874" height="277" key="GridCell.Tab.0.bottom/0.31.1920.1049@0.31.1920.1049" timestamp="1620685708348" />
-    <state width="1874" height="277" key="GridCell.Tab.0.center" timestamp="1620728582472">
+    <state width="1874" height="277" key="GridCell.Tab.0.center" timestamp="1620736232309">
       <screen x="0" y="31" width="1920" height="1049" />
     </state>
-    <state width="1874" height="277" key="GridCell.Tab.0.center/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620728582472" />
+    <state width="1874" height="277" key="GridCell.Tab.0.center/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620736232309" />
     <state width="1874" height="277" key="GridCell.Tab.0.center/0.31.1920.1049@0.31.1920.1049" timestamp="1620685708346" />
-    <state width="1874" height="277" key="GridCell.Tab.0.left" timestamp="1620728582472">
+    <state width="1874" height="277" key="GridCell.Tab.0.left" timestamp="1620736232308">
       <screen x="0" y="31" width="1920" height="1049" />
     </state>
-    <state width="1874" height="277" key="GridCell.Tab.0.left/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620728582472" />
+    <state width="1874" height="277" key="GridCell.Tab.0.left/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620736232308" />
     <state width="1874" height="277" key="GridCell.Tab.0.left/0.31.1920.1049@0.31.1920.1049" timestamp="1620685708345" />
-    <state width="1874" height="277" key="GridCell.Tab.0.right" timestamp="1620728582472">
+    <state width="1874" height="277" key="GridCell.Tab.0.right" timestamp="1620736232309">
       <screen x="0" y="31" width="1920" height="1049" />
     </state>
-    <state width="1874" height="277" key="GridCell.Tab.0.right/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620728582472" />
+    <state width="1874" height="277" key="GridCell.Tab.0.right/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620736232309" />
     <state width="1874" height="277" key="GridCell.Tab.0.right/0.31.1920.1049@0.31.1920.1049" timestamp="1620685708348" />
-    <state x="555" y="294" width="810" height="531" key="Vcs.Push.Dialog.v2" timestamp="1620728632831">
+    <state x="555" y="294" width="810" height="531" key="Vcs.Push.Dialog.v2" timestamp="1620731046120">
       <screen x="0" y="31" width="1920" height="1049" />
     </state>
-    <state x="555" y="294" key="Vcs.Push.Dialog.v2/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620728632831" />
+    <state x="555" y="294" width="810" height="531" key="Vcs.Push.Dialog.v2/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620731046120" />
     <state x="555" y="294" width="810" height="531" key="Vcs.Push.Dialog.v2/0.31.1920.1049@0.31.1920.1049" timestamp="1620685631637" />
     <state x="745" y="472" width="430" height="175" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1620685606758">
       <screen x="0" y="31" width="1920" height="1049" />
