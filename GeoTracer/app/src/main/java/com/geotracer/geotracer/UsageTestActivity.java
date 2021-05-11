@@ -1,22 +1,38 @@
 package com.geotracer.geotracer;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import java.util.List;
 import java.util.logging.Logger;
 import com.geotracer.geotracer.db.local.KeyValueManagement;
 import com.geotracer.geotracer.db.remote.FirestoreManagement;
+import com.geotracer.geotracer.infoapp.InfoActivity;
+import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
+import com.geotracer.geotracer.settingapp.SettingActivity;
+import com.geotracer.geotracer.testingapp.LogService;
+import com.geotracer.geotracer.testingapp.TestingActivity;
 import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.geotracer.geotracer.utils.data.ExtSignature;
 import com.geotracer.geotracer.utils.data.Signature;
@@ -27,6 +43,7 @@ import org.json.JSONArray;
 
 public class UsageTestActivity extends AppCompatActivity {
 
+        boolean bound;
         private KeyValueManagement keyValueStore;
         private NotificationSender notificationSender;
         private FirestoreManagement firestore;
@@ -58,6 +75,7 @@ public class UsageTestActivity extends AppCompatActivity {
 
                 NotificationSender.LocalBinder binder = (NotificationSender.LocalBinder) service;
                 notificationSender = binder.getService();
+                bound = true;
 
             }
 
@@ -65,9 +83,11 @@ public class UsageTestActivity extends AppCompatActivity {
             public void onServiceDisconnected(ComponentName arg0) {
 
                 notificationSender = null;
+                bound = false;
 
             }
         };
+
 
     private final ServiceConnection firestoreService = new ServiceConnection() {
 
@@ -104,10 +124,40 @@ public class UsageTestActivity extends AppCompatActivity {
 
             logger.info("[TEST] KeyValueDb Service started");
 
+            LocalBroadcastManager.getInstance(getBaseContext()).registerReceiver(
+                    new BroadcastReceiver() {
+                        @Override
+                        public void onReceive(Context context, Intent intent) {
+
+                            Log.i(this.getClass().getName(), "BROADCAST LISTENER FOR CONTACTS");
+                            String toLog = intent.getStringExtra("Contact");
+
+                            showPopupWindow((TextView) findViewById(R.id.textView), "Signature Collection Stopped");
+                        }
+                    },new IntentFilter(LogService.ACTION_BROADCAST)
+
+            );
+
         }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind to LocalService
+        Intent intent = new Intent(this, NotificationSender.class);
+        bindService(intent, notificationService, Context.BIND_AUTO_CREATE);
+    }
 
-        @Override
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unbindService(notificationService);
+        bound = false;
+    }
+
+
+
+    @Override
         protected void onDestroy(){
             super.onDestroy();
             unbindService(keyValueService);
@@ -158,4 +208,71 @@ public class UsageTestActivity extends AppCompatActivity {
                 firestore.insertInfectedLocations(positions.getValue());
         }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.db_menu, menu);
+        return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        TextView tv;
+        Intent i;
+        switch(item.getItemId()){
+            case R.id.from_DB_to_main:
+                i = new Intent(this, MainActivity.class);
+                startActivity(i);
+                return true;
+            case R.id.from_DB_to_testing:
+                i = new Intent(this, TestingActivity.class);
+                startActivity(i);
+                return true;
+            case R.id.from_DB_to_settings:
+                i = new Intent(this, SettingActivity.class);
+                startActivity(i);
+                return true;
+            case R.id.from_DB_to_info:
+                i = new Intent(this, InfoActivity.class);
+                startActivity(i);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    protected void showPopupWindow(TextView location, String message){
+
+        //instantiate the popup.xml layout file
+        LayoutInflater layoutInflater = (LayoutInflater) UsageTestActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        //it is used to take the resources from the popup.xml file
+        View customView = layoutInflater.inflate(R.layout.popup,null);
+
+        Button closePopupBtn = (Button) customView.findViewById(R.id.closePopupBtn);
+
+        //instantiate popup window
+        PopupWindow popupWindow = new PopupWindow(customView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        //display the popup window
+        popupWindow.showAtLocation(location, Gravity.CENTER, 0, 0);
+
+
+        TextView popup_view = (TextView) customView.findViewById(R.id.popup_text);
+        popup_view.setText(message);
+
+        //close the popup window on button click
+        closePopupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+
+
+
+    }
+
+
+
+}

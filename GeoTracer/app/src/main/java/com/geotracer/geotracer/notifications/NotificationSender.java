@@ -1,5 +1,7 @@
 package com.geotracer.geotracer.notifications;
 
+import com.esotericsoftware.minlog.Log;
+import com.geotracer.geotracer.testingapp.LogService;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.geotracer.geotracer.db.local.KeyValueManagement;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -10,6 +12,8 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.EventListener;
 import android.content.ServiceConnection;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.work.OneTimeWorkRequest;
 import android.content.ComponentName;
 import androidx.annotation.Nullable;
@@ -27,6 +31,7 @@ import java.util.List;
 
 
 public class NotificationSender extends Service {
+    public static final String ACTION_BROADCAST = NotificationSender.class.getName();
 
     public class LocalBinder extends Binder {
 
@@ -170,5 +175,13 @@ public class NotificationSender extends Service {
 
     public void infectionReaction(){
         logger.info("INFECTED!!!!!");
+
+        String info = "WARNING!!\n You could have been in contact with an infected person\n";
+
+        Intent intent = new Intent(ACTION_BROADCAST);
+        intent.putExtra("Contact", info);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        Log.info(this.getClass().getName(), "Message sent");
+
     }
 }

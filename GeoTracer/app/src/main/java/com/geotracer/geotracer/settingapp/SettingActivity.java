@@ -29,7 +29,7 @@ public class SettingActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     //ENABLE THE RECEIVING OF NOTIFICATION FOR HAVING MET SOMEONE POSITIVE TO COVID19
-                    Log.d(this.getClass().getName(), "Contanct Notification Enabled");
+                    Log.d(this.getClass().getName(), "Contact Notification Enabled");
                 }else{
                     //DISABLE THE RECEIVING OF NOTIFICATION FOR HAVING MET SOMEONE POSITIVE TO COVID19
                     Log.d(this.getClass().getName(), "Contanct Notification Disabled");

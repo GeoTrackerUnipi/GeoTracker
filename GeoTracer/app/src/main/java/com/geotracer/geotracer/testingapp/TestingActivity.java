@@ -36,7 +36,6 @@ public class TestingActivity extends AppCompatActivity {
 
     LogService service;
     boolean bound;
-    Handler listerHandler;
 
 
     @Override

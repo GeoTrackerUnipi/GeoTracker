@@ -28,17 +28,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6ea0b472-2ab6-4806-a1a1-f1653b5edd79" name="Default Changelist" comment="Commented all the files and make some bug correction">
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/menu/db_menu.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/db/local/KeyValueManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/db/local/KeyValueManagement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/UsageTestActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/UsageTestActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/mainapp/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/mainapp/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/notifications/NotificationSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/notifications/NotificationSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/TestingActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/TestingActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[VirtualDevicePath@/home/nico/.android/avd/Pixel_3a_API_30_x86.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[SerialNumber@GSM9X18815W02087]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -48,6 +51,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="resourceFile" />
       </list>
     </option>
   </component>
@@ -62,7 +66,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/src/main/res" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="memory.settings.postsync.last.time.stamp" value="1620650065911" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
@@ -263,30 +267,58 @@
       <screen x="0" y="31" width="1920" height="1049" />
     </state>
     <state x="693" y="306" width="534" height="506" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.31.1920.1049@0.31.1920.1049" timestamp="1620684174336" />
+    <state x="308" y="182" key="AndroidCreateResourceFileDialog" timestamp="1620749374411">
+      <screen x="0" y="23" width="1440" height="800" />
+    </state>
+    <state x="308" y="182" key="AndroidCreateResourceFileDialog/0.23.1440.800@0.23.1440.800" timestamp="1620749374410" />
     <state x="743" y="316" width="434" height="487" key="FileChooserDialogImpl" timestamp="1620727434667">
       <screen x="0" y="31" width="1920" height="1049" />
     </state>
     <state x="743" y="316" width="434" height="487" key="FileChooserDialogImpl/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620727434667" />
-    <state width="1874" height="277" key="GridCell.Tab.0.bottom" timestamp="1620741661647">
-      <screen x="0" y="31" width="1920" height="1049" />
+    <state width="1398" height="2" key="GridCell.Tab.0.bottom" timestamp="1620753068648">
+      <screen x="0" y="23" width="1440" height="803" />
     </state>
+    <state width="1398" height="203" key="GridCell.Tab.0.bottom/0.23.1440.800@0.23.1440.800" timestamp="1620752549336" />
+    <state width="1398" height="2" key="GridCell.Tab.0.bottom/0.23.1440.803@0.23.1440.803" timestamp="1620753068648" />
     <state width="1874" height="277" key="GridCell.Tab.0.bottom/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620741661647" />
     <state width="1874" height="277" key="GridCell.Tab.0.bottom/0.31.1920.1049@0.31.1920.1049" timestamp="1620685708348" />
-    <state width="1874" height="277" key="GridCell.Tab.0.center" timestamp="1620741661647">
-      <screen x="0" y="31" width="1920" height="1049" />
+    <state width="1398" height="2" key="GridCell.Tab.0.center" timestamp="1620753068646">
+      <screen x="0" y="23" width="1440" height="803" />
     </state>
+    <state width="1398" height="203" key="GridCell.Tab.0.center/0.23.1440.800@0.23.1440.800" timestamp="1620752549336" />
+    <state width="1398" height="2" key="GridCell.Tab.0.center/0.23.1440.803@0.23.1440.803" timestamp="1620753068646" />
     <state width="1874" height="277" key="GridCell.Tab.0.center/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620741661647" />
     <state width="1874" height="277" key="GridCell.Tab.0.center/0.31.1920.1049@0.31.1920.1049" timestamp="1620685708346" />
-    <state width="1874" height="277" key="GridCell.Tab.0.left" timestamp="1620741661647">
-      <screen x="0" y="31" width="1920" height="1049" />
+    <state width="1398" height="2" key="GridCell.Tab.0.left" timestamp="1620753068646">
+      <screen x="0" y="23" width="1440" height="803" />
     </state>
+    <state width="1398" height="203" key="GridCell.Tab.0.left/0.23.1440.800@0.23.1440.800" timestamp="1620752549334" />
+    <state width="1398" height="2" key="GridCell.Tab.0.left/0.23.1440.803@0.23.1440.803" timestamp="1620753068646" />
     <state width="1874" height="277" key="GridCell.Tab.0.left/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620741661647" />
     <state width="1874" height="277" key="GridCell.Tab.0.left/0.31.1920.1049@0.31.1920.1049" timestamp="1620685708345" />
-    <state width="1874" height="277" key="GridCell.Tab.0.right" timestamp="1620741661647">
-      <screen x="0" y="31" width="1920" height="1049" />
+    <state width="1398" height="2" key="GridCell.Tab.0.right" timestamp="1620753068647">
+      <screen x="0" y="23" width="1440" height="803" />
     </state>
+    <state width="1398" height="203" key="GridCell.Tab.0.right/0.23.1440.800@0.23.1440.800" timestamp="1620752549336" />
+    <state width="1398" height="2" key="GridCell.Tab.0.right/0.23.1440.803@0.23.1440.803" timestamp="1620753068647" />
     <state width="1874" height="277" key="GridCell.Tab.0.right/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620741661647" />
     <state width="1874" height="277" key="GridCell.Tab.0.right/0.31.1920.1049@0.31.1920.1049" timestamp="1620685708348" />
+    <state width="1398" height="2" key="GridCell.Tab.1.bottom" timestamp="1620753068650">
+      <screen x="0" y="23" width="1440" height="803" />
+    </state>
+    <state width="1398" height="2" key="GridCell.Tab.1.bottom/0.23.1440.803@0.23.1440.803" timestamp="1620753068650" />
+    <state width="1398" height="2" key="GridCell.Tab.1.center" timestamp="1620753068649">
+      <screen x="0" y="23" width="1440" height="803" />
+    </state>
+    <state width="1398" height="2" key="GridCell.Tab.1.center/0.23.1440.803@0.23.1440.803" timestamp="1620753068649" />
+    <state width="1398" height="2" key="GridCell.Tab.1.left" timestamp="1620753068648">
+      <screen x="0" y="23" width="1440" height="803" />
+    </state>
+    <state width="1398" height="2" key="GridCell.Tab.1.left/0.23.1440.803@0.23.1440.803" timestamp="1620753068648" />
+    <state width="1398" height="2" key="GridCell.Tab.1.right" timestamp="1620753068649">
+      <screen x="0" y="23" width="1440" height="803" />
+    </state>
+    <state width="1398" height="2" key="GridCell.Tab.1.right/0.23.1440.803@0.23.1440.803" timestamp="1620753068649" />
     <state x="555" y="294" width="810" height="531" key="Vcs.Push.Dialog.v2" timestamp="1620740535558">
       <screen x="0" y="31" width="1920" height="1049" />
     </state>
