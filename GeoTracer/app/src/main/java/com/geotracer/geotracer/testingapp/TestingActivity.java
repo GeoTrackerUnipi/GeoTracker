@@ -28,6 +28,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.geotracer.geotracer.R;
 import com.geotracer.geotracer.infoapp.InfoActivity;
 import com.geotracer.geotracer.mainapp.MainActivity;
+import com.geotracer.geotracer.notifications.NotificationSender;
 import com.geotracer.geotracer.settingapp.SettingActivity;
 
 
@@ -72,6 +73,7 @@ public class TestingActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LogService.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
     }
+
 
     @Override
     protected void onStop() {

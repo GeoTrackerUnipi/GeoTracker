@@ -40,20 +40,22 @@ public class MainActivity extends AppCompatActivity {
 
     NotificationSender service;
     boolean bound;
+    BroadcastReceiver onNotice;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(
-                new BroadcastReceiver() {
+                onNotice = new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
 
                         Log.d(this.getClass().getName(), "BROADCAST LISTENER FOR CONTACTS");
                         String toLog = intent.getStringExtra("Contact");
 
-                        showPopupWindow((TextView) findViewById(R.id.textView), "Signature Collection Stopped");
+                        showPopupWindow((TextView) findViewById(R.id.textView), toLog);
                     }
                 },new IntentFilter(LogService.ACTION_BROADCAST)
 
@@ -66,6 +68,13 @@ public class MainActivity extends AppCompatActivity {
         // Bind to LocalService
         Intent intent = new Intent(this, NotificationSender.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
+    }
+
+    protected void onResume() {
+        super.onResume();
+
+        IntentFilter iff= new IntentFilter(NotificationSender.ACTION_BROADCAST);
+        LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, iff);
     }
 
     @Override

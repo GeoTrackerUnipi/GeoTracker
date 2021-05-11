@@ -1,28 +1,71 @@
 package com.geotracer.geotracer.settingapp;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.geotracer.geotracer.R;
 import com.geotracer.geotracer.infoapp.InfoActivity;
 import com.geotracer.geotracer.mainapp.MainActivity;
+import com.geotracer.geotracer.notifications.NotificationSender;
+import com.geotracer.geotracer.testingapp.LogService;
 import com.geotracer.geotracer.testingapp.TestingActivity;
 
 public class SettingActivity extends AppCompatActivity {
 
 
+    NotificationSender service;
+    boolean bound;
+    BroadcastReceiver onNotice;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
+        /*
+
+        BROADCAST LISTENER FOR CONTACTS
+         */
+
+        LocalBroadcastManager.getInstance(SettingActivity.this).registerReceiver(
+                onNotice = new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+
+                        Log.d(this.getClass().getName(), "BROADCAST LISTENER FOR CONTACTS");
+                        String toLog = intent.getStringExtra("Contact");
+
+                        showPopupWindow((TextView) findViewById(R.id.textView), toLog);
+                    }
+                },new IntentFilter(LogService.ACTION_BROADCAST)
+
+        );
+
+        /*
+
+        LISTENER FOR SWITCH BUTTONS
+         */
 
         Switch contact_notifications = findViewById(R.id.notification_contact);
         contact_notifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -66,6 +109,46 @@ public class SettingActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind to LocalService
+        Intent intent = new Intent(this, NotificationSender.class);
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+    }
+
+    protected void onResume() {
+        super.onResume();
+
+        IntentFilter iff= new IntentFilter(NotificationSender.ACTION_BROADCAST);
+        LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, iff);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unbindService(connection);
+        bound = false;
+    }
+
+    /** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection connection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder s) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            NotificationSender.LocalBinder binder = (NotificationSender.LocalBinder) s;
+            service = binder.getService();
+            bound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            bound = false;
+        }
+    };
+
 
 
     /*
@@ -103,6 +186,37 @@ public class SettingActivity extends AppCompatActivity {
     }
 
 
+    protected void showPopupWindow(TextView location, String message){
+
+        //instantiate the popup.xml layout file
+        LayoutInflater layoutInflater = (LayoutInflater) SettingActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        //it is used to take the resources from the popup.xml file
+        View customView = layoutInflater.inflate(R.layout.popup,null);
+
+        Button closePopupBtn = (Button) customView.findViewById(R.id.closePopupBtn);
+
+        //instantiate popup window
+        PopupWindow popupWindow = new PopupWindow(customView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        //display the popup window
+        popupWindow.showAtLocation(location, Gravity.CENTER, 0, 0);
+
+
+        TextView popup_view = (TextView) customView.findViewById(R.id.popup_text);
+        popup_view.setText(message);
+
+        //close the popup window on button click
+        closePopupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+
+
+
+    }
 
 
 }

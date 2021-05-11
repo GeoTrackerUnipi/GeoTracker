@@ -44,6 +44,7 @@ import org.json.JSONArray;
 public class UsageTestActivity extends AppCompatActivity {
 
         boolean bound;
+        BroadcastReceiver onNotice;
         private KeyValueManagement keyValueStore;
         private NotificationSender notificationSender;
         private FirestoreManagement firestore;
@@ -68,7 +69,7 @@ public class UsageTestActivity extends AppCompatActivity {
             }
         };
 
-        private final ServiceConnection notificationService = new ServiceConnection() {
+        private ServiceConnection notificationService = new ServiceConnection() {
 
             @Override
             public void onServiceConnected(ComponentName className, IBinder service) {
@@ -124,15 +125,14 @@ public class UsageTestActivity extends AppCompatActivity {
 
             logger.info("[TEST] KeyValueDb Service started");
 
-            LocalBroadcastManager.getInstance(getBaseContext()).registerReceiver(
-                    new BroadcastReceiver() {
+            LocalBroadcastManager.getInstance(UsageTestActivity.this).registerReceiver(
+                    onNotice = new BroadcastReceiver() {
                         @Override
                         public void onReceive(Context context, Intent intent) {
-
                             Log.i(this.getClass().getName(), "BROADCAST LISTENER FOR CONTACTS");
                             String toLog = intent.getStringExtra("Contact");
 
-                            showPopupWindow((TextView) findViewById(R.id.textView), "Signature Collection Stopped");
+                            showPopupWindow((TextView) findViewById(R.id.textView), toLog);
                         }
                     },new IntentFilter(LogService.ACTION_BROADCAST)
 
@@ -140,13 +140,6 @@ public class UsageTestActivity extends AppCompatActivity {
 
         }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // Bind to LocalService
-        Intent intent = new Intent(this, NotificationSender.class);
-        bindService(intent, notificationService, Context.BIND_AUTO_CREATE);
-    }
 
     @Override
     protected void onStop() {
@@ -155,6 +148,12 @@ public class UsageTestActivity extends AppCompatActivity {
         bound = false;
     }
 
+    protected void onResume() {
+        super.onResume();
+
+        IntentFilter iff= new IntentFilter(NotificationSender.ACTION_BROADCAST);
+        LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, iff);
+    }
 
 
     @Override

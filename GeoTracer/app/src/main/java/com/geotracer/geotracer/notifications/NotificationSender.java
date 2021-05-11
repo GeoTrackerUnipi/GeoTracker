@@ -1,6 +1,7 @@
 package com.geotracer.geotracer.notifications;
 
 import com.esotericsoftware.minlog.Log;
+import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.testingapp.LogService;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.geotracer.geotracer.db.local.KeyValueManagement;
@@ -32,7 +33,6 @@ import java.util.List;
 
 public class NotificationSender extends Service {
     public static final String ACTION_BROADCAST = NotificationSender.class.getName();
-
     public class LocalBinder extends Binder {
 
         public NotificationSender getService() {
@@ -129,6 +129,7 @@ public class NotificationSender extends Service {
     @Override
     public IBinder onBind(Intent intent) {
 
+        Log.info(this.getClass().getName(), "Service Bounded");
         return classBinder;
 
     }
@@ -180,8 +181,10 @@ public class NotificationSender extends Service {
 
         Intent intent = new Intent(ACTION_BROADCAST);
         intent.putExtra("Contact", info);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-        Log.info(this.getClass().getName(), "Message sent");
+        if(LocalBroadcastManager.getInstance(this).sendBroadcast(intent) == false)
+            Log.info(this.getClass().getName(), "Message sent");
+        else
+            Log.info(this.getClass().getName(), "Message sent");
 
     }
 }
