@@ -22,7 +22,6 @@ import com.geotracer.geotracer.utils.data.ExtSignature;
 import com.geotracer.geotracer.utils.data.Signature;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.geotracer.geotracer.utils.generics.RetStatus;
-import com.google.firebase.FirebaseApp;
 
 import org.json.JSONArray;
 
@@ -93,7 +92,7 @@ public class UsageTestActivity extends AppCompatActivity {
 
             super.onCreate(savedInstanceState);
 
-            setContentView(R.layout.activity_main);
+            setContentView(R.layout.testing_main);
             Intent intent = new Intent(this, KeyValueManagement.class);
             bindService(intent, keyValueService, Context.BIND_AUTO_CREATE);
 
@@ -117,32 +116,32 @@ public class UsageTestActivity extends AppCompatActivity {
         public void insertBeacon(View view){
 
             String beacon = ((EditText)findViewById(R.id.beacon_add)).getText().toString();
-            keyValueStore.insertBeacon(new ExtSignature(beacon,10));
+            keyValueStore.beacons.insertBeacon(new ExtSignature(beacon,10));
         }
 
         public void insertBucket(View view){
             String bucket = ((EditText)findViewById(R.id.bucket_add)).getText().toString();
-            keyValueStore.insertBucket(bucket);
+            keyValueStore.buckets.insertBucket(bucket);
         }
 
         public void insertSignature(View view){
             String signature = ((EditText)findViewById(R.id.signature_input)).getText().toString();
-            keyValueStore.insertSignature(new Signature(signature));
+            keyValueStore.signatures.insertSignature(new Signature(signature));
         }
 
         public void getBeacon(View view){
             String beacon = ((EditText)findViewById(R.id.beacon_search)).getText().toString();
-            ((TextView)findViewById(R.id.display)).setText(keyValueStore.beaconPresent(beacon).toString());
+            ((TextView)findViewById(R.id.display)).setText(keyValueStore.beacons.beaconPresent(beacon).toString());
         }
 
         public void getBuckets(View view){
-            JSONArray jsonArray = new JSONArray(keyValueStore.getBuckets().getValue());
+            JSONArray jsonArray = new JSONArray(keyValueStore.buckets.getBuckets().getValue());
             ((TextView)findViewById(R.id.display_buckets)).setText(jsonArray.toString());
         }
 
         public void getSignatures(View view){
             StringBuilder put = new StringBuilder();
-            RetStatus<List<Signature>> ret = keyValueStore.getAllSignatures();
+            RetStatus<List<Signature>> ret = keyValueStore.signatures.getAllSignatures();
             if( ret.getStatus() != OpStatus.OK)
                 return;
             List<Signature> signatures = ret.getValue();
@@ -153,7 +152,7 @@ public class UsageTestActivity extends AppCompatActivity {
         }
 
         public void sendAlert(View view){
-            RetStatus<List<BaseLocation>> positions = keyValueStore.getAllPositions();
+            RetStatus<List<BaseLocation>> positions = keyValueStore.positions.getAllPositions();
             notificationSender.infectionAlert();
             if( positions.getStatus() == OpStatus.OK)
                 firestore.insertInfectedLocations(positions.getValue());

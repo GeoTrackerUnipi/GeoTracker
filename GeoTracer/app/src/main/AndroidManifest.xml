@@ -8,14 +8,30 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.GeoTracer">
-        <service android:name=".db.local.KeyValueManagement"/>
-        <service android:name=".notifications.NotificationSender"/>
-        <service android:name=".db.remote.FirestoreManagement"/>
-        <activity android:name=".UsageTestActivity">
+        android:theme="@style/Theme.GeotracerApp">
+        <service
+            android:name=".db.local.KeyValueManagement"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".notifications.NotificationSender"
+            android:enabled="true"
+            android:exported="false" />
+        <service android:name=".db.remote.FirestoreManagement"
+            android:enabled="true"
+            android:exported="false"/>
+        <activity android:name="com.geotracer.geotracer.UsageTestActivity"/>
+        <activity android:name=".infoapp.InfoActivity" />
+        <activity android:name=".settingapp.SettingActivity" />
+        <service
+            android:name=".testingapp.LogService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity android:name=".testingapp.TestingActivity" />
+        <activity android:name=".mainapp.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

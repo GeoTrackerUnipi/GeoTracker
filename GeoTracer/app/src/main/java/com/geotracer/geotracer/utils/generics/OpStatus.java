@@ -8,6 +8,7 @@ public enum OpStatus {
     ERROR,
     UPDATE_LOCATION,
     COLLECTED,
+    UPDATED,
     EMPTY;
 
     @Override
@@ -21,6 +22,7 @@ public enum OpStatus {
             case ERROR:              return "ERROR";
             case UPDATE_LOCATION:    return "UPDATE_LOCATION";
             case COLLECTED:          return "COLLECTED";
+            case UPDATED:            return "UPDATED";
             case EMPTY:              return "EMPTY";
             default: throw new IllegalArgumentException();
 

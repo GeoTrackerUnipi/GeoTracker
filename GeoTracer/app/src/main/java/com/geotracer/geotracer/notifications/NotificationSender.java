@@ -9,17 +9,13 @@ import android.os.Binder;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
-import androidx.work.Constraints;
 import androidx.work.OneTimeWorkRequest;
-import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
-import com.geotracer.geotracer.db.DatabaseConsolidator;
 import com.geotracer.geotracer.db.local.KeyValueManagement;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.geotracer.geotracer.utils.generics.RetStatus;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -30,7 +26,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class NotificationSender extends Service {
@@ -52,7 +47,7 @@ public class NotificationSender extends Service {
             keyValueStore = binder.getService();
 
             //  getting from the local database all the user's buckets
-            RetStatus<List<String>> result = keyValueStore.getBuckets();
+            RetStatus<List<String>> result = keyValueStore.buckets.getBuckets();
 
             try {
                 if (result.getStatus() == OpStatus.OK)
@@ -71,7 +66,7 @@ public class NotificationSender extends Service {
 
                                             for (DocumentChange dc : value.getDocumentChanges())
                                                 if( dc.getType() == DocumentChange.Type.ADDED &&
-                                                        keyValueStore.beaconPresent(
+                                                        keyValueStore.beacons.beaconPresent(
                                                                 (String)dc.getDocument().getData().get("signature")) == OpStatus.PRESENT){
                                                     infectionReaction();
                                                     break;
@@ -147,7 +142,7 @@ public class NotificationSender extends Service {
 
     public OpStatus addBucket(String bucket){
 
-        OpStatus status = keyValueStore.insertBucket(bucket);
+        OpStatus status = keyValueStore.buckets.insertBucket(bucket);
         if( status != OpStatus.OK)
             return status;
 
@@ -159,7 +154,7 @@ public class NotificationSender extends Service {
                 assert value != null;
                 if(value.getMetadata().isFromCache()) return;
                 for (DocumentChange dc : value.getDocumentChanges())
-                    if( dc.getType() == DocumentChange.Type.ADDED && keyValueStore.beaconPresent( (String)dc.getDocument().getData().get("signature")) == OpStatus.PRESENT){
+                    if( dc.getType() == DocumentChange.Type.ADDED && keyValueStore.beacons.beaconPresent( (String)dc.getDocument().getData().get("signature")) == OpStatus.PRESENT){
                         infectionReaction();
                         break;
                     }
@@ -169,7 +164,7 @@ public class NotificationSender extends Service {
     }
 
     public OpStatus removeBucket(String bucket){
-        OpStatus result = keyValueStore.removeBucket(bucket);
+        OpStatus result = keyValueStore.buckets.removeBucket(bucket);
         if( result == OpStatus.OK)
             Objects.requireNonNull(listeners.get(bucket)).remove();
         return result;
