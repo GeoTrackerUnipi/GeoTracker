@@ -20,14 +20,15 @@
         <service android:name=".db.remote.FirestoreManagement"
             android:enabled="true"
             android:exported="false"/>
-        <activity android:name="com.geotracer.geotracer.UsageTestActivity"/>
-        <activity android:name=".infoapp.InfoActivity" />
-        <activity android:name=".settingapp.SettingActivity" />
+
         <service
             android:name=".testingapp.LogService"
             android:enabled="true"
             android:exported="false" />
 
+        <activity android:name=".UsageTestActivity"/>
+        <activity android:name=".infoapp.InfoActivity" />
+        <activity android:name=".settingapp.SettingActivity" />
         <activity android:name=".testingapp.TestingActivity" />
         <activity android:name=".mainapp.MainActivity">
             <intent-filter>

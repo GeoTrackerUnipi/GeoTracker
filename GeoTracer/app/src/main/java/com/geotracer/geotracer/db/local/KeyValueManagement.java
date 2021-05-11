@@ -34,10 +34,10 @@ public class KeyValueManagement extends Service {
     }
 
     private final IBinder classBinder = new LocalBinder();  // maintains a reference to a global service class
-    public final SignatureUtility signatures = new SignatureUtility(Paper.book("signatures"));   //  functions to operate on signatures
-    public final PositionUtility positions = new PositionUtility(Paper.book("positions"));       //
-    public final BeaconUtility beacons = new BeaconUtility(Paper.book("beacons"));
-    public final BucketUtility buckets = new BucketUtility(Paper.book("buckets"));
+    public SignatureUtility signatures = null;   //  functions to operate on signatures
+    public PositionUtility positions = null;       //
+    public BeaconUtility beacons = null;
+    public BucketUtility buckets = null;
 
     @Override
     public void onCreate(){
@@ -46,6 +46,10 @@ public class KeyValueManagement extends Service {
         //  initialization of Paper key-value database
         Paper.init(getBaseContext());
 
+        signatures = new SignatureUtility(Paper.book("signatures"));   //  functions to operate on signatures
+        positions = new PositionUtility(Paper.book("positions"));       //
+        beacons = new BeaconUtility(Paper.book("beacons"));
+        buckets = new BucketUtility(Paper.book("buckets"));
         //  launch the DatabaseConsolidator worker
         WorkManager
                 .getInstance(this.getBaseContext())
