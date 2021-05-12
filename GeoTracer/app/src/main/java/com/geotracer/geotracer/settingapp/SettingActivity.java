@@ -25,18 +25,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.geotracer.geotracer.R;
+import com.geotracer.geotracer.db.local.KeyValueManagement;
+import com.geotracer.geotracer.db.remote.FirestoreManagement;
 import com.geotracer.geotracer.infoapp.InfoActivity;
 import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
 import com.geotracer.geotracer.testingapp.LogService;
 import com.geotracer.geotracer.testingapp.TestingActivity;
+import com.geotracer.geotracer.utils.data.BaseLocation;
+import com.geotracer.geotracer.utils.data.Signature;
+import com.geotracer.geotracer.utils.generics.OpStatus;
+import com.geotracer.geotracer.utils.generics.RetStatus;
+
+import java.util.List;
 
 public class SettingActivity extends AppCompatActivity {
 
 
-    NotificationSender service;
+    NotificationSender notificationSender;
     boolean boundNotification;
     BroadcastReceiver onNotice;
+    FirestoreManagement firestoreManagement;
+    private KeyValueManagement keyValueStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,11 +108,17 @@ public class SettingActivity extends AppCompatActivity {
         });
 
         Switch positivity_switch = (Switch) findViewById(R.id.positivity_report);
-        proximity_notifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        positivity_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     //ENABLE THE RECEIVING OF NOTIFICATION FOR BEING TOO CLOSE TO OTHER PEOPLE
-                    Log.d(this.getClass().getName(), "Positivity Report Enabled");
+                    RetStatus<List<BaseLocation>> userPositions = keyValueStore.positions.getAllPositions();
+                    if(userPositions.getStatus() == OpStatus.OK){
+                        firestoreManagement.insertInfectedLocations(userPositions.getValue());
+                        notificationSender.infectionAlert();
+                        Log.d(this.getClass().getName(), "Positivity Report Enabled");
+                    }
+
                 }else{
                     //DISABLE THE RECEIVING OF NOTIFICATION FOR BEING TOO CLOSE TO OTHER PEOPLE
                     Log.d(this.getClass().getName(), "Positivity Report Disabled");
@@ -120,6 +136,11 @@ public class SettingActivity extends AppCompatActivity {
         // Bind to LocalService
         Intent intent = new Intent(this, NotificationSender.class);
         bindService(intent, notificationService, Context.BIND_AUTO_CREATE);
+
+        intent = new Intent(this, KeyValueManagement.class);
+        bindService(intent, keyValueService, Context.BIND_AUTO_CREATE);
+        intent = new Intent(this, FirestoreManagement.class);
+        bindService(intent, firestoreService, Context.BIND_AUTO_CREATE);
     }
 
     protected void onResume() {
@@ -139,6 +160,8 @@ public class SettingActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         unbindService(notificationService);
+        unbindService(keyValueService);
+        unbindService(firestoreService);
         boundNotification = false;
     }
 
@@ -150,7 +173,7 @@ public class SettingActivity extends AppCompatActivity {
                                        IBinder s) {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             NotificationSender.LocalBinder binder = (NotificationSender.LocalBinder) s;
-            service = binder.getService();
+            notificationSender = binder.getService();
             boundNotification = true;
         }
 
@@ -161,6 +184,42 @@ public class SettingActivity extends AppCompatActivity {
     };
 
 
+
+    private final ServiceConnection keyValueService = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+
+            KeyValueManagement.LocalBinder binder = (KeyValueManagement.LocalBinder) service;
+            keyValueStore = binder.getService();
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+
+            keyValueStore = null;
+
+        }
+    };
+
+    private final ServiceConnection firestoreService = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+
+            FirestoreManagement.LocalBinder binder = (FirestoreManagement.LocalBinder) service;
+            firestoreManagement = binder.getService();
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+
+            firestoreManagement = null;
+
+        }
+    };
 
     /*
 
