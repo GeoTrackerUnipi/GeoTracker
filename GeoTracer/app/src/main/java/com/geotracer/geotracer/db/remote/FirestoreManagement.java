@@ -16,15 +16,12 @@ import com.google.android.gms.tasks.Task;
 import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
 import com.google.firebase.FirebaseApp;
-
-import android.content.Context;
 import android.content.Intent;
 import java.util.ArrayList;
 import android.app.Service;
 import android.os.IBinder;
 import java.util.Objects;
 import android.os.Binder;
-import android.os.Vibrator;
 import android.util.Log;
 import java.util.Date;
 import java.util.List;
@@ -41,7 +38,7 @@ public class FirestoreManagement extends Service {
 
     private FirebaseFirestore firestore;
     private CollectionReference collection;
-    private final LocationAggregator aggregator = new LocationAggregator((Vibrator) getSystemService(Context.VIBRATOR_SERVICE));
+    private static final LocationAggregator aggregator = new LocationAggregator();
 
     //  callback function to obtain asynchronously the data from firestore
     public interface FirestoreCallback {
