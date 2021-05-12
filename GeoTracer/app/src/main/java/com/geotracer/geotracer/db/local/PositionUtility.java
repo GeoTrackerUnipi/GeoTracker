@@ -46,13 +46,14 @@ public class PositionUtility {
             if(positions.contains(stringTag)) {
 
                 positions.delete(stringTag);
-                Log.d(TAG,"Updating position: " + stringTag );
+                Log.d(TAG,"Updating position: " + stringTag + " : " + location.toString() );
                 positions.write(stringTag, location.toString());
                 return OpStatus.UPDATED;
 
-            }else
-                Log.d(TAG, "Putting new position " + stringTag );
+            }
 
+            Log.d(TAG, "Putting new position " + stringTag );
+            positions.write(stringTag, location.toString());
 
             return OpStatus.OK;
 
@@ -78,7 +79,7 @@ public class PositionUtility {
             //  collecting all the stored positions
             positions
                     .getAllKeys()
-                    .forEach( s->collectedPositions.add( gson.fromJson(s,BaseLocation.class)) );
+                    .forEach( s->collectedPositions.add( gson.fromJson((String)positions.read(s),BaseLocation.class)) );
 
             //  sorting all the position by their expiring time
             Collections.sort(collectedPositions);

@@ -39,6 +39,7 @@ import com.geotracer.geotracer.utils.data.ExtSignature;
 import com.geotracer.geotracer.utils.data.Signature;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.geotracer.geotracer.utils.generics.RetStatus;
+import com.google.firebase.firestore.GeoPoint;
 
 import org.json.JSONArray;
 
@@ -207,6 +208,13 @@ public class UsageTestActivity extends AppCompatActivity {
             Log.println(Log.INFO,"TEST","Insert Beacon Status: " + status.toString());
         }
 
+        public void insertPosition(View view){
+            String latitude = ((EditText)findViewById(R.id.latitude)).getText().toString();
+            String longitude = ((EditText)findViewById(R.id.longitude)).getText().toString();
+            OpStatus status = keyValueStore.positions.insertOrUpdatePosition(new BaseLocation(new GeoPoint(Float.parseFloat(latitude), Float.parseFloat(longitude))));
+            Log.println(Log.INFO,"TEST","Insert Beacon Status: " + status.toString());
+        }
+
         public void getBeacon(View view){
             String beacon = ((EditText)findViewById(R.id.beacon_search)).getText().toString();
             ((TextView)findViewById(R.id.display)).setText(keyValueStore.beacons.beaconPresent(beacon).toString());
@@ -227,6 +235,17 @@ public class UsageTestActivity extends AppCompatActivity {
                 put.append(signature.getSignature()).append("\n");
             ((TextView)findViewById(R.id.display_signatures)).setText(put);
 
+        }
+
+        public void getPositions(View view){
+            StringBuilder put = new StringBuilder();
+            RetStatus<List<BaseLocation>> ret = keyValueStore.positions.getAllPositions();
+            if( ret.getStatus() != OpStatus.OK)
+                return;
+            List<BaseLocation> signatures = ret.getValue();
+            for( BaseLocation signature: signatures)
+                put.append(signature.getLocation()).append("\n");
+            ((TextView)findViewById(R.id.display_positions)).setText(put);
         }
 
         public void sendAlert(View view){

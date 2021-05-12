@@ -110,12 +110,6 @@ public class SettingActivity extends AppCompatActivity {
                     //ENABLE THE RECEIVING OF NOTIFICATION FOR BEING TOO CLOSE TO OTHER PEOPLE
 
 
-                    /*
-
-
-                    NICOLA è QUIIIIIIIIII
-
-
                     RetStatus<List<BaseLocation>> userPositions = keyValueStore.positions.getAllPositions();
                     if(userPositions.getStatus() == OpStatus.OK){
                         firestoreManagement.insertInfectedLocations(userPositions.getValue());
@@ -123,8 +117,6 @@ public class SettingActivity extends AppCompatActivity {
                         Log.d(this.getClass().getName(), "Positivity Report Enabled");
                     }
 
-
-                     */
 
                 }else{
                     //DISABLE THE RECEIVING OF NOTIFICATION FOR BEING TOO CLOSE TO OTHER PEOPLE

@@ -69,7 +69,6 @@ public class SignatureUtility {
 
             //  reordering of the signatures basing on their expire time
             Collections.sort(signatures);
-
             //  by the reordering we can get all the valid signatures by just splitting the list
             //  from the first valid signature encountered [invalid,invalid, valid, valid, valid..]
             for( int a = 0; a<signatures.size(); a++)
