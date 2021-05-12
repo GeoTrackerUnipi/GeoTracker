@@ -12,15 +12,6 @@ public class RetStatus<T>{
         this.result = error;
     }
 
-    public RetStatus<String> buildError(OpStatus error){
-        try {
-            return new RetStatus<>(error.toString(), error);
-        }catch(IllegalArgumentException e){
-            e.printStackTrace();
-            return new RetStatus<>("ERROR", OpStatus.ERROR);
-        }
-    }
-
     public T getValue(){
         if( value == null || result != OpStatus.OK)
             return null;

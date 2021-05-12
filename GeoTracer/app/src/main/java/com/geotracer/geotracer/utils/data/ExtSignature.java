@@ -2,12 +2,13 @@ package com.geotracer.geotracer.utils.data;
 
 import com.google.gson.Gson;
 
+import org.jetbrains.annotations.NotNull;
+
 //// SIGNATURES
 //   Bean class to store the external user's beacons
-
 public class ExtSignature extends Signature{
 
-    private double distance;
+    private final double distance;
 
     public ExtSignature(String beacon, double distance) {
 
@@ -36,7 +37,7 @@ public class ExtSignature extends Signature{
     }
 
     @Override
-    public String toString(){
+    public @NotNull String toString(){
         Gson gson = new Gson();
         return gson.toJson(this);
     }

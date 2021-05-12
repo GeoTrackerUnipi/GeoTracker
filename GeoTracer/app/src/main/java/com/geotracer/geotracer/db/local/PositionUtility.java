@@ -18,6 +18,7 @@ import java.util.List;
 //   propagate all the user position inside the heat map
 //   Data Format:    POSITION: { position, expire }
 
+@SuppressWarnings("unused")
 public class PositionUtility {
 
 

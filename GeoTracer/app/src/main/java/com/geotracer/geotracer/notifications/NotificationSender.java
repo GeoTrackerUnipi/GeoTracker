@@ -1,23 +1,17 @@
 package com.geotracer.geotracer.notifications;
 
-import com.esotericsoftware.minlog.Log;
-import com.geotracer.geotracer.mainapp.MainActivity;
-import com.geotracer.geotracer.testingapp.LogService;
-import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.geotracer.geotracer.db.local.KeyValueManagement;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.geotracer.geotracer.utils.generics.RetStatus;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.EventListener;
 import android.content.ServiceConnection;
-
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.work.OneTimeWorkRequest;
+import com.esotericsoftware.minlog.Log;
 import android.content.ComponentName;
-import androidx.annotation.Nullable;
 import androidx.work.WorkManager;
 import java.util.logging.Logger;
 import android.content.Context;
@@ -31,6 +25,7 @@ import java.util.Objects;
 import java.util.List;
 
 
+@SuppressWarnings("unused")
 public class NotificationSender extends Service {
     public static final String ACTION_BROADCAST = NotificationSender.class.getName();
     public class LocalBinder extends Binder {
@@ -56,28 +51,22 @@ public class NotificationSender extends Service {
                 if (result.getStatus() == OpStatus.OK)
                     observedLocations.addAll(result.getValue());
 
-                observedLocations.forEach(bucket -> {
-                    listeners
-                            .put(bucket, db.collection(bucket)
-                                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value,
-                                                            @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
+                observedLocations.forEach(bucket -> listeners
+                        .put(bucket, db.collection(bucket)
+                                .addSnapshotListener((value, error) -> {
 
-                                            assert value != null;
-                                            if(value.getMetadata().isFromCache()) return;
+                                    assert value != null;
+                                    if(value.getMetadata().isFromCache()) return;
 
-                                            for (DocumentChange dc : value.getDocumentChanges())
-                                                if( dc.getType() == DocumentChange.Type.ADDED &&
-                                                        keyValueStore.beacons.beaconPresent(
-                                                                (String)dc.getDocument().getData().get("signature")) == OpStatus.PRESENT){
-                                                    infectionReaction();
-                                                    break;
-                                                }
+                                    for (DocumentChange dc : value.getDocumentChanges())
+                                        if( dc.getType() == DocumentChange.Type.ADDED &&
+                                                keyValueStore.beacons.beaconPresent(
+                                                        (String)dc.getDocument().getData().get("signature")) == OpStatus.PRESENT){
+                                            infectionReaction();
+                                            break;
                                         }
-                                    })
-                            );
-                });
+                                })
+                        ));
             }catch(RuntimeException e){
                 e.printStackTrace();
             }
@@ -150,19 +139,15 @@ public class NotificationSender extends Service {
         if( status != OpStatus.OK)
             return status;
 
-        listeners.put(bucket,db.collection(bucket).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable @org.jetbrains.annotations.Nullable QuerySnapshot value,
-                                @Nullable @org.jetbrains.annotations.Nullable FirebaseFirestoreException error) {
+        listeners.put(bucket,db.collection(bucket).addSnapshotListener((value, error) -> {
 
-                assert value != null;
-                if(value.getMetadata().isFromCache()) return;
-                for (DocumentChange dc : value.getDocumentChanges())
-                    if( dc.getType() == DocumentChange.Type.ADDED && keyValueStore.beacons.beaconPresent( (String)dc.getDocument().getData().get("signature")) == OpStatus.PRESENT){
-                        infectionReaction();
-                        break;
-                    }
-            }
+            assert value != null;
+            if(value.getMetadata().isFromCache()) return;
+            for (DocumentChange dc : value.getDocumentChanges())
+                if( dc.getType() == DocumentChange.Type.ADDED && keyValueStore.beacons.beaconPresent( (String)dc.getDocument().getData().get("signature")) == OpStatus.PRESENT){
+                    infectionReaction();
+                    break;
+                }
         }));
         return OpStatus.OK;
     }
@@ -181,9 +166,7 @@ public class NotificationSender extends Service {
 
         Intent intent = new Intent(ACTION_BROADCAST);
         intent.putExtra("Contact", info);
-        if(LocalBroadcastManager.getInstance(this).sendBroadcast(intent) == false)
-            Log.info(this.getClass().getName(), "Message sent");
-        else
+        if(!LocalBroadcastManager.getInstance(this).sendBroadcast(intent))
             Log.info(this.getClass().getName(), "Message sent");
 
     }

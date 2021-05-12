@@ -12,7 +12,7 @@ import java.util.Date;
 
 //// EXT LOCATION
 //   Bean class to store an heatmap point
-
+@SuppressWarnings("unused")
 public class ExtLocation extends BaseLocation{
 
     private boolean infected;

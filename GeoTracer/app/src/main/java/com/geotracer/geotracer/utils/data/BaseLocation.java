@@ -11,7 +11,7 @@ import java.util.Date;
 
 //// BASE LOCATION
 //   Bean class to store the user position
-
+@SuppressWarnings("unused")
 public class BaseLocation implements Comparable<BaseLocation>{
 
     protected GeoPoint location;

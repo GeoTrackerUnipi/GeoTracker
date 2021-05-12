@@ -1,28 +1,24 @@
 package com.geotracer.geotracer.notifications;
 
 import com.geotracer.geotracer.utils.generics.RetStatus;
-import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.geotracer.geotracer.utils.data.Signature;
+import static android.content.ContentValues.TAG;
 import org.jetbrains.annotations.NotNull;
 import androidx.work.WorkerParameters;
 import androidx.annotation.NonNull;
-import java.util.logging.Logger;
 import android.content.Context;
-import android.util.Log;
-
 import java.util.Collections;
 import androidx.work.Worker;
-import com.google.gson.Gson;
 import java.util.ArrayList;
 import io.paperdb.Paper;
+import android.util.Log;
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
 
 //// INFECTION ALARM
-//   Worker to flood the user signatures in all the registered buckets
+//   Worker for flooding the user signatures in all the registered buckets
 public class InfectionAlarm extends Worker {
 
     private final FirebaseFirestore db;
@@ -39,16 +35,19 @@ public class InfectionAlarm extends Worker {
         try {
 
             Log.d(TAG, "[Infection Alert] Starting collect user beacons");
+            //  getting all the stored signatures
             RetStatus<List<Signature>> signatures = getAllSignatures();
             if (signatures.getStatus() != OpStatus.OK)
                 return Result.failure();
-
+            //  getting all the stored buckets
             RetStatus<List<String>> buckets = getBuckets();
             if( buckets.getStatus() != OpStatus.OK )
                 return Result.retry();
 
+            //  we send all the signatures in all the buckets
             buckets.getValue().forEach( bucket -> signatures.getValue().forEach(signature -> db.collection(bucket).add(signature)));
 
+            //  the signatures are no more usable, we remove all the signatures
             Paper.book("signatures").destroy();
             return Result.success();
 

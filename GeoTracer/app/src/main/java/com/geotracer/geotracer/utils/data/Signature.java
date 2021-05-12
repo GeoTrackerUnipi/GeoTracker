@@ -2,6 +2,8 @@ package com.geotracer.geotracer.utils.data;
 
 import com.google.gson.Gson;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -42,7 +44,7 @@ public class Signature implements Comparable<Signature> {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         Gson gson = new Gson();
         return gson.toJson(this);
     }
