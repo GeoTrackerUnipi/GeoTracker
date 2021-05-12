@@ -45,7 +45,7 @@ public class LocationAggregator {
                 return new RetStatus<>(null, OpStatus.PRESENT);
 
             //  we update the aggregated value and verify the two rules, if the function returns the
-            //  UPDATE_LOCATION flag it means that a new aggregation need to be performed
+            //  UPDATE_LOCATION flag it means that a new aggregation needs to be performed
             if (LocationAggregator.location.incrementCriticity(location) == OpStatus.UPDATE_LOCATION) {
                 //  we prepare the response
                 RetStatus<ExtLocation> retStatus = new RetStatus<>(LocationAggregator.location, OpStatus.OK);

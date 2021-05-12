@@ -3,10 +3,8 @@ package com.geotracer.geotracer.db.remote;
 import com.google.firebase.firestore.CollectionReference;
 import com.geotracer.geotracer.utils.generics.RetStatus;
 import com.geotracer.geotracer.utils.generics.OpStatus;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.geotracer.geotracer.utils.data.ExtLocation;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -18,7 +16,6 @@ import com.google.android.gms.tasks.Task;
 import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
 import com.google.firebase.FirebaseApp;
-import androidx.annotation.NonNull;
 import android.content.Intent;
 import java.util.ArrayList;
 import android.app.Service;
@@ -36,6 +33,7 @@ import java.util.List;
 //   the database, this is very inefficient but it's just a testing method to overcome the paywall of
 //   implementing functions directly inside the Firebase Firestore cloud service
 
+@SuppressWarnings("unused")
 public class FirestoreManagement extends Service {
 
     private FirebaseFirestore firestore;
@@ -137,26 +135,23 @@ public class FirestoreManagement extends Service {
 
         //  when all the data are ready
         Tasks.whenAllComplete(tasks)
-                .addOnCompleteListener(new OnCompleteListener<List<Task<?>>>() {
-                    @Override
-                    public void onComplete(@NonNull Task<List<Task<?>>> t) {
-                        List<ExtLocation> locations = new ArrayList<>();
+                .addOnCompleteListener( t -> {
+                    List<ExtLocation> locations = new ArrayList<>();
 
-                        for (Task<QuerySnapshot> task : tasks) {
-                            QuerySnapshot snap = task.getResult();
-                            assert snap != null;
-                            for (DocumentSnapshot doc : snap.getDocuments())
-                                locations.add(new ExtLocation(
-                                        doc.getGeoPoint("location"),
-                                        doc.getDate("expire"),
-                                        doc.getBoolean("infected"),
-                                        doc.getLong("criticity"),
-                                        doc.getString("geohash")));
-                        }
-                        Log.d(TAG,"Near Location collected: " + locations.size() + " data points obtained");
-                        callback.setResults(locations);
-
+                    for (Task<QuerySnapshot> task : tasks) {
+                        QuerySnapshot snap = task.getResult();
+                        assert snap != null;
+                        for (DocumentSnapshot doc : snap.getDocuments())
+                            locations.add(new ExtLocation(
+                                    doc.getGeoPoint("location"),
+                                    doc.getDate("expire"),
+                                    doc.getBoolean("infected"),
+                                    doc.getLong("criticity"),
+                                    doc.getString("geohash")));
                     }
+                    Log.d(TAG,"Near Location collected: " + locations.size() + " data points obtained");
+                    callback.setResults(locations);
+
                 });
     }
 
@@ -172,24 +167,17 @@ public class FirestoreManagement extends Service {
             WriteBatch writeBatch = firestore.batch();
 
             //  if a data is expired then we set a delete operation on the batch
-            collection.get().addOnSuccessListener((querySnapshot) -> {
+            collection.get().addOnSuccessListener((querySnapshot) -> querySnapshot.forEach((locationDoc) -> {
 
-                querySnapshot.forEach((locationDoc) -> {
+                if (Objects.requireNonNull(locationDoc.getDate("expire")).after(new Date()))
+                    writeBatch.delete(Objects.requireNonNull(locationDoc.getReference()));
 
-                    if (Objects.requireNonNull(locationDoc.getDate("expire")).after(new Date()))
-                        writeBatch.delete(Objects.requireNonNull(locationDoc.getReference()));
-
-                });
-
-            });
+            }));
 
             //  we execute all the settled operation
-            writeBatch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    assert false;
-                    Log.d(TAG,"Firestore consolidation completed " + aVoid.toString());
-                }
+            writeBatch.commit().addOnSuccessListener(aVoid -> {
+                assert false;
+                Log.d(TAG,"Firestore consolidation completed " + aVoid.toString());
             });
             return OpStatus.OK;
 

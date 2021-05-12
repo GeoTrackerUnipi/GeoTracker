@@ -16,6 +16,7 @@ import java.util.List;
 //   the contact tracing mechanism
 //   Data Format:    SIGNATURE: { signature, expire }
 
+@SuppressWarnings("unused")
 public class SignatureUtility {
 
     private final Book signatures;

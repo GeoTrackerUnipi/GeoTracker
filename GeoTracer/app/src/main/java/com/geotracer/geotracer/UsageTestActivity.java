@@ -69,7 +69,7 @@ public class UsageTestActivity extends AppCompatActivity {
             }
         };
 
-        private ServiceConnection notificationService = new ServiceConnection() {
+        private final ServiceConnection notificationService = new ServiceConnection() {
 
             @Override
             public void onServiceConnected(ComponentName className, IBinder service) {
@@ -176,7 +176,8 @@ public class UsageTestActivity extends AppCompatActivity {
         public void insertBeacon(View view){
 
             String beacon = ((EditText)findViewById(R.id.beacon_add)).getText().toString();
-            keyValueStore.beacons.insertBeacon(new ExtSignature(beacon,10));
+            OpStatus status = keyValueStore.beacons.insertBeacon(new ExtSignature(beacon,10));
+            Log.println(Log.INFO,"TEST","Insert Beacon Status: " + status.toString());
         }
 
         public void insertBucket(View view){
@@ -186,7 +187,8 @@ public class UsageTestActivity extends AppCompatActivity {
 
         public void insertSignature(View view){
             String signature = ((EditText)findViewById(R.id.signature_input)).getText().toString();
-            keyValueStore.signatures.insertSignature(new Signature(signature));
+            OpStatus status = keyValueStore.signatures.insertSignature(new Signature(signature));
+            Log.println(Log.INFO,"TEST","Insert Beacon Status: " + status.toString());
         }
 
         public void getBeacon(View view){
@@ -272,17 +274,7 @@ public class UsageTestActivity extends AppCompatActivity {
         popup_view.setText(message);
 
         //close the popup window on button click
-        closePopupBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
-
-
+        closePopupBtn.setOnClickListener(v -> popupWindow.dismiss());
 
     }
-
-
-
 }
