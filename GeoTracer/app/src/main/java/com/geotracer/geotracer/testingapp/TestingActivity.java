@@ -75,7 +75,7 @@ public class TestingActivity extends AppCompatActivity {
 
                         TextView tv = new TextView(TestingActivity.this);
                         if(tv == null)
-                            Log.d(this.getClass().getName() + "BROADCAST RECEIVER", "Empty location");
+                            Log.d(this.getClass().getName() + "BROADCAST LISTENER FOR CONTACTS", "Empty location");
                         else
                             showPopupWindow(tv, toLog);
                     }

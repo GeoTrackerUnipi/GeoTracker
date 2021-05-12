@@ -166,8 +166,10 @@ public class NotificationSender extends Service {
 
         Intent intent = new Intent(ACTION_BROADCAST);
         intent.putExtra("Contact", info);
-        if(!LocalBroadcastManager.getInstance(this).sendBroadcast(intent))
+        if(LocalBroadcastManager.getInstance(this).sendBroadcast(intent))
             Log.info(this.getClass().getName(), "Message sent");
+        else
+            Log.info(this.getClass().getName(), "Message not sent");
 
     }
 }
