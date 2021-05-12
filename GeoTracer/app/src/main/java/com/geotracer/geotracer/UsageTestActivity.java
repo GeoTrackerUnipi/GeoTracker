@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -138,10 +139,18 @@ public class UsageTestActivity extends AppCompatActivity {
                                 Log.d(this.getClass().getName() + "BROADCAST LISTENER FOR CONTACTS", "Empty location");
                             else
                                 showPopupWindow(tv, toLog);
+
+                            FrameLayout frameLayout = findViewById(R.id.contact_frame);
+                            frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
+                            TextView contact_text = findViewById(R.id.contact_text);
+                            contact_text.setText(getResources().getString(R.string.contacts));
+                            ((UserStatus) UsageTestActivity.this.getApplication()).setContacts(true);
                         }
                     },new IntentFilter(LogService.ACTION_BROADCAST)
 
             );
+
+
 
         }
 
@@ -158,6 +167,13 @@ public class UsageTestActivity extends AppCompatActivity {
 
         IntentFilter iff= new IntentFilter(NotificationSender.ACTION_BROADCAST);
         LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, iff);
+
+        if(((UserStatus) this.getApplication()).getContacts()) {
+            FrameLayout frameLayout = findViewById(R.id.contact_frame);
+            frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
+            TextView tv = findViewById(R.id.contact_text);
+            tv.setText(getResources().getString(R.string.contacts));
+        }
     }
 
     @Override
@@ -253,6 +269,7 @@ public class UsageTestActivity extends AppCompatActivity {
         }
     }
 
+
     protected void showPopupWindow(TextView location, String message){
 
         //instantiate the popup.xml layout file
@@ -274,7 +291,16 @@ public class UsageTestActivity extends AppCompatActivity {
         popup_view.setText(message);
 
         //close the popup window on button click
-        closePopupBtn.setOnClickListener(v -> popupWindow.dismiss());
+        closePopupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+
+
 
     }
+
+
 }

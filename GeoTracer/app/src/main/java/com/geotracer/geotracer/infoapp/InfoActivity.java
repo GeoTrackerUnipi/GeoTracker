@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.geotracer.geotracer.R;
+import com.geotracer.geotracer.UsageTestActivity;
+import com.geotracer.geotracer.UserStatus;
 import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
 import com.geotracer.geotracer.settingapp.SettingActivity;
@@ -53,15 +56,21 @@ public class InfoActivity extends AppCompatActivity {
                     @Override
                     public void onReceive(Context context, Intent intent) {
 
-                        Log.d(this.getClass().getName(), "BROADCAST LISTENER FOR CONTACTS");
+                        Log.i(this.getClass().getName(), "BROADCAST LISTENER FOR CONTACTS");
                         String toLog = intent.getStringExtra("Contact");
-
 
                         TextView tv = new TextView(InfoActivity.this);
                         if(tv == null)
                             Log.d(this.getClass().getName() + "BROADCAST LISTENER FOR CONTACTS", "Empty location");
                         else
                             showPopupWindow(tv, toLog);
+
+
+                        FrameLayout frameLayout = findViewById(R.id.contact_frame);
+                        frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
+                        TextView contact_text = findViewById(R.id.contact_text);
+                        contact_text.setText(getResources().getString(R.string.contacts));
+                        ((UserStatus) InfoActivity.this.getApplication()).setContacts(true);
                     }
                 },new IntentFilter(LogService.ACTION_BROADCAST)
 
@@ -83,6 +92,12 @@ public class InfoActivity extends AppCompatActivity {
 
         IntentFilter iff= new IntentFilter(NotificationSender.ACTION_BROADCAST);
         LocalBroadcastManager.getInstance(this).registerReceiver(notificationReceiver, iff);
+        if(((UserStatus) this.getApplication()).getContacts()) {
+            FrameLayout frameLayout = findViewById(R.id.contact_frame);
+            frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
+            TextView tv = findViewById(R.id.contact_text);
+            tv.setText(getResources().getString(R.string.contacts));
+        }
     }
 
     @Override
@@ -183,4 +198,6 @@ public class InfoActivity extends AppCompatActivity {
 
 
     }
+
+
 }

@@ -9,5 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#CCCCCC</color>
     <color name="popup">#828282</color>
+    <color name="red">#FF0000</color>
 </resources>
 

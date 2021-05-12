@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Switch;
@@ -25,6 +26,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.geotracer.geotracer.R;
+import com.geotracer.geotracer.UsageTestActivity;
+import com.geotracer.geotracer.UserStatus;
 import com.geotracer.geotracer.db.local.KeyValueManagement;
 import com.geotracer.geotracer.db.remote.FirestoreManagement;
 import com.geotracer.geotracer.infoapp.InfoActivity;
@@ -66,12 +69,17 @@ public class SettingActivity extends AppCompatActivity {
                         Log.d(this.getClass().getName(), "BROADCAST LISTENER FOR CONTACTS");
                         String toLog = intent.getStringExtra("Contact");
 
-
                         TextView tv = new TextView(SettingActivity.this);
                         if(tv == null)
                             Log.d(this.getClass().getName() + "BROADCAST LISTENER FOR CONTACTS", "Empty location");
                         else
                             showPopupWindow(tv, toLog);
+
+                        FrameLayout frameLayout = findViewById(R.id.contact_frame);
+                        frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
+                        TextView contact_text = findViewById(R.id.contact_text);
+                        contact_text.setText(getResources().getString(R.string.contacts));
+                        ((UserStatus) SettingActivity.this.getApplication()).setContacts(true);
                     }
                 },new IntentFilter(LogService.ACTION_BROADCAST)
 
@@ -82,18 +90,6 @@ public class SettingActivity extends AppCompatActivity {
         LISTENER FOR SWITCH BUTTONS
          */
 
-        Switch contact_notifications = findViewById(R.id.notification_contact);
-        contact_notifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    //ENABLE THE RECEIVING OF NOTIFICATION FOR HAVING MET SOMEONE POSITIVE TO COVID19
-                    Log.d(this.getClass().getName(), "Contact Notification Enabled");
-                }else{
-                    //DISABLE THE RECEIVING OF NOTIFICATION FOR HAVING MET SOMEONE POSITIVE TO COVID19
-                    Log.d(this.getClass().getName(), "Contanct Notification Disabled");
-                }
-            }
-        });
         Switch proximity_notifications = (Switch) findViewById(R.id.notification_proximity);
         proximity_notifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -112,12 +108,23 @@ public class SettingActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     //ENABLE THE RECEIVING OF NOTIFICATION FOR BEING TOO CLOSE TO OTHER PEOPLE
+
+
+                    /*
+
+
+                    NICOLA è QUIIIIIIIIII
+
+
                     RetStatus<List<BaseLocation>> userPositions = keyValueStore.positions.getAllPositions();
                     if(userPositions.getStatus() == OpStatus.OK){
                         firestoreManagement.insertInfectedLocations(userPositions.getValue());
                         notificationSender.infectionAlert();
                         Log.d(this.getClass().getName(), "Positivity Report Enabled");
                     }
+
+
+                     */
 
                 }else{
                     //DISABLE THE RECEIVING OF NOTIFICATION FOR BEING TOO CLOSE TO OTHER PEOPLE
@@ -148,6 +155,12 @@ public class SettingActivity extends AppCompatActivity {
 
         IntentFilter iff= new IntentFilter(NotificationSender.ACTION_BROADCAST);
         LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, iff);
+        if(((UserStatus) this.getApplication()).getContacts()) {
+            FrameLayout frameLayout = findViewById(R.id.contact_frame);
+            frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
+            TextView tv = findViewById(R.id.contact_text);
+            tv.setText(getResources().getString(R.string.contacts));
+        }
     }
 
     @Override

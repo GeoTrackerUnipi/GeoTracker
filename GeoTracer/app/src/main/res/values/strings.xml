@@ -9,6 +9,8 @@
     <string name="menu_setting_item">Settings</string>
     <string name="menu_info_item">Info</string>
 
+    <string name="no_contacts">Be relaxed! No contacts detected</string>
+    <string name="contacts">"WARNING!!\n You could have been in contact with an infected person\n"</string>
     <string name="activity_info">
         This application was developed by:\n
                 Riccardo Bertini\n

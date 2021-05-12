@@ -1,5 +1,6 @@
 package com.geotracer.geotracer.mainapp;
 
+import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -26,6 +28,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.geotracer.geotracer.R;
 import com.geotracer.geotracer.UsageTestActivity;
 
+import com.geotracer.geotracer.UserStatus;
 import com.geotracer.geotracer.infoapp.InfoActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
 import com.geotracer.geotracer.settingapp.SettingActivity;
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onReceive(Context context, Intent intent) {
 
-                        Log.d(this.getClass().getName(), "BROADCAST LISTENER FOR CONTACTS");
+                        Log.i(this.getClass().getName(), "BROADCAST LISTENER FOR CONTACTS");
                         String toLog = intent.getStringExtra("Contact");
 
                         TextView tv = new TextView(MainActivity.this);
@@ -57,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
                             Log.d(this.getClass().getName() + "BROADCAST LISTENER FOR CONTACTS", "Empty location");
                         else
                             showPopupWindow(tv, toLog);
+
+                        FrameLayout frameLayout = findViewById(R.id.contact_frame);
+                        frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
+                        TextView contact_text = findViewById(R.id.contact_text);
+                        contact_text.setText(getResources().getString(R.string.contacts));
+                        ((UserStatus) MainActivity.this.getApplication()).setContacts(true);
                     }
                 },new IntentFilter(LogService.ACTION_BROADCAST)
 
@@ -76,6 +85,12 @@ public class MainActivity extends AppCompatActivity {
 
         IntentFilter iff= new IntentFilter(NotificationSender.ACTION_BROADCAST);
         LocalBroadcastManager.getInstance(this).registerReceiver(notificationReceiver, iff);
+        if(((UserStatus) this.getApplication()).getContacts()) {
+            FrameLayout frameLayout = findViewById(R.id.contact_frame);
+            frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
+            TextView tv = findViewById(R.id.contact_text);
+            tv.setText(getResources().getString(R.string.contacts));
+        }
     }
 
     @Override
@@ -186,5 +201,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
 }

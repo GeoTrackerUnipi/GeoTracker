@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
@@ -25,6 +26,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.geotracer.geotracer.R;
+import com.geotracer.geotracer.UsageTestActivity;
+import com.geotracer.geotracer.UserStatus;
 import com.geotracer.geotracer.infoapp.InfoActivity;
 import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
@@ -77,10 +80,14 @@ public class TestingActivity extends AppCompatActivity {
                         if(tv == null)
                             Log.d(this.getClass().getName() + "BROADCAST LISTENER FOR CONTACTS", "Empty location");
                         else {
-                            tv.setText(toLog);
-                            //showPopupWindow(tv, toLog);
+                            showPopupWindow(tv, toLog);
                         }
 
+                        FrameLayout frameLayout = findViewById(R.id.contact_frame);
+                        frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
+                        TextView contact_text = findViewById(R.id.contact_text);
+                        contact_text.setText(getResources().getString(R.string.contacts));
+                        ((UserStatus) TestingActivity.this.getApplication()).setContacts(true);
                     }
                 },new IntentFilter(LogService.ACTION_BROADCAST)
 
@@ -137,6 +144,13 @@ public class TestingActivity extends AppCompatActivity {
 /*
         iff= new IntentFilter(LogService.ACTION_BROADCAST);
         LocalBroadcastManager.getInstance(this).registerReceiver(logServiceReceiver, iff);  */
+
+        if(((UserStatus) this.getApplication()).getContacts()) {
+            FrameLayout frameLayout = findViewById(R.id.contact_frame);
+            frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
+            TextView tv = findViewById(R.id.contact_text);
+            tv.setText(getResources().getString(R.string.contacts));
+        }
     }
 
     @Override
