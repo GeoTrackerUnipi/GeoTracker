@@ -76,8 +76,11 @@ public class TestingActivity extends AppCompatActivity {
                         TextView tv = new TextView(TestingActivity.this);
                         if(tv == null)
                             Log.d(this.getClass().getName() + "BROADCAST LISTENER FOR CONTACTS", "Empty location");
-                        else
-                            showPopupWindow(tv, toLog);
+                        else {
+                            tv.setText(toLog);
+                            //showPopupWindow(tv, toLog);
+                        }
+
                     }
                 },new IntentFilter(LogService.ACTION_BROADCAST)
 
@@ -131,16 +134,16 @@ public class TestingActivity extends AppCompatActivity {
 
         IntentFilter iff= new IntentFilter(NotificationSender.ACTION_BROADCAST);
         LocalBroadcastManager.getInstance(this).registerReceiver(notificationReceiver, iff);
-
+/*
         iff= new IntentFilter(LogService.ACTION_BROADCAST);
-        LocalBroadcastManager.getInstance(this).registerReceiver(logServiceReceiver, iff);
+        LocalBroadcastManager.getInstance(this).registerReceiver(logServiceReceiver, iff);  */
     }
 
     @Override
     protected void onPause(){
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(logServiceReceiver);
+        //LocalBroadcastManager.getInstance(this).unregisterReceiver(logServiceReceiver);
 
     }
 
@@ -182,7 +185,9 @@ public class TestingActivity extends AppCompatActivity {
 
         String name = this.getClass().getName();
 
-        service.printLog(name, s);
+        TextView tv = new TextView(TestingActivity.this);
+        showPopupWindow(tv, s);
+        //service.printLog(name, s);
 
 
         /*
@@ -210,8 +215,9 @@ public class TestingActivity extends AppCompatActivity {
         //if(/*   THE DISSEMINATION STOPPED   */){
 
 
-        showPopupWindow((TextView) findViewById(R.id.signature_dissemination), "Dissemination Stopped");
-        service.printLog(this.getClass().getName(), "DEVICE STOPPED DISSEMINATING ITS SIGNATURE\n");
+        TextView tv = new TextView(TestingActivity.this);
+        showPopupWindow(tv, "Dissemination Stopped");
+        //service.printLog(this.getClass().getName(), "DEVICE STOPPED DISSEMINATING ITS SIGNATURE\n");
 
 
 
@@ -239,8 +245,9 @@ public class TestingActivity extends AppCompatActivity {
         I SHOW THE COLLECTION INFORMATION IN THE LOG BOX
 
          */
-
-        service.printLog(this.getClass().getName(), "DEVICE STARTED COLLECTING SIGNATURES\n");
+        TextView tv = new TextView(TestingActivity.this);
+        showPopupWindow(tv, "Signature Collection Started");
+        //service.printLog(this.getClass().getName(), "DEVICE STARTED COLLECTING SIGNATURES\n");
 
 
         /*
@@ -263,8 +270,9 @@ public class TestingActivity extends AppCompatActivity {
 
          */
         //if(/*   THE COLLECTION STOPPED   */){
-        showPopupWindow((TextView) findViewById(R.id.signature_collection), "Signature Collection Stopped");
-        service.printLog(this.getClass().getName(), "DEVICE STOPPED COLLECTING SIGNATURES\n");
+        TextView tv = new TextView(TestingActivity.this);
+        showPopupWindow(tv, "Signature Collection Stopped");
+        //service.printLog(this.getClass().getName(), "DEVICE STOPPED COLLECTING SIGNATURES\n");
 
 
         /*
@@ -283,7 +291,9 @@ public class TestingActivity extends AppCompatActivity {
          */
         //if(/*   DONE IT   */){
 
-        service.printLog(this.getClass().getName(), "USER TAGGED AS INFECTED\n");
+        TextView tv = new TextView(TestingActivity.this);
+        showPopupWindow(tv, "USER TAGGED AS INFECTED");
+        //service.printLog(this.getClass().getName(), "USER TAGGED AS INFECTED\n");
 
 
         /*
@@ -304,7 +314,9 @@ public class TestingActivity extends AppCompatActivity {
 
         //if(/*   DONE IT   */){
 
-        service.printLog(this.getClass().getName(), "USER IS NOT CONSIDERED INFECTED ANYMORE\n");
+        TextView tv = new TextView(TestingActivity.this);
+        showPopupWindow(tv, "USER IS NOT CONSIDERED INFECTED ANYMORE");
+        //service.printLog(this.getClass().getName(), "USER IS NOT CONSIDERED INFECTED ANYMORE\n");
 
 
         /*
@@ -323,7 +335,8 @@ public class TestingActivity extends AppCompatActivity {
         IF THE TESTING INTERFACE IS AVAILABLE TO EVERYONE I SUGGEST TO DELETE ONLY ITS DATA.
         A POPUP WINDOW WITH THE RESULT OF THE OPERATION WILL BE SHOWN
          */
-        showPopupWindow((TextView) findViewById(R.id.deleteSignature), "Old data has been deleted from the database");
+        TextView tv = new TextView(TestingActivity.this);
+        showPopupWindow(tv, "Old data has been deleted from the database");
 
     }
 
