@@ -177,14 +177,15 @@ public class NotificationSender extends Service {
     public void infectionReaction(){
         logger.info("INFECTED!!!!!");
 
+
         String info = "WARNING!!\n You could have been in contact with an infected person\n";
 
         Intent intent = new Intent(ACTION_BROADCAST);
         intent.putExtra("Contact", info);
         if(LocalBroadcastManager.getInstance(this).sendBroadcast(intent) == false)
-            Log.info(this.getClass().getName(), "Message sent");
+            Log.info(this.getClass().getName(), "MESSAGE NOT SENT");
         else
-            Log.info(this.getClass().getName(), "Message sent");
+            Log.info(this.getClass().getName(), "MESSAGE SENT");
 
     }
 }

@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,14 +32,12 @@ import com.geotracer.geotracer.settingapp.SettingActivity;
 import com.geotracer.geotracer.testingapp.LogService;
 import com.geotracer.geotracer.testingapp.TestingActivity;
 
-import org.w3c.dom.Text;
-
 
 public class MainActivity extends AppCompatActivity {
 
-    NotificationSender service;
-    boolean bound;
-    BroadcastReceiver onNotice;
+    NotificationSender notificationSender;
+    boolean boundNotification;
+    BroadcastReceiver notificationReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +45,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(
-                onNotice = new BroadcastReceiver() {
+                notificationReceiver = new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
 
                         Log.d(this.getClass().getName(), "BROADCAST LISTENER FOR CONTACTS");
                         String toLog = intent.getStringExtra("Contact");
 
-                        showPopupWindow((TextView) findViewById(R.id.textView), toLog);
+                        TextView tv = new TextView(MainActivity.this);
+                        if(tv == null)
+                            Log.d(this.getClass().getName() + "BROADCAST RECEIVER", "Empty location");
+                        else
+                            showPopupWindow(tv, toLog);
                     }
                 },new IntentFilter(LogService.ACTION_BROADCAST)
 
@@ -67,38 +68,44 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // Bind to LocalService
         Intent intent = new Intent(this, NotificationSender.class);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        bindService(intent, notificationService, Context.BIND_AUTO_CREATE);
     }
 
     protected void onResume() {
         super.onResume();
 
         IntentFilter iff= new IntentFilter(NotificationSender.ACTION_BROADCAST);
-        LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, iff);
+        LocalBroadcastManager.getInstance(this).registerReceiver(notificationReceiver, iff);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        unbindService(connection);
-        bound = false;
+        unbindService(notificationService);
+        boundNotification = false;
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationReceiver);
     }
 
     /** Defines callbacks for service binding, passed to bindService() */
-    private ServiceConnection connection = new ServiceConnection() {
+    private ServiceConnection notificationService = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder s) {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             NotificationSender.LocalBinder binder = (NotificationSender.LocalBinder) s;
-            service = binder.getService();
-            bound = true;
+            notificationSender = binder.getService();
+            boundNotification = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            bound = false;
+            boundNotification = false;
         }
     };
 

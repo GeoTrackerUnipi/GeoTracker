@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Gravity;
@@ -36,7 +35,11 @@ public class TestingActivity extends AppCompatActivity {
 
 
     LogService service;
-    boolean bound;
+    boolean boundLog;
+    boolean boundNotification;
+    BroadcastReceiver notificationReceiver;
+    BroadcastReceiver logServiceReceiver;
+    NotificationSender notificationSender;
 
 
     @Override
@@ -48,7 +51,7 @@ public class TestingActivity extends AppCompatActivity {
         TextView tv = (TextView) findViewById(R.id.log_text);
 
         LocalBroadcastManager.getInstance(TestingActivity.this).registerReceiver(
-                new BroadcastReceiver() {
+                logServiceReceiver = new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
 
@@ -62,7 +65,82 @@ public class TestingActivity extends AppCompatActivity {
 
         );
 
+        LocalBroadcastManager.getInstance(TestingActivity.this).registerReceiver(
+                notificationReceiver = new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
 
+                        Log.d(this.getClass().getName(), "BROADCAST LISTENER FOR CONTACTS");
+                        String toLog = intent.getStringExtra("Contact");
+
+                        TextView tv = new TextView(TestingActivity.this);
+                        if(tv == null)
+                            Log.d(this.getClass().getName() + "BROADCAST RECEIVER", "Empty location");
+                        else
+                            showPopupWindow(tv, toLog);
+                    }
+                },new IntentFilter(LogService.ACTION_BROADCAST)
+
+        );
+
+
+
+    }
+
+
+    private ServiceConnection notificationService = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+
+            NotificationSender.LocalBinder binder = (NotificationSender.LocalBinder) service;
+            notificationSender = binder.getService();
+            boundNotification = true;
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+
+            notificationSender = null;
+            boundNotification = false;
+
+        }
+    };
+    /** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection logServiceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder s) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            LogService.LocalBinder binder = (LogService.LocalBinder) s;
+            service = binder.getService();
+            boundLog = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            boundLog = false;
+        }
+    };
+
+
+    protected void onResume() {
+        super.onResume();
+
+        IntentFilter iff= new IntentFilter(NotificationSender.ACTION_BROADCAST);
+        LocalBroadcastManager.getInstance(this).registerReceiver(notificationReceiver, iff);
+
+        iff= new IntentFilter(LogService.ACTION_BROADCAST);
+        LocalBroadcastManager.getInstance(this).registerReceiver(logServiceReceiver, iff);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(logServiceReceiver);
 
     }
 
@@ -71,34 +149,22 @@ public class TestingActivity extends AppCompatActivity {
         super.onStart();
         // Bind to LocalService
         Intent intent = new Intent(this, LogService.class);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        bindService(intent, logServiceConnection, Context.BIND_AUTO_CREATE);
+        Intent intent2 = new Intent(this, NotificationSender.class);
+        bindService(intent2, notificationService, Context.BIND_AUTO_CREATE);
     }
 
 
     @Override
     protected void onStop() {
         super.onStop();
-        unbindService(connection);
-        bound = false;
+        unbindService(logServiceConnection);
+        unbindService(notificationService);
+        boundNotification = false;
+        boundLog = false;
     }
 
-    /** Defines callbacks for service binding, passed to bindService() */
-    private ServiceConnection connection = new ServiceConnection() {
 
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder s) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
-            LogService.LocalBinder binder = (LogService.LocalBinder) s;
-            service = binder.getService();
-            bound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            bound = false;
-        }
-    };
 
     public void startDissemination(View view) {
 

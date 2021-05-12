@@ -129,10 +129,15 @@ public class UsageTestActivity extends AppCompatActivity {
                     onNotice = new BroadcastReceiver() {
                         @Override
                         public void onReceive(Context context, Intent intent) {
+
                             Log.i(this.getClass().getName(), "BROADCAST LISTENER FOR CONTACTS");
                             String toLog = intent.getStringExtra("Contact");
 
-                            showPopupWindow((TextView) findViewById(R.id.textView), toLog);
+                            TextView tv = new TextView(UsageTestActivity.this);
+                            if(tv == null)
+                                Log.d(this.getClass().getName() + "BROADCAST RECEIVER", "Empty location");
+                            else
+                                showPopupWindow(tv, toLog);
                         }
                     },new IntentFilter(LogService.ACTION_BROADCAST)
 
@@ -153,6 +158,12 @@ public class UsageTestActivity extends AppCompatActivity {
 
         IntentFilter iff= new IntentFilter(NotificationSender.ACTION_BROADCAST);
         LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, iff);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(onNotice);
     }
 
 

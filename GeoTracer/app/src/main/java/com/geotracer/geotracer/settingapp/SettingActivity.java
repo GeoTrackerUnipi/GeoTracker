@@ -35,7 +35,7 @@ public class SettingActivity extends AppCompatActivity {
 
 
     NotificationSender service;
-    boolean bound;
+    boolean boundNotification;
     BroadcastReceiver onNotice;
 
     @Override
@@ -56,7 +56,12 @@ public class SettingActivity extends AppCompatActivity {
                         Log.d(this.getClass().getName(), "BROADCAST LISTENER FOR CONTACTS");
                         String toLog = intent.getStringExtra("Contact");
 
-                        showPopupWindow((TextView) findViewById(R.id.textView), toLog);
+
+                        TextView tv = new TextView(SettingActivity.this);
+                        if(tv == null)
+                            Log.d(this.getClass().getName() + "BROADCAST RECEIVER", "Empty location");
+                        else
+                            showPopupWindow(tv, toLog);
                     }
                 },new IntentFilter(LogService.ACTION_BROADCAST)
 
@@ -114,7 +119,7 @@ public class SettingActivity extends AppCompatActivity {
         super.onStart();
         // Bind to LocalService
         Intent intent = new Intent(this, NotificationSender.class);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        bindService(intent, notificationService, Context.BIND_AUTO_CREATE);
     }
 
     protected void onResume() {
@@ -125,14 +130,20 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause(){
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(onNotice);
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
-        unbindService(connection);
-        bound = false;
+        unbindService(notificationService);
+        boundNotification = false;
     }
 
     /** Defines callbacks for service binding, passed to bindService() */
-    private ServiceConnection connection = new ServiceConnection() {
+    private ServiceConnection notificationService = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName className,
@@ -140,12 +151,12 @@ public class SettingActivity extends AppCompatActivity {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             NotificationSender.LocalBinder binder = (NotificationSender.LocalBinder) s;
             service = binder.getService();
-            bound = true;
+            boundNotification = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            bound = false;
+            boundNotification = false;
         }
     };
 
