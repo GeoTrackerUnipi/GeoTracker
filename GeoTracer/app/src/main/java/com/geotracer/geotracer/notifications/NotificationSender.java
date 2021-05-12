@@ -13,6 +13,11 @@ import androidx.work.OneTimeWorkRequest;
 import com.esotericsoftware.minlog.Log;
 import android.content.ComponentName;
 import androidx.work.WorkManager;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Logger;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +28,8 @@ import java.util.HashMap;
 import android.os.Binder;
 import java.util.Objects;
 import java.util.List;
+
+import io.paperdb.Paper;
 
 
 @SuppressWarnings("unused")
@@ -96,7 +103,6 @@ public class NotificationSender extends Service {
             db = FirebaseFirestore.getInstance();
 
             //  creating connection to service KeyValueManagement
-            logger.info("Context: " + getApplicationContext() + " local: " + getBaseContext());
             Intent service = new Intent(getBaseContext(), KeyValueManagement.class);
             bindService(service, keyValueService, Context.BIND_AUTO_CREATE);
 
@@ -166,17 +172,40 @@ public class NotificationSender extends Service {
         return result;
     }
 
+    public boolean amiInfected(){
+        if(Paper.book("notification_state").contains("application_state")){
+            try {
+                if(Objects.requireNonNull(DateFormat.getDateInstance().parse(Paper.book("notification_state").read("application_state"))).after(new Date()))
+                    return true;
+                else
+                    Paper.book("notification_state").delete("application_state");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
     public void infectionReaction(){
-        logger.info("INFECTED!!!!!");
 
-        String info = "WARNING!!\n You could have been in contact with an infected person\n";
+        //  notifications expire time 14 days
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DAY_OF_MONTH, 14);
 
-        Intent intent = new Intent(ACTION_BROADCAST);
-        intent.putExtra("Contact", info);
-        if(LocalBroadcastManager.getInstance(this).sendBroadcast(intent))
-            Log.info(this.getClass().getName(), "Message sent");
-        else
-            Log.info(this.getClass().getName(), "Message not sent");
+            //  if the user has stored information we update them in order to increase the expire
+        if( Paper.book("notification_state").contains("application_state"))
+            Paper.book("notification_state").delete("application_state");
+        else{
+            //  otherwise we advise the GUI to show a notification and store the expiring
+            String info = "WARNING!!\n You could have been in contact with an infected person\n";
+            Intent intent = new Intent(ACTION_BROADCAST);
+            intent.putExtra("Contact", info);
+            if(LocalBroadcastManager.getInstance(this).sendBroadcast(intent))
+                Log.info(this.getClass().getName(), "Message sent");
+        }
+
+        Paper.book("notification_state").write("application_state", calendar.getTime().toString());
 
     }
 }
