@@ -1,5 +1,13 @@
 package com.geotracer.geotracer.db.remote;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Vibrator;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.esotericsoftware.minlog.Log;
+import com.geotracer.geotracer.notifications.NotificationSender;
 import com.geotracer.geotracer.utils.generics.RetStatus;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.geotracer.geotracer.utils.data.BaseLocation;
@@ -19,6 +27,13 @@ public class LocationAggregator {
 
     private final static List<String> archive = new ArrayList<>();  //  maintains unique IDs
     private static ExtLocation location = null;                     //  maintains the aggregated value
+    private static boolean proximityAlertFlag = false;              //  flag to activate/deactive raising of proximity alerts
+    private final Vibrator vibrator;
+
+
+    LocationAggregator(Vibrator vibrator){
+        this.vibrator = vibrator;
+    }
 
     //  perform aggregation of the input data applying the two previous rules
     //  Returns:
@@ -39,6 +54,12 @@ public class LocationAggregator {
                 archive.add(ID);  // the given ID is setted has registered
                 return new RetStatus<>(null, OpStatus.COLLECTED);
             }
+
+            //  if the distance is less then
+            float distance = LocationAggregator.location.pointsDistance(location);
+            if( proximityAlertFlag && distance < 5)
+                vibrator.vibrate((long)(100*distance));
+
 
             //  if the ID is already used we discard the request
             if (archive.contains(ID))
@@ -66,4 +87,10 @@ public class LocationAggregator {
 
         }
     }
+
+    public void setProximityAlert(boolean active){
+        proximityAlertFlag = active;
+    }
+
+
 }

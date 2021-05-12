@@ -139,16 +139,23 @@ public class NotificationSender extends Service {
         if( status != OpStatus.OK)
             return status;
 
-        listeners.put(bucket,db.collection(bucket).addSnapshotListener((value, error) -> {
+        listeners
+                .put(bucket, db.collection(bucket)
+                        .addSnapshotListener((value, error) -> {
 
-            assert value != null;
-            if(value.getMetadata().isFromCache()) return;
-            for (DocumentChange dc : value.getDocumentChanges())
-                if( dc.getType() == DocumentChange.Type.ADDED && keyValueStore.beacons.beaconPresent( (String)dc.getDocument().getData().get("signature")) == OpStatus.PRESENT){
-                    infectionReaction();
-                    break;
-                }
-        }));
+                            assert value != null;
+                            if(value.getMetadata().isFromCache()) return;
+
+                            for (DocumentChange dc : value.getDocumentChanges())
+                                if( dc.getType() == DocumentChange.Type.ADDED &&
+                                        keyValueStore.beacons.beaconPresent(
+                                                (String)dc.getDocument().getData().get("signature")) == OpStatus.PRESENT){
+                                    infectionReaction();
+                                    break;
+                                }
+                        })
+                );
+
         return OpStatus.OK;
     }
 

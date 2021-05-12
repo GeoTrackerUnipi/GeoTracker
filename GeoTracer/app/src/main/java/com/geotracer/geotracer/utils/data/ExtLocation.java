@@ -74,6 +74,15 @@ public class ExtLocation extends BaseLocation{
         return OpStatus.OK;
     }
 
+    public float pointsDistance(BaseLocation location){
+
+        float[] results = new float[1];
+        Location.distanceBetween(this.location.getLatitude(),this.location.getLongitude(),
+                location.getLocation().getLatitude(),location.getLocation().getLongitude(),
+                results);
+        return results[0];
+    }
+
     public boolean getInfected(){
         return infected;
     }
