@@ -119,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
             notificationSender = binder.getService();
             boundNotification = true;
 
-            Log.i("INFETTATO", String.valueOf(notificationSender.amiInfected()));
-            if(notificationSender.amiInfected()==true){
+            Log.i("INFETTATO", String.valueOf(notificationSender.canIbeInfected()));
+            if(notificationSender.canIbeInfected()){
                 FrameLayout frameLayout = findViewById(R.id.contact_frame);
                 frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
                 TextView contact_text = findViewById(R.id.contact_text);

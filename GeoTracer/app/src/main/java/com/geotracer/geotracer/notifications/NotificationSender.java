@@ -1,6 +1,5 @@
 package com.geotracer.geotracer.notifications;
 
-
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.geotracer.geotracer.db.local.KeyValueManagement;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -16,8 +15,10 @@ import androidx.work.WorkManager;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Logger;
 import android.content.Context;
 import android.content.Intent;
@@ -172,10 +173,10 @@ public class NotificationSender extends Service {
         return result;
     }
 
-    public boolean amiInfected(){
+    public boolean canIbeInfected(){
         if(Paper.book("notification_state").contains("application_state")){
             try {
-                if(Objects.requireNonNull(DateFormat.getDateInstance().parse(Paper.book("notification_state").read("application_state"))).after(new Date()))
+                if(Objects.requireNonNull(new SimpleDateFormat("EEE MMM dd hh:mm:ss zzzz yyyy", Locale.ENGLISH).parse(Paper.book("notification_state").read("application_state"))).after(new Date()))
                     return true;
                 else
                     Paper.book("notification_state").delete("application_state");
