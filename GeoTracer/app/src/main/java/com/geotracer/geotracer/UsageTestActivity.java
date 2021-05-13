@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import java.util.List;
@@ -35,6 +36,7 @@ import com.geotracer.geotracer.settingapp.SettingActivity;
 import com.geotracer.geotracer.testingapp.LogService;
 import com.geotracer.geotracer.testingapp.TestingActivity;
 import com.geotracer.geotracer.utils.data.BaseLocation;
+import com.geotracer.geotracer.utils.data.ExtLocation;
 import com.geotracer.geotracer.utils.data.ExtSignature;
 import com.geotracer.geotracer.utils.data.Signature;
 import com.geotracer.geotracer.utils.generics.OpStatus;
@@ -215,6 +217,24 @@ public class UsageTestActivity extends AppCompatActivity {
             Log.println(Log.INFO,"TEST","Insert Beacon Status: " + status.toString());
         }
 
+        public void insertExtPosition(View view){
+            double latitude = Double.parseDouble(((EditText)findViewById(R.id.ext_latitude)).getText().toString());
+            double longitude = Double.parseDouble(((EditText)findViewById(R.id.ext_longitude)).getText().toString());
+            ExtLocation location = new ExtLocation(new GeoPoint(latitude,longitude));
+            if(((RadioButton)findViewById(R.id.insert_ext_loc)).isChecked()){
+                location.setCriticity(1);
+                location.setInfected();
+
+            }else{
+                Integer criticity = Integer.parseInt(((EditText)findViewById(R.id.criticity)).getText().toString());
+                location.setCriticity(criticity);
+            }
+
+            firestore.testInsertLocation(location);
+            Log.println(Log.INFO,"TEST","Insert Beacon Status: " + location.getGeoHash());
+
+        }
+
         public void getBeacon(View view){
             String beacon = ((EditText)findViewById(R.id.beacon_search)).getText().toString();
             ((TextView)findViewById(R.id.display)).setText(keyValueStore.beacons.beaconPresent(beacon).toString());
@@ -246,6 +266,14 @@ public class UsageTestActivity extends AppCompatActivity {
             for( BaseLocation signature: signatures)
                 put.append(signature.getLocation()).append("\n");
             ((TextView)findViewById(R.id.display_positions)).setText(put);
+        }
+
+        public void getExtLocations(View view){
+            double latitude = Double.parseDouble(((EditText)findViewById(R.id.getExtLatitude)).getText().toString());
+            double longitude = Double.parseDouble(((EditText)findViewById(R.id.getExtLongitude)).getText().toString());
+            ExtLocation location = new ExtLocation(new GeoPoint(latitude,longitude));
+            firestore.getNearLocations(new GeoPoint(latitude,longitude),5000);
+
         }
 
         public void sendAlert(View view){

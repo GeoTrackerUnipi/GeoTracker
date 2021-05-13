@@ -12,8 +12,6 @@ import androidx.work.OneTimeWorkRequest;
 import com.esotericsoftware.minlog.Log;
 import android.content.ComponentName;
 import androidx.work.WorkManager;
-
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

@@ -40,11 +40,11 @@ public class FirestoreManagement extends Service {
     private CollectionReference collection;
     private static final LocationAggregator aggregator = new LocationAggregator();
 
+    FirestoreCallback callback;
+
     //  callback function to obtain asynchronously the data from firestore
     public interface FirestoreCallback {
-        List<ExtLocation> getResults();
-        void setResults(List<ExtLocation> results);
-        boolean isPresent();
+        void onDataCollected(List<ExtLocation> location);
     }
 
     //  binder for giving the Service class
@@ -117,10 +117,17 @@ public class FirestoreManagement extends Service {
 
     }
 
+    //  TODO To be removed
+    public void testInsertLocation(ExtLocation location){
+        collection
+                .add(location)
+                .addOnSuccessListener(documentReference -> Log.d(TAG,"New document inserted into Firestore: " + documentReference.getId()))
+                .addOnFailureListener(e -> Log.d(TAG,"Error adding a document" + e));
+    }
+
     //  function used to collect data to generate a heatmap. It requires a location which will be the center
     //  of a circle with a certain radious. The function will return all the points inside the circle
-    public void getNearLocations(GeoPoint location, double radiusInM, FirestoreCallback callback ){
-
+    public FirestoreCallback getNearLocations(GeoPoint location, double radiusInM){
 
         final GeoLocation center = new GeoLocation(location.getLatitude(), location.getLongitude());
         final List<Task<QuerySnapshot>> tasks = new ArrayList<>();   // lists for all the queries
@@ -129,7 +136,7 @@ public class FirestoreManagement extends Service {
         //  in order to collect all the data placed between the bounds
         GeoFireUtils.getGeoHashQueryBounds(center, radiusInM).forEach(
                 bound -> tasks.add( collection
-                        .orderBy("geohash")
+                        .orderBy("geoHash")
                         .startAt(bound.startHash)
                         .endAt(bound.endHash).get()));
 
@@ -150,9 +157,12 @@ public class FirestoreManagement extends Service {
                                     doc.getString("geohash")));
                     }
                     Log.d(TAG,"Near Location collected: " + locations.size() + " data points obtained");
-                    callback.setResults(locations);
+                   // callback.onDataCollected(locations);
+                    Log.d(TAG, locations.toString());
 
                 });
+
+        return this.callback;
     }
 
     // [testing function] removes all the expired data from the database. This is very inefficient

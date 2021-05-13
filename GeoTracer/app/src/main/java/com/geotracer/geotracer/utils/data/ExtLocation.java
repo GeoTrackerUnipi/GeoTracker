@@ -53,6 +53,10 @@ public class ExtLocation extends BaseLocation{
         return this;
     }
 
+    public void setCriticity(int criticity){
+        this.criticity = criticity;
+    }
+
     public OpStatus incrementCriticity(BaseLocation location){
 
         Calendar calendar = Calendar.getInstance();
