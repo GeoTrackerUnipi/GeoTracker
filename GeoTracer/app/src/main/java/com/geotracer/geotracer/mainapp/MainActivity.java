@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(
                 notificationReceiver = new BroadcastReceiver() {
                     @Override
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         // Bind to LocalService
         Intent intent = new Intent(this, NotificationSender.class);
         bindService(intent, notificationService, Context.BIND_AUTO_CREATE);
+
     }
 
     protected void onResume() {
@@ -116,6 +118,15 @@ public class MainActivity extends AppCompatActivity {
             NotificationSender.LocalBinder binder = (NotificationSender.LocalBinder) s;
             notificationSender = binder.getService();
             boundNotification = true;
+
+            Log.i("INFETTATO", String.valueOf(notificationSender.amiInfected()));
+            if(notificationSender.amiInfected()==true){
+                FrameLayout frameLayout = findViewById(R.id.contact_frame);
+                frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
+                TextView contact_text = findViewById(R.id.contact_text);
+                contact_text.setText(getResources().getString(R.string.contacts));
+                ((UserStatus) MainActivity.this.getApplication()).setContacts(true);
+            }
         }
 
         @Override

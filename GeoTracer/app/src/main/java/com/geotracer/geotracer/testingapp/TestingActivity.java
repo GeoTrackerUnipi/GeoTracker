@@ -28,10 +28,12 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.geotracer.geotracer.R;
 import com.geotracer.geotracer.UsageTestActivity;
 import com.geotracer.geotracer.UserStatus;
+import com.geotracer.geotracer.db.remote.FirestoreManagement;
 import com.geotracer.geotracer.infoapp.InfoActivity;
 import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
 import com.geotracer.geotracer.settingapp.SettingActivity;
+import com.geotracer.geotracer.utils.generics.OpStatus;
 
 
 public class TestingActivity extends AppCompatActivity {
@@ -43,6 +45,7 @@ public class TestingActivity extends AppCompatActivity {
     BroadcastReceiver notificationReceiver;
     BroadcastReceiver logServiceReceiver;
     NotificationSender notificationSender;
+    private FirestoreManagement firestore;
 
 
     @Override
@@ -135,12 +138,32 @@ public class TestingActivity extends AppCompatActivity {
         }
     };
 
+    private final ServiceConnection firestoreService = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+
+            FirestoreManagement.LocalBinder binder = (FirestoreManagement.LocalBinder) service;
+            firestore = binder.getService();
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+
+            firestore = null;
+
+        }
+    };
+
 
     protected void onResume() {
         super.onResume();
 
         IntentFilter iff= new IntentFilter(NotificationSender.ACTION_BROADCAST);
         LocalBroadcastManager.getInstance(this).registerReceiver(notificationReceiver, iff);
+        Intent intent = new Intent(this, FirestoreManagement.class);
+        bindService(intent, firestoreService, Context.BIND_AUTO_CREATE);
 /*
         iff= new IntentFilter(LogService.ACTION_BROADCAST);
         LocalBroadcastManager.getInstance(this).registerReceiver(logServiceReceiver, iff);  */
@@ -157,6 +180,7 @@ public class TestingActivity extends AppCompatActivity {
     protected void onPause(){
         super.onPause();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationReceiver);
+        unbindService(firestoreService);
         //LocalBroadcastManager.getInstance(this).unregisterReceiver(logServiceReceiver);
 
     }
@@ -169,6 +193,8 @@ public class TestingActivity extends AppCompatActivity {
         bindService(intent, logServiceConnection, Context.BIND_AUTO_CREATE);
         Intent intent2 = new Intent(this, NotificationSender.class);
         bindService(intent2, notificationService, Context.BIND_AUTO_CREATE);
+        intent = new Intent(this, FirestoreManagement.class);
+        bindService(intent, firestoreService, Context.BIND_AUTO_CREATE);
     }
 
 
@@ -319,27 +345,6 @@ public class TestingActivity extends AppCompatActivity {
         */
     }
 
-    public void healed(View view) {
-
-        /*
-            UNTAG THE USER AS INFECTED
-            THE RESULT WILL BE SHOWN IN A POPUP WINDOW IN ADDITION TO THE LOG SECTION
-         */
-
-        //if(/*   DONE IT   */){
-
-        TextView tv = new TextView(TestingActivity.this);
-        showPopupWindow(tv, "USER IS NOT CONSIDERED INFECTED ANYMORE");
-        //service.printLog(this.getClass().getName(), "USER IS NOT CONSIDERED INFECTED ANYMORE\n");
-
-
-        /*
-
-        }else{
-           service.printLog(name, "Error! Unable to untag the user as infected\n");
-        }
-        */
-    }
 
     public void delete(View view) {
 
@@ -349,8 +354,15 @@ public class TestingActivity extends AppCompatActivity {
         IF THE TESTING INTERFACE IS AVAILABLE TO EVERYONE I SUGGEST TO DELETE ONLY ITS DATA.
         A POPUP WINDOW WITH THE RESULT OF THE OPERATION WILL BE SHOWN
          */
-        TextView tv = new TextView(TestingActivity.this);
-        showPopupWindow(tv, "Old data has been deleted from the database");
+
+        if(firestore.dropExpiredLocations()== OpStatus.OK) {
+            TextView tv = new TextView(TestingActivity.this);
+            showPopupWindow(tv, "Old data has been deleted from the database");
+        }else{
+            TextView tv = new TextView(TestingActivity.this);
+            showPopupWindow(tv, "Error! Data not deleted");
+        }
+
 
     }
 
