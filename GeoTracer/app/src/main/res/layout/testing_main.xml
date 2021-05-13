@@ -379,7 +379,7 @@
 
                 <Button
                     android:id="@+id/button13"
-                    android:layout_width="150dp"
+                    android:layout_width="75dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:onClick="getExtLocations"
@@ -394,7 +394,7 @@
 
                 <EditText
                     android:id="@+id/getExtLatitude"
-                    android:layout_width="wrap_content"
+                    android:layout_width="75dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
@@ -409,17 +409,12 @@
 
                 <EditText
                     android:id="@+id/getExtLongitude"
-                    android:layout_width="wrap_content"
+                    android:layout_width="75dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
                     android:inputType="numberDecimal" />
 
-                <TextView
-                    android:id="@+id/display_ext_loc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
             </LinearLayout>
 
             <include
