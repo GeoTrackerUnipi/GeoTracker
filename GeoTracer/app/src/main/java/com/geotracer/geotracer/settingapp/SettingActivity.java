@@ -22,6 +22,7 @@ import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -292,6 +293,30 @@ public class SettingActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+
+        super.onSaveInstanceState(outState);
+/*
+        //save the button status
+        String log = ((TextView)findViewById(R.id.log_text)).getText().toString();
+        outState.putString("log", log);
+
+        Log.d(this.getLocalClassName(), "Instance State Saved");
+*/
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState){
+        super.onRestoreInstanceState(savedInstanceState);
+/*
+        //restore the button status
+        String log = savedInstanceState.getString("log");
+        ((TextView)findViewById(R.id.log_text)).setText(log);
+        Log.d(this.getLocalClassName(), "Instance State Restored"); */
+    }
+
 
 
 }
