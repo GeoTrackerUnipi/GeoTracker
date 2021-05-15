@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/delete_my_positions"
+        android:title="Delete My Positions"/>
+    <item
+        android:id="@+id/delete_my_signatures"
+        android:title="Delete My Signatures"/>
+    <item
+        android:id="@+id/delete_all"
+        android:title="Delete All"/>
+</menu>

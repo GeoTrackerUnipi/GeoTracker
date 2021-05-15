@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -482,4 +483,35 @@ public class TestingActivity extends AppCompatActivity {
     }
 
 
+    public void manageDelete(View view) {
+
+        //Creating the instance of PopupMenu
+        PopupMenu popup = new PopupMenu(TestingActivity.this, view);
+        //Inflating the Popup using xml file
+        popup.getMenuInflater().inflate(R.menu.delete_menu, popup.getMenu());
+
+        //registering popup with OnMenuItemClickListener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+
+                switch(item.getItemId()){
+                    case R.id.delete_my_positions:
+                        //DELETE MY POSITIONS
+                        return true;
+                    case R.id.delete_my_signatures:
+                        //DELETE MY SIGNATURES
+                        return true;
+                    case R.id.delete_all:
+                        //DELETE EVERYTHING
+                        return true;
+                    default:
+                        return false;
+                }
+
+            }
+        });
+
+        popup.show();//showing popup menu
+
+    }
 }
