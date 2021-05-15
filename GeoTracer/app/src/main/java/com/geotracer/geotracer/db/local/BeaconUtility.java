@@ -15,9 +15,10 @@ import io.paperdb.Book;
 
 public class BeaconUtility {
 
-    private final Book beacons;
+    private final Book beacons;    //  collection of beacons
 
-    // prevents the class to be instantiated outside the package
+    // CONSTRUCTOR
+
     BeaconUtility(Book beacons){
         this.beacons = beacons;
     }
@@ -70,6 +71,26 @@ public class BeaconUtility {
             return beacons
                     .contains(beacon) && !new ExtSignature(beacons.read(beacon)).isExpired() ?
                     OpStatus.PRESENT : OpStatus.NOT_PRESENT;
+
+        }catch(RuntimeException e){
+
+            e.printStackTrace();
+            return OpStatus.ERROR;
+
+        }
+    }
+
+    //  drop all the beacons from the local database
+    //  Returns:
+    //      - OpStatus.OK: all the beacons removed
+    //      - OpStatus.ERROR: an error has occurred during the beacons removal
+
+    public OpStatus dropAllBeacons(){
+
+        try{
+
+            beacons.destroy();
+            return OpStatus.OK;
 
         }catch(RuntimeException e){
 

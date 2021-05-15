@@ -7,6 +7,7 @@ import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.geotracer.geotracer.utils.data.ExtLocation;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 import static android.content.ContentValues.TAG;
@@ -175,6 +176,21 @@ public class FirestoreManagement extends Service {
             //  we create a batch operation which will execute all the requested operation in a
             //  asynchronous way
             WriteBatch writeBatch = firestore.batch();
+
+            firestore.collection("buckets").get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                        collection.get().addOnSuccessListener((querySnapshot) -> querySnapshot.forEach((locationDoc) -> {
+
+                            if (Objects.requireNonNull(locationDoc.getDate("expire")).after(new Date()))
+                                writeBatch.delete(Objects.requireNonNull(locationDoc.getReference()));
+
+                        }));
+                    }
+                } else {
+                    Log.w(TAG, "Error getting documents.", task.getException());
+                }
+            });
 
             //  if a data is expired then we set a delete operation on the batch
             collection.get().addOnSuccessListener((querySnapshot) -> querySnapshot.forEach((locationDoc) -> {

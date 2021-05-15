@@ -106,4 +106,18 @@ public class PositionUtility {
         }
     }
 
+    //  drop all the positions from the local database
+    //  Returns:
+    //      - OpStatus.OK: all the positions removed
+    //      - OpStatus.ERROR: an error has occurred during the positions removal
+
+    public OpStatus dropAllPositions(){
+        try{
+            positions.destroy();
+            return OpStatus.OK;
+        }catch(RuntimeException e){
+            e.printStackTrace();
+            return OpStatus.ERROR;
+        }
+    }
 }

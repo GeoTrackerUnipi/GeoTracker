@@ -61,7 +61,7 @@ public class DatabaseConsolidator extends Worker {
             });
 
             Log.d( TAG, "Consolidation of stored beacons completed: " + before + " -> " +
-                    Paper.book("beacons").getAllKeys());
+                    Paper.book("beacons").getAllKeys().size());
             return OpStatus.OK;
 
         }catch(RuntimeException e){

@@ -11,6 +11,9 @@ import android.app.Service;
 import android.os.IBinder;
 import android.os.Binder;
 import android.os.Build;
+
+import com.geotracer.geotracer.utils.generics.OpStatus;
+
 import io.paperdb.Paper;
 
 //   KEY-VALUE MANAGEMENT
@@ -35,9 +38,9 @@ public class KeyValueManagement extends Service {
 
     private final IBinder classBinder = new LocalBinder();  // maintains a reference to a global service class
     public SignatureUtility signatures = null;   //  functions to operate on signatures
-    public PositionUtility positions = null;       //
-    public BeaconUtility beacons = null;
-    public BucketUtility buckets = null;
+    public PositionUtility positions = null;     //  functions to operate on user positions
+    public BeaconUtility beacons = null;         //  functions to operate on beacons
+    public BucketUtility buckets = null;         //  functions to operate on buckets
 
     @Override
     public void onCreate(){
@@ -47,9 +50,9 @@ public class KeyValueManagement extends Service {
         Paper.init(getBaseContext());
 
         signatures = new SignatureUtility(Paper.book("signatures"));   //  functions to operate on signatures
-        positions = new PositionUtility(Paper.book("positions"));       //
-        beacons = new BeaconUtility(Paper.book("beacons"));
-        buckets = new BucketUtility(Paper.book("buckets"));
+        positions = new PositionUtility(Paper.book("positions"));      //  functions to operate on user positions
+        beacons = new BeaconUtility(Paper.book("beacons"));            //  functions to operate on beacons
+        buckets = new BucketUtility(Paper.book("buckets"));            //  functions to operate on buckets
         //  launch the DatabaseConsolidator worker
         WorkManager
                 .getInstance(this.getBaseContext())
@@ -73,8 +76,19 @@ public class KeyValueManagement extends Service {
     public IBinder onBind(Intent intent) {
 
         return classBinder;
-
     }
 
+    //  general function to remove all the elements from the local database
+    @SuppressWarnings("unused")
+    public void cleanLocalStore(){
+
+        if(signatures.removeAllSignatures() != OpStatus.OK)
+            return;
+        if(positions.dropAllPositions() != OpStatus.OK)
+            return;
+        if( beacons.dropAllBeacons() != OpStatus.OK)
+            return;
+        buckets.dropAllBuckets();
+    }
 }
 

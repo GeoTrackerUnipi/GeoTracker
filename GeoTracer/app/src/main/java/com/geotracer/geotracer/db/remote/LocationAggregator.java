@@ -19,7 +19,6 @@ public class LocationAggregator {
 
     private final static List<String> archive = new ArrayList<>();  //  maintains unique IDs
     private static ExtLocation location = null;                     //  maintains the aggregated value
-    private static boolean proximityAlertFlag = false;              //  flag to activate/deactive raising of proximity alerts
 
     //  perform aggregation of the input data applying the two previous rules
     //  Returns:
@@ -67,10 +66,4 @@ public class LocationAggregator {
 
         }
     }
-
-    public void setProximityAlert(boolean active){
-        proximityAlertFlag = active;
-    }
-
-
 }
