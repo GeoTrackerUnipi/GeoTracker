@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.geotracer.geotracer.R;
 import com.geotracer.geotracer.UsageTestActivity;
 import com.geotracer.geotracer.UserStatus;
+import com.geotracer.geotracer.db.local.KeyValueManagement;
 import com.geotracer.geotracer.db.remote.FirestoreManagement;
 import com.geotracer.geotracer.infoapp.InfoActivity;
 import com.geotracer.geotracer.mainapp.MainActivity;
@@ -46,6 +48,7 @@ public class TestingActivity extends AppCompatActivity {
     BroadcastReceiver logServiceReceiver;
     NotificationSender notificationSender;
     private FirestoreManagement firestore;
+    private KeyValueManagement keyValueManagement;
 
 
     @Override
@@ -156,14 +159,39 @@ public class TestingActivity extends AppCompatActivity {
         }
     };
 
+    private final ServiceConnection keyValueService = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+
+            KeyValueManagement.LocalBinder binder = (KeyValueManagement.LocalBinder) service;
+            keyValueManagement = binder.getService();
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+
+            keyValueManagement = null;
+
+        }
+    };
+
 
     protected void onResume() {
         super.onResume();
 
+        //NOTIFICATION RECEIVER
         IntentFilter iff= new IntentFilter(NotificationSender.ACTION_BROADCAST);
         LocalBroadcastManager.getInstance(this).registerReceiver(notificationReceiver, iff);
+
+        //FIRESTORE MANAGEMENT
         Intent intent = new Intent(this, FirestoreManagement.class);
         bindService(intent, firestoreService, Context.BIND_AUTO_CREATE);
+
+        //KEYVALUE MANAGEMENT
+        intent = new Intent(this, KeyValueManagement.class);
+        bindService(intent, keyValueService, Context.BIND_AUTO_CREATE);
 /*
         iff= new IntentFilter(LogService.ACTION_BROADCAST);
         LocalBroadcastManager.getInstance(this).registerReceiver(logServiceReceiver, iff);  */
@@ -179,8 +207,15 @@ public class TestingActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
+
+        //NOTIFICATION
         LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationReceiver);
+
+        //FIRESTORE
         unbindService(firestoreService);
+
+        //KEYVALUE
+        unbindService(keyValueService);
         //LocalBroadcastManager.getInstance(this).unregisterReceiver(logServiceReceiver);
 
     }
@@ -191,10 +226,18 @@ public class TestingActivity extends AppCompatActivity {
         // Bind to LocalService
         Intent intent = new Intent(this, LogService.class);
         bindService(intent, logServiceConnection, Context.BIND_AUTO_CREATE);
+
+        //BIND NOTIFICATION SERVICE
         Intent intent2 = new Intent(this, NotificationSender.class);
         bindService(intent2, notificationService, Context.BIND_AUTO_CREATE);
+
+        //BIND FIRESTORE SERVICE
         intent = new Intent(this, FirestoreManagement.class);
         bindService(intent, firestoreService, Context.BIND_AUTO_CREATE);
+
+        //BIND KEYVALUE SERVICE
+        intent = new Intent(this, KeyValueManagement.class);
+        bindService(intent, keyValueService, Context.BIND_AUTO_CREATE);
     }
 
 
@@ -482,4 +525,42 @@ public class TestingActivity extends AppCompatActivity {
     }
 
 
+    public void manageDelete(View view) {
+
+        //Creating the instance of PopupMenu
+        PopupMenu popup = new PopupMenu(TestingActivity.this, view);
+        //Inflating the Popup using xml file
+        popup.getMenuInflater().inflate(R.menu.delete_menu, popup.getMenu());
+
+        //registering popup with OnMenuItemClickListener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+
+                switch(item.getItemId()){
+                    case R.id.delete_my_positions:
+                        //keyValueManagement.positions.
+                        //DELETE MY POSITIONS
+                        return true;
+                    case R.id.delete_rec_positions:
+                        //DELETE OTHER PEOPLE POSITIONS
+                        return true;
+                    case R.id.delete_my_signatures:
+                        //DELETE MY SIGNATURES
+                        return true;
+                    case R.id.delete_rec_beacons:
+                        //DELETE RECEIVED BEACONS
+                        return true;
+                    case R.id.delete_all:
+                        //DELETE EVERYTHING
+                        return true;
+                    default:
+                        return false;
+                }
+
+            }
+        });
+
+        popup.show();//showing popup menu
+
+    }
 }

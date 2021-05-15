@@ -172,7 +172,7 @@
         android:layout_height="0dp"
         android:background="@drawable/rounded_corner"
         android:gravity="center"
-        android:text="Delete Old Data"
+        android:text="Delete Data"
         android:textColor="@color/black"
         android:textSize="20dp"
         android:textStyle="bold"
@@ -193,11 +193,11 @@
         android:id="@+id/button7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete"
         android:onClick="delete"
+        android:text="Delete Old Data"
         android:textSize="10dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/delete_title_guideline" />
 
@@ -296,6 +296,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
+
+    <Button
+        android:id="@+id/button10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="manageDelete"
+        android:textSize="10dp"
+        android:text="Delete Menu"
+        app:layout_constraintBottom_toTopOf="@+id/log"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/button_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/deleteSignature" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
