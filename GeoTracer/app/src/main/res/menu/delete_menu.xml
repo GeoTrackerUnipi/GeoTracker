@@ -12,4 +12,7 @@
     <item
         android:id="@+id/delete_all"
         android:title="Delete All"/>
+    <item
+        android:id="@+id/delete_bucket"
+        android:title="Delete Buckets"/>
 </menu>

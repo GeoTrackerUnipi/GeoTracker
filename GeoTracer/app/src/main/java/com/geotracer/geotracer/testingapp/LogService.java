@@ -5,15 +5,21 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.ScrollView;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.geotracer.geotracer.R;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 public class LogService extends Service {
 
     public static final String ACTION_BROADCAST = LogService.class.getName();
+    private static final String TESTING_ACTIVITY_LOG = "TestingActivity";
     // Binder given to clients
     private final IBinder binder = new LocalBinder();
 
@@ -42,7 +48,7 @@ public class LogService extends Service {
 
     //METHOD USED BY CLIENT TO PRINT LOG MESSAGES
     public void printLog(String class_name, String message){
-
+/*
         Log.d(this.getClass().getName(), "printLog function");
         //SHOW ONLY THE TIME
         Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -52,5 +58,9 @@ public class LogService extends Service {
         Intent intent = new Intent(ACTION_BROADCAST);
         intent.putExtra("LogMessage", log);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+
+ */
+
     }
+
 }

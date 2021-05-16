@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.HandlerThread;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Gravity;
@@ -67,7 +68,7 @@ public class TestingActivity extends AppCompatActivity {
 
         TextView tv = (TextView) findViewById(R.id.log_text);
         tv.setText("");
-/*
+
         LocalBroadcastManager.getInstance(TestingActivity.this).registerReceiver(
                 logServiceReceiver = new BroadcastReceiver() {
                     @Override
@@ -75,13 +76,14 @@ public class TestingActivity extends AppCompatActivity {
 
                         Log.d(TESTING_ACTIVITY_LOG, "BROADCAST LISTENER");
                         String toLog = intent.getStringExtra("LogMessage");
+                        Log.i(TESTING_ACTIVITY_LOG, toLog);
                         tv.append(toLog);
                         ScrollView sv = (ScrollView) findViewById(R.id.scrollview);
                         sv.fullScroll(ScrollView.FOCUS_DOWN);
                     }
                 },new IntentFilter(LogService.ACTION_BROADCAST)
 
-        );      */
+        );
 
 
         LocalBroadcastManager.getInstance(TestingActivity.this).registerReceiver(
@@ -108,15 +110,6 @@ public class TestingActivity extends AppCompatActivity {
                 },new IntentFilter(NotificationSender.ACTION_BROADCAST)
 
         );
-
-        try {
-            Runtime.getRuntime().exec("logcat -c");
-        } catch (IOException e) {
-            // Handle Exception
-        }
-
-
-
 
     }
 
@@ -593,11 +586,6 @@ public class TestingActivity extends AppCompatActivity {
                             showPopupWindow(tv, "Error in removing positions");
                         else {
                             showPopupWindow(tv, "All positions removed");
-                            FrameLayout frameLayout = findViewById(R.id.contact_frame);
-                            frameLayout.setBackgroundColor(getResources().getColor(R.color.white));
-                            TextView contact_text = findViewById(R.id.contact_text);
-                            contact_text.setText(getResources().getString(R.string.contacts));
-                            ((UserStatus) TestingActivity.this.getApplication()).setContacts(false);
                         }
                         return true;
                     case R.id.delete_my_signatures:
@@ -613,11 +601,6 @@ public class TestingActivity extends AppCompatActivity {
                             showPopupWindow(tv, "Error in removing beacons");
                         else {
                             showPopupWindow(tv, "All beacons removed");
-                            FrameLayout frameLayout = findViewById(R.id.contact_frame);
-                            frameLayout.setBackgroundColor(getResources().getColor(R.color.white));
-                            TextView contact_text = findViewById(R.id.contact_text);
-                            contact_text.setText(getResources().getString(R.string.contacts));
-                            ((UserStatus) TestingActivity.this.getApplication()).setContacts(false);
                         }
                         return true;
                     case R.id.delete_all:
@@ -626,14 +609,22 @@ public class TestingActivity extends AppCompatActivity {
                             showPopupWindow(tv, "Error in cleaning the local database");
                         }
                         else {
-                            showPopupWindow(tv, "All beacons removed");
-                            FrameLayout frameLayout = findViewById(R.id.contact_frame);
-                            frameLayout.setBackgroundColor(getResources().getColor(R.color.white));
-                            TextView contact_text = findViewById(R.id.contact_text);
-                            contact_text.setText(getResources().getString(R.string.contacts));
-                            ((UserStatus) TestingActivity.this.getApplication()).setContacts(false);
+                            if(notificationSender.forceNotInfected()==OpStatus.OK) {
+                                FrameLayout frameLayout = findViewById(R.id.contact_frame);
+                                frameLayout.setBackgroundColor(getResources().getColor(R.color.white));
+                                TextView contact_text = findViewById(R.id.contact_text);
+                                contact_text.setText(getResources().getString(R.string.contacts));
+                                ((UserStatus) TestingActivity.this.getApplication()).setContacts(false);
+                                showPopupWindow(tv, "Local database cleaned");
+                            }
                         }
                         return true;
+                    case R.id.delete_bucket:
+                        if(notificationSender.removeAllBuckets() != OpStatus.OK)
+                            showPopupWindow(tv, "Error in deleting buckets");
+                        else{
+                            showPopupWindow(tv, "All buckets removed");
+                        }
                     default:
                         return false;
                 }
@@ -645,22 +636,36 @@ public class TestingActivity extends AppCompatActivity {
 
     }
 
+    public void readLog(View view){
+        Runnable r = new Runnable() {
+            public void run() {
+                showLog(view);
+            }
+        };
+
+        new Thread(r).start();
+    }
+
     public void showLog(View view) {
+
         TextView tv = findViewById(R.id.log_text);
 
         Process logcat;
         final StringBuilder log = new StringBuilder();
         try {
 
+            Process process = Runtime.getRuntime().exec( "logcat -c");
             String cmd = "logcat -d " + TESTING_ACTIVITY_LOG + ":D" + " *:S";
             logcat = Runtime.getRuntime().exec(cmd);
             BufferedReader br = new BufferedReader(new InputStreamReader(logcat.getInputStream()));
             String line;
             String separator = System.getProperty("line.separator");
+            //String lastLine = "";
             while ((line = br.readLine()) != null) {
                 log.append(line);
                 log.append(separator);
             }
+
             tv.append(log.toString());
             ScrollView sv = (ScrollView) findViewById(R.id.scrollview);
             sv.fullScroll(ScrollView.FOCUS_DOWN);
@@ -671,4 +676,6 @@ public class TestingActivity extends AppCompatActivity {
         }
 
     }
+
+
 }
