@@ -30,7 +30,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ea0b472-2ab6-4806-a1a1-f1653b5edd79" name="Default Changelist" comment="Asynchronous implementation of the log window, filtering by TAG.">
+    <list default="true" id="6ea0b472-2ab6-4806-a1a1-f1653b5edd79" name="Default Changelist" comment="Write in LogWindow with an external service.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/LogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/LogService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/TestingActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/TestingActivity.java" afterDir="false" />
@@ -311,7 +311,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621171115686</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Write in LogWindow with an external service.">
+      <created>1621173761720</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1621173761720</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -347,7 +354,8 @@
     <MESSAGE value="Some additions to the previous commit." />
     <MESSAGE value="Added the changes to the layout frame in case of a delete. Starting implementing the log receive" />
     <MESSAGE value="Asynchronous implementation of the log window, filtering by TAG." />
-    <option name="LAST_COMMIT_MESSAGE" value="Asynchronous implementation of the log window, filtering by TAG." />
+    <MESSAGE value="Write in LogWindow with an external service." />
+    <option name="LAST_COMMIT_MESSAGE" value="Write in LogWindow with an external service." />
   </component>
   <component name="WindowStateProjectService">
     <state x="480" y="293" width="960" height="533" key="#PSD" timestamp="1620735240374">
@@ -377,37 +385,37 @@
       <screen x="0" y="31" width="1920" height="1049" />
     </state>
     <state x="743" y="316" width="434" height="487" key="FileChooserDialogImpl/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620727434667" />
-    <state width="1398" height="219" key="GridCell.Tab.0.bottom" timestamp="1621173653795">
+    <state width="1398" height="68" key="GridCell.Tab.0.bottom" timestamp="1621174755372">
       <screen x="0" y="23" width="1440" height="794" />
     </state>
-    <state width="1398" height="219" key="GridCell.Tab.0.bottom/0.23.1440.794@0.23.1440.794" timestamp="1621173653795" />
+    <state width="1398" height="68" key="GridCell.Tab.0.bottom/0.23.1440.794@0.23.1440.794" timestamp="1621174755372" />
     <state width="1398" height="213" key="GridCell.Tab.0.bottom/0.23.1440.797@0.23.1440.797" timestamp="1620893505365" />
     <state width="1398" height="542" key="GridCell.Tab.0.bottom/0.23.1440.800@0.23.1440.800" timestamp="1620893030282" />
     <state width="1398" height="205" key="GridCell.Tab.0.bottom/0.23.1440.803@0.23.1440.803" timestamp="1620893240726" />
     <state width="1874" height="277" key="GridCell.Tab.0.bottom/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620741661647" />
     <state width="1874" height="277" key="GridCell.Tab.0.bottom/0.31.1920.1049@0.31.1920.1049" timestamp="1620792102257" />
-    <state width="1398" height="219" key="GridCell.Tab.0.center" timestamp="1621173653794">
+    <state width="1398" height="68" key="GridCell.Tab.0.center" timestamp="1621174755371">
       <screen x="0" y="23" width="1440" height="794" />
     </state>
-    <state width="1398" height="219" key="GridCell.Tab.0.center/0.23.1440.794@0.23.1440.794" timestamp="1621173653794" />
+    <state width="1398" height="68" key="GridCell.Tab.0.center/0.23.1440.794@0.23.1440.794" timestamp="1621174755371" />
     <state width="1398" height="213" key="GridCell.Tab.0.center/0.23.1440.797@0.23.1440.797" timestamp="1620893505365" />
     <state width="1398" height="542" key="GridCell.Tab.0.center/0.23.1440.800@0.23.1440.800" timestamp="1620893030280" />
     <state width="1398" height="205" key="GridCell.Tab.0.center/0.23.1440.803@0.23.1440.803" timestamp="1620893240725" />
     <state width="1874" height="277" key="GridCell.Tab.0.center/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620741661647" />
     <state width="1874" height="277" key="GridCell.Tab.0.center/0.31.1920.1049@0.31.1920.1049" timestamp="1620792102256" />
-    <state width="1398" height="219" key="GridCell.Tab.0.left" timestamp="1621173653793">
+    <state width="1398" height="68" key="GridCell.Tab.0.left" timestamp="1621174755370">
       <screen x="0" y="23" width="1440" height="794" />
     </state>
-    <state width="1398" height="219" key="GridCell.Tab.0.left/0.23.1440.794@0.23.1440.794" timestamp="1621173653793" />
+    <state width="1398" height="68" key="GridCell.Tab.0.left/0.23.1440.794@0.23.1440.794" timestamp="1621174755370" />
     <state width="1398" height="213" key="GridCell.Tab.0.left/0.23.1440.797@0.23.1440.797" timestamp="1620893505364" />
     <state width="1398" height="542" key="GridCell.Tab.0.left/0.23.1440.800@0.23.1440.800" timestamp="1620893030279" />
     <state width="1398" height="205" key="GridCell.Tab.0.left/0.23.1440.803@0.23.1440.803" timestamp="1620893240723" />
     <state width="1874" height="277" key="GridCell.Tab.0.left/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620741661647" />
     <state width="1874" height="277" key="GridCell.Tab.0.left/0.31.1920.1049@0.31.1920.1049" timestamp="1620792102256" />
-    <state width="1398" height="219" key="GridCell.Tab.0.right" timestamp="1621173653794">
+    <state width="1398" height="68" key="GridCell.Tab.0.right" timestamp="1621174755371">
       <screen x="0" y="23" width="1440" height="794" />
     </state>
-    <state width="1398" height="219" key="GridCell.Tab.0.right/0.23.1440.794@0.23.1440.794" timestamp="1621173653794" />
+    <state width="1398" height="68" key="GridCell.Tab.0.right/0.23.1440.794@0.23.1440.794" timestamp="1621174755371" />
     <state width="1398" height="213" key="GridCell.Tab.0.right/0.23.1440.797@0.23.1440.797" timestamp="1620893505365" />
     <state width="1398" height="542" key="GridCell.Tab.0.right/0.23.1440.800@0.23.1440.800" timestamp="1620893030281" />
     <state width="1398" height="205" key="GridCell.Tab.0.right/0.23.1440.803@0.23.1440.803" timestamp="1620893240725" />
@@ -433,10 +441,10 @@
     </state>
     <state width="1398" height="2" key="GridCell.Tab.1.right/0.23.1440.794@0.23.1440.794" timestamp="1620753483898" />
     <state width="1398" height="2" key="GridCell.Tab.1.right/0.23.1440.803@0.23.1440.803" timestamp="1620753068649" />
-    <state x="416" y="222" width="810" height="531" key="Vcs.Push.Dialog.v2" timestamp="1621171117965">
+    <state x="416" y="222" width="810" height="531" key="Vcs.Push.Dialog.v2" timestamp="1621173787729">
       <screen x="0" y="23" width="1440" height="794" />
     </state>
-    <state x="416" y="222" key="Vcs.Push.Dialog.v2/0.23.1440.794@0.23.1440.794" timestamp="1621171117965" />
+    <state x="416" y="222" key="Vcs.Push.Dialog.v2/0.23.1440.794@0.23.1440.794" timestamp="1621173787729" />
     <state x="416" y="223" key="Vcs.Push.Dialog.v2/0.23.1440.797@0.23.1440.797" timestamp="1620830086731" />
     <state x="416" y="224" key="Vcs.Push.Dialog.v2/0.23.1440.800@0.23.1440.800" timestamp="1620831820242" />
     <state x="416" y="224" key="Vcs.Push.Dialog.v2/0.23.1440.803@0.23.1440.803" timestamp="1620893408274" />

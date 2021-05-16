@@ -58,6 +58,7 @@ public class TestingActivity extends AppCompatActivity {
     private FirestoreManagement firestore;
     private KeyValueManagement keyValueManagement;
 
+
     public static final String TESTING_ACTIVITY_LOG = "TestingActivity";
 
 
@@ -75,7 +76,7 @@ public class TestingActivity extends AppCompatActivity {
                     @Override
                     public void onReceive(Context context, Intent intent) {
 
-                        Log.d(TESTING_ACTIVITY_LOG, "LogService BROADCAST LISTENER");
+                        //Log.d(TESTING_ACTIVITY_LOG, "LogService BROADCAST LISTENER");
                         String toLog = intent.getStringExtra("LogMessage");
 
                         tv.append(toLog);
@@ -645,49 +646,11 @@ public class TestingActivity extends AppCompatActivity {
 
     }
 
-    public void readLog(View view){
+    /*
+    NOT USED ANYMORE, BUT CAN BE USEFUL IF YOU WANT TO ASK FOR LOG DISPLAY INSTEAD OF PERIODICALLY RECEIVE THEM.
+     */
+    public void showLog(View view){
         service.listenToLog();
-        /*
-
-        handler.postDelayed(runnable = new Runnable() {
-            public void run() {
-                handler.postDelayed(runnable, delay);
-                service.listenToLog();
-            }
-        }, delay);
-
-         */
-    }
-
-    public void showLog(View view) {
-
-        TextView tv = findViewById(R.id.log_text);
-
-        Process logcat;
-        final StringBuilder log = new StringBuilder();
-        try {
-
-            Process process = Runtime.getRuntime().exec( "logcat -c");
-            String cmd = "logcat -d " + TESTING_ACTIVITY_LOG + ":D" + " *:S";
-            logcat = Runtime.getRuntime().exec(cmd);
-            BufferedReader br = new BufferedReader(new InputStreamReader(logcat.getInputStream()));
-            String line;
-            String separator = System.getProperty("line.separator");
-            //String lastLine = "";
-            while ((line = br.readLine()) != null) {
-                log.append(line);
-                log.append(separator);
-            }
-
-            tv.append(log.toString());
-            ScrollView sv = (ScrollView) findViewById(R.id.scrollview);
-            sv.fullScroll(ScrollView.FOCUS_DOWN);
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
 

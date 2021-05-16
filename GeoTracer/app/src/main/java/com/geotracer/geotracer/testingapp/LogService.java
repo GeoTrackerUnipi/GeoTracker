@@ -3,6 +3,7 @@ package com.geotracer.geotracer.testingapp;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.ScrollView;
@@ -23,6 +24,9 @@ public class LogService extends Service {
     // Binder given to clients
     private final IBinder binder = new LocalBinder();
 
+    Handler handler = new Handler();
+    Runnable runnable;
+    int delay = 2000;
 
     public class LocalBinder extends Binder {
         LogService getService() {
@@ -35,8 +39,22 @@ public class LogService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(this.getClass().getName(), "Service Created");
+
+
+        handler.postDelayed(runnable = new Runnable() {
+            public void run() {
+                handler.postDelayed(runnable, delay);
+                listenToLog();
+            }
+        }, delay);
+
+
     }
 
+    public void onDestroy(){
+        super.onDestroy();
+        handler.removeCallbacks(runnable);
+    }
 
 
     @Override
@@ -46,9 +64,11 @@ public class LogService extends Service {
         return binder;
     }
 
-    //METHOD USED BY CLIENT TO PRINT LOG MESSAGES
+    /*
+    METHOD USED BY CLIENT TO PRINT LOG MESSAGES PROVIDING A STRING AND A "TAG"
+     */
     public void printLog(String class_name, String message){
-/*
+
         Log.d(this.getClass().getName(), "printLog function");
         //SHOW ONLY THE TIME
         Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -59,9 +79,12 @@ public class LogService extends Service {
         intent.putExtra("LogMessage", log);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 
- */
 
     }
+
+    /*
+    THIS FUNCTION TAKES THE SYSTEM LOGS AND PRINT THEM IN THE LOG WINDOW OF THE TESTING ACTIVITY
+     */
 
     public void listenToLog(){
 
@@ -86,10 +109,11 @@ public class LogService extends Service {
             }
 
             //Log.i(TESTING_ACTIVITY_LOG, String.valueOf(i) + "VALUE " + log.toString());
-
-            Intent intent = new Intent(ACTION_BROADCAST);
-            intent.putExtra("LogMessage", log.toString());
-            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+            if(i > 1) {
+                Intent intent = new Intent(ACTION_BROADCAST);
+                intent.putExtra("LogMessage", log.toString());
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
