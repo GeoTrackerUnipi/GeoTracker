@@ -22,12 +22,16 @@ public class LocationAggregator {
 
     //  perform aggregation of the input data applying the two previous rules
     //  Returns:
+    //           - OpStatus.ILLEGAL_ARGUMENT: invalid arguments provided to the class
     //           - OpStatus.COLLECTED: data is taken and used for aggregation
     //           - OpStatus.PRESENT: the ID is already aggregated into the value
     //           - OpStatus.OK: a new aggregated value is generated and returned back
     //           - OpStatus.ERROR: an error has occurred during the request management
 
     public RetStatus<ExtLocation> insertValue(String ID, BaseLocation location){
+
+        if( location == null || ID == null || ID.length() == 0 )
+            return new RetStatus<>(null, OpStatus.ILLEGAL_ARGUMENT);
 
         try {
 

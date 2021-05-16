@@ -34,7 +34,7 @@ import java.util.List;
 //   the database, this is very inefficient but it's just a testing method to overcome the paywall of
 //   implementing functions directly inside the Firebase Firestore cloud service
 
-@SuppressWarnings("unused")
+@SuppressWarnings("all")
 public class FirestoreManagement extends Service {
 
     private FirebaseFirestore firestore;
@@ -45,7 +45,8 @@ public class FirestoreManagement extends Service {
 
     //  callback function to obtain asynchronously the data from firestore
     public interface FirestoreCallback {
-        void onDataCollected(List<ExtLocation> location);
+        void onSuccess();
+        void onFailure();
     }
 
     //  binder for giving the Service class
@@ -78,18 +79,27 @@ public class FirestoreManagement extends Service {
     }
 
     //  function for pushing location values inside the firestore
-    public void insertLocation(String ID, BaseLocation location){
+    public OpStatus insertLocation(String ID, BaseLocation location){
+
+        if( ID == null || ID.length() == 0 || location == null)
+            return OpStatus.ILLEGAL_ARGUMENT;
 
         //  we aggregate the value provided
         RetStatus<ExtLocation> status = aggregator.insertValue(ID, location);
 
+
         //  basing on the result of the aggregating operation we choose a reaction
         switch(status.getStatus()){
             case OK:  // aggregation of a value completed, is needed to push it into the database
-                collection
-                        .add(status.getValue())
-                        .addOnSuccessListener(documentReference -> Log.d(TAG,"New document inserted into Firestore: " + documentReference.getId()))
-                        .addOnFailureListener(e -> Log.d(TAG,"Error adding a document" + e));
+                try {
+                    collection
+                            .add(status.getValue())
+                            .addOnSuccessListener(documentReference -> Log.d(TAG, "New document inserted into Firestore: " + documentReference.getId()))
+                            .addOnFailureListener(e -> Log.d(TAG, "Error adding a document" + e));
+                }catch( RuntimeException e){
+                    e.printStackTrace();
+                    return OpStatus.ERROR;
+                }
                 break;
 
             case COLLECTED:  //  given value aggregated
@@ -102,116 +112,185 @@ public class FirestoreManagement extends Service {
 
             default:         //  errors
                 Log.d(TAG,"An error has occurred during the request management");
+                return status.getStatus();
         }
 
+        return OpStatus.OK;
     }
 
     //  function used when a user is infected, it floods all the user location of the last 2 weeks into
     //  the database in order to update the heatmap
-    public void insertInfectedLocations(List<BaseLocation> locationList){
+    //      - OpStatus.OK: infected location correctly inserted
+    //      - OpStatus.ERROR: some error happened during function execution
+    public OpStatus insertInfectedLocations(List<BaseLocation> locationList){
 
         Log.d(TAG, "User infected. Starting flooding of infected locations");
-        locationList.forEach( location -> collection
+        try {
+            locationList.forEach(location -> collection
                     .add(new ExtLocation(location.getLocation()).setInfected())
-                    .addOnSuccessListener(documentReference -> Log.d(TAG,"Infected location stored inside firestore: " + documentReference.getId()))
+                    .addOnSuccessListener(documentReference -> Log.d(TAG, "Infected location stored inside firestore: " + documentReference.getId()))
                     .addOnFailureListener(e -> Log.d(TAG, "Error adding a document" + e)));
+            return OpStatus.OK;
+        }catch(RuntimeException e){
+            e.printStackTrace();
+            return OpStatus.ERROR;
+        }
 
     }
 
     //  TODO To be removed
-    public void testInsertLocation(ExtLocation location){
-        collection
-                .add(location)
-                .addOnSuccessListener(documentReference -> Log.d(TAG,"New document inserted into Firestore: " + documentReference.getId()))
-                .addOnFailureListener(e -> Log.d(TAG,"Error adding a document" + e));
+    public OpStatus testInsertLocation(ExtLocation location){
+        try {
+            collection
+                    .add(location)
+                    .addOnSuccessListener(documentReference -> Log.d(TAG, "New document inserted into Firestore: " + documentReference.getId()))
+                    .addOnFailureListener(e -> Log.d(TAG, "Error adding a document" + e));
+            return OpStatus.OK;
+        }catch(RuntimeException e){
+            e.printStackTrace();
+            return OpStatus.ERROR;
+        }
     }
 
     //  function used to collect data to generate a heatmap. It requires a location which will be the center
     //  of a circle with a certain radious. The function will return all the points inside the circle
-    public FirestoreCallback getNearLocations(GeoPoint location, double radiusInM){
+    // Returns:
+    //      - OpStatus.ILLEGAL_ARGUMENT: invalid arguments provided to the class
+    //      - OpStatus.OK: near locations correctly collected
+    //      - OpStatus.ERROR: some error happened during function execution
+    public OpStatus getNearLocations(GeoPoint location, double radiusInM){
+
+        if( location == null || radiusInM <= 0 )
+            return OpStatus.ILLEGAL_ARGUMENT;
 
         final GeoLocation center = new GeoLocation(location.getLatitude(), location.getLongitude());
         final List<Task<QuerySnapshot>> tasks = new ArrayList<>();   // lists for all the queries
 
-        //  generating the bounds used for the geo-query and for every bound we create a query
-        //  in order to collect all the data placed between the bounds
-        GeoFireUtils.getGeoHashQueryBounds(center, radiusInM).forEach(
-                bound -> tasks.add( collection
-                        .orderBy("geoHash")
-                        .startAt(bound.startHash)
-                        .endAt(bound.endHash).get()));
+        try {
+            //  generating the bounds used for the geo-query and for every bound we create a query
+            //  in order to collect all the data placed between the bounds
+            GeoFireUtils.getGeoHashQueryBounds(center, radiusInM).forEach(
+                    bound -> tasks.add(collection
+                            .orderBy("geoHash")
+                            .startAt(bound.startHash)
+                            .endAt(bound.endHash).get()));
 
-        //  when all the data are ready
-        Tasks.whenAllComplete(tasks)
-                .addOnCompleteListener( t -> {
-                    List<ExtLocation> locations = new ArrayList<>();
+            //  when all the data are ready
+            Tasks.whenAllComplete(tasks)
+                    .addOnCompleteListener(t -> {
+                        List<ExtLocation> locations = new ArrayList<>();
 
-                    for (Task<QuerySnapshot> task : tasks) {
-                        QuerySnapshot snap = task.getResult();
-                        assert snap != null;
-                        for (DocumentSnapshot doc : snap.getDocuments())
-                            locations.add(new ExtLocation(
-                                    doc.getGeoPoint("location"),
-                                    doc.getDate("expire"),
-                                    doc.getBoolean("infected"),
-                                    doc.getLong("criticity"),
-                                    doc.getString("geohash")));
-                    }
-                    Log.d(TAG,"Near Location collected: " + locations.size() + " data points obtained");
-                   // callback.onDataCollected(locations);
-                    Log.d(TAG, locations.toString());
+                        for (Task<QuerySnapshot> task : tasks) {
+                            QuerySnapshot snap = task.getResult();
+                            assert snap != null;
+                            for (DocumentSnapshot doc : snap.getDocuments())
+                                locations.add(new ExtLocation(
+                                        doc.getGeoPoint("location"),
+                                        doc.getDate("expire"),
+                                        doc.getBoolean("infected"),
+                                        doc.getLong("criticity"),
+                                        doc.getString("geohash")));
+                        }
+                        Log.d(TAG, "Near Location collected: " + locations.size() + " data points obtained");
+                        // callback.onDataCollected(locations);
+                        Log.d(TAG, locations.toString());
 
-                });
+                    });
+            return OpStatus.OK;
 
-        return this.callback;
+        }catch( RuntimeException e ){
+            e.printStackTrace();
+            return OpStatus.ERROR;
+        }
+
     }
 
-    // [testing function] removes all the expired data from the database. This is very inefficient
+    // [testing function] removes all the expired heatmap data from the database. This is very inefficient
     // but it's just a testing method to overcome the paywall of implementing functions directly
     // inside the Firebase Firestore cloud service
+    // Returns:
+    //      - OpStatus.OK: firestore database correctly consolidated
+    //      - OpStatus.ERROR: some error happened during function execution
     public OpStatus dropExpiredLocations(){
 
         try {
 
-            //  we create a batch operation which will execute all the requested operation in a
-            //  asynchronous way
-            WriteBatch writeBatch = firestore.batch();
-
-            firestore.collection("buckets").get().addOnCompleteListener(task -> {
+            collection.whereLessThan("expire", new Date()).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                        collection.get().addOnSuccessListener((querySnapshot) -> querySnapshot.forEach((locationDoc) -> {
-
-                            if (Objects.requireNonNull(locationDoc.getDate("expire")).after(new Date()))
-                                writeBatch.delete(Objects.requireNonNull(locationDoc.getReference()));
-
-                        }));
-                    }
-                } else {
-                    Log.w(TAG, "Error getting documents.", task.getException());
+                    WriteBatch batch = firestore.batch();
+                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult()))
+                        batch.delete(document.getReference());
+                    batch.commit().addOnSuccessListener(s -> Log.d(TAG, "Geotraces correctly consolidated"));
                 }
             });
 
-            //  if a data is expired then we set a delete operation on the batch
-            collection.get().addOnSuccessListener((querySnapshot) -> querySnapshot.forEach((locationDoc) -> {
+            Log.d(TAG, "Starting consolidation of stored notifications");
+            dropExpiredNotifications();
+            return OpStatus.OK;
 
-                if (Objects.requireNonNull(locationDoc.getDate("expire")).after(new Date()))
-                    writeBatch.delete(Objects.requireNonNull(locationDoc.getReference()));
+        }catch(RuntimeException e){
+            e.printStackTrace();
+            return OpStatus.ERROR;
+        }
 
-            }));
+    }
 
-            //  we execute all the settled operation
-            writeBatch.commit().addOnSuccessListener(aVoid -> {
-                assert false;
-                Log.d(TAG,"Firestore consolidation completed " + aVoid.toString());
+    // [testing function] removes all the expired notification data from the database. This is very inefficient
+    // but it's just a testing method to overcome the paywall of implementing functions directly
+    // inside the Firebase Firestore cloud service
+    // Returns:
+    //      - OpStatus.OK: all the notification buckets correctly consolidated
+    //      - OpStatus.ERROR: some error happened during function execution
+    public OpStatus dropExpiredNotifications(){
+
+        try {
+
+            //  from a dedicated collection we identify all the stored buckets
+            firestore.collection("buckets").get().addOnCompleteListener(task -> {
+                if( task.getResult() != null)
+                    for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult())
+                        //  to every bucket we initialize the consolidation
+                        dropExpiredNotificationBucket( queryDocumentSnapshot.getString("bucket"));
             });
             return OpStatus.OK;
 
         }catch(RuntimeException e){
-
             e.printStackTrace();
             return OpStatus.ERROR;
+        }
+    }
 
+    // [testing function] support function to dropExpiredNotification. Removes all the expired notification
+    // data from a single given bucket. This is very inefficient but it's just a testing method to overcome
+    // the paywall of implementing functions directly inside the Firebase Firestore cloud service
+    // Returns:
+    //      - OpStatus.ILLEGAL_ARGUMENT: invalid arguments provided to the class
+    //      - OpStatus.OK: single notification bucket correctly consolidated
+    //      - OpStatus.ERROR: some error happened during function execution
+    private OpStatus dropExpiredNotificationBucket(String bucket){
+
+        if( bucket == null || bucket.length() == 0 )
+            return OpStatus.ILLEGAL_ARGUMENT;
+
+        try{
+
+            //  we collect all the data that have an expired timestamp
+            firestore.collection(bucket).whereLessThan("expire", new Date()).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    // we create a batch to remove in background all the collected data
+                    WriteBatch writeBatch = firestore.batch();
+                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult()))
+                        writeBatch.delete(document.getReference());
+
+                    writeBatch.commit().addOnSuccessListener(s -> Log.d(TAG, "Bucket " + bucket + " correclty consolidated"));
+                }
+
+            });
+            return OpStatus.OK;
+
+        }catch( RuntimeException e ){
+            e.printStackTrace();
+            return OpStatus.ERROR;
         }
     }
 }

@@ -34,6 +34,7 @@ import com.geotracer.geotracer.notifications.NotificationSender;
 import com.geotracer.geotracer.settingapp.SettingActivity;
 import com.geotracer.geotracer.testingapp.LogService;
 import com.geotracer.geotracer.testingapp.TestingActivity;
+import com.geotracer.geotracer.utils.generics.OpStatus;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             boundNotification = true;
 
             Log.i("INFETTATO", String.valueOf(notificationSender.canIbeInfected()));
-            if(notificationSender.canIbeInfected()){
+            if(notificationSender.canIbeInfected() == OpStatus.INFECTED){
                 FrameLayout frameLayout = findViewById(R.id.contact_frame);
                 frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
                 TextView contact_text = findViewById(R.id.contact_text);

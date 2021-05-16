@@ -31,11 +31,15 @@ public class PositionUtility {
 
     //  insert a new user position or update it in order to refresh the expiring time
     //  Returns:
+    //      - OpStatus.ILLEGAL_ARGUMENT: illegal argument provided to the function
     //      - OpStatus.OK: the position is inserted
     //      - OpStatus.REFRESH: the position is updated
     //      - OpStatus.ERROR: an error has occurred during the request
 
     public OpStatus insertOrUpdatePosition(BaseLocation location ){
+
+        if( location == null )
+            return OpStatus.ILLEGAL_ARGUMENT;
 
         if( positions == null )
             return OpStatus.ERROR;

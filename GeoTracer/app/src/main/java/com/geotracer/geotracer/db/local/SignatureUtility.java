@@ -34,6 +34,9 @@ public class SignatureUtility {
 
     public OpStatus insertSignature(Signature signature){
 
+        if( signature == null )
+            return OpStatus.ILLEGAL_ARGUMENT;
+
         try {
 
             //  verification of the signature presence

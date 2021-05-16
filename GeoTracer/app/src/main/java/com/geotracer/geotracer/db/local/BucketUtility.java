@@ -30,11 +30,15 @@ public class BucketUtility {
 
     //  insert a new bucket for message notifications
     //  Returns:
+    //      - OpStatus.ILLEGAL_ARGUMENT: illegal argument provided to the function
     //      - OpStatus.OK: the bucket is added to the store
     //      - OpStatus.PRESENT: the bucket is already present inside the store
     //      - OpStatus.ERROR: an error has occurred during the request
 
     public OpStatus insertBucket( String bucket ){
+
+        if( bucket == null || bucket.length() == 0 )
+            return OpStatus.ILLEGAL_ARGUMENT;
 
         try {
 
@@ -65,11 +69,15 @@ public class BucketUtility {
 
     //  removes a registered bucket
     //  Returns:
+    //      - OpStatus.ILLEGAL_ARGUMENT: illegal argument provided to the function
     //      - OpStatus.OK: the bucket is correctly removed from the store
     //      - OpStatus.NOT_PRESENT: the bucket is not present inside the store
     //      - OpStatus.ERROR: an error has occurred during the request
 
     public OpStatus removeBucket(String bucket){
+
+        if( bucket == null || bucket.length() == 0 )
+            return OpStatus.ILLEGAL_ARGUMENT;
 
         try {
 
@@ -132,18 +140,31 @@ public class BucketUtility {
     //  registry on the firestore database the bucket. Function required to supply the lack of the
     //  back-end. Helps the database to remove old data knowing the registered buckets without any
     //  remote code execution
-    private void addRemoteBucket(String bucket ){
+    //  Returns:
+    //      - OpStatus.ILLEGAL_ARGUMENT: illegal argument provided to the function
+    //      - OpStatus.OK: the bucket is correctly added
+    //      - OpStatus.ERROR: some error happened during function execution
+    private OpStatus addRemoteBucket(String bucket ){
 
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        CollectionReference collection = firestore.collection("buckets");
+        if( bucket == null || bucket.length() == 0 )
+            return OpStatus.ILLEGAL_ARGUMENT;
 
-        collection.whereEqualTo("bucket", bucket).get().addOnSuccessListener(queryDocumentSnapshots -> {
-            //  if the bucket isn't present we insert it into the registry
-            if (queryDocumentSnapshots.getDocuments().size() == 0){
-                Map<String,String> bucketMap = new HashMap<>();
-                bucketMap.put("bucket",bucket);
-                collection.add(bucketMap).addOnSuccessListener(documentReference -> Log.d(TAG, "Bucket " + bucket + " added remotely"));
-            }
-        });
+        try {
+            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+            CollectionReference collection = firestore.collection("buckets");
+
+            collection.whereEqualTo("bucket", bucket).get().addOnSuccessListener(queryDocumentSnapshots -> {
+                //  if the bucket isn't present we insert it into the registry
+                if (queryDocumentSnapshots.getDocuments().size() == 0) {
+                    Map<String, String> bucketMap = new HashMap<>();
+                    bucketMap.put("bucket", bucket);
+                    collection.add(bucketMap).addOnSuccessListener(documentReference -> Log.d(TAG, "Bucket " + bucket + " added remotely"));
+                }
+            });
+        }catch(RuntimeException e){
+            e.printStackTrace();
+            return OpStatus.ERROR;
+        }
+        return OpStatus.OK;
     }
 }

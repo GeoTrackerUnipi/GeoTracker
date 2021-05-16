@@ -25,10 +25,14 @@ public class BeaconUtility {
 
     //  insert a new captured position
     //  Returns:
+    //      - OpStatus.ILLEGAL_ARGUMENT: illegal argument provided to the function
     //      - OpStatus.OK: all the valid signatures are given with the object
     //      - OpStatus.ERROR: an error has occurred during the request
 
     public OpStatus insertBeacon(ExtSignature beacon){
+
+        if( beacon == null )
+            return OpStatus.ILLEGAL_ARGUMENT;
 
         String beaconString = beacon.toString();
         String beaconTag = beacon.getSignature();
@@ -60,11 +64,15 @@ public class BeaconUtility {
 
     //  verify if a beacon is present inside the store and if it is valid
     //  Returns:
+    //      - OpStatus.ILLEGAL_ARGUMENT: illegal argument provided to the function
     //      - OpStatus.PRESENT: the beacon is present and valid
     //      - OpStatus.NOT_PRESENT: the beacon is not present or it is present but expired
     //      - OpStatus.ERROR: an error has occurred during the managing of the request
 
     public OpStatus beaconPresent(String beacon){
+
+        if( beacon == null || beacon.length() == 0 )
+            return OpStatus.ILLEGAL_ARGUMENT;
 
         try {
             //  we verify that the beacon is present and not expired

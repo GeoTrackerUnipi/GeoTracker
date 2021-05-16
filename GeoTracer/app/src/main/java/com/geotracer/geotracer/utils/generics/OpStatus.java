@@ -13,6 +13,9 @@ public enum OpStatus {
     UPDATE_LOCATION,
     COLLECTED,
     UPDATED,
+    ILLEGAL_ARGUMENT,
+    INFECTED,
+    NOT_INFECTED,
     EMPTY;
 
     @Override
@@ -27,6 +30,9 @@ public enum OpStatus {
             case UPDATE_LOCATION:    return "UPDATE_LOCATION";
             case COLLECTED:          return "COLLECTED";
             case UPDATED:            return "UPDATED";
+            case ILLEGAL_ARGUMENT:   return "ILLEGAL_ARGUMENT";
+            case INFECTED:           return "INFECTED";
+            case NOT_INFECTED:       return "NOT_INFECTED";
             case EMPTY:              return "EMPTY";
             default: throw new IllegalArgumentException();
 
