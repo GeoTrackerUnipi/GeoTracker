@@ -63,4 +63,38 @@ public class LogService extends Service {
 
     }
 
+    public void listenToLog(){
+
+        int i = 0;
+        Process logcat;
+        final StringBuilder log = new StringBuilder();
+
+        try {
+
+            Process process = Runtime.getRuntime().exec("logcat -c");
+            String cmd = "logcat -d " + TESTING_ACTIVITY_LOG + ":D" + " *:S";
+            logcat = Runtime.getRuntime().exec(cmd);
+            BufferedReader br = new BufferedReader(new InputStreamReader(logcat.getInputStream()));
+            String line;
+            String separator = System.getProperty("line.separator");
+            //String lastLine = "";
+
+            while ((line = br.readLine()) != null) {
+                i++;
+                log.append(line);
+                log.append(separator);
+            }
+
+            //Log.i(TESTING_ACTIVITY_LOG, String.valueOf(i) + "VALUE " + log.toString());
+
+            Intent intent = new Intent(ACTION_BROADCAST);
+            intent.putExtra("LogMessage", log.toString());
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }

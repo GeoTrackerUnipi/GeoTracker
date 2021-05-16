@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.util.Log;
@@ -74,12 +75,13 @@ public class TestingActivity extends AppCompatActivity {
                     @Override
                     public void onReceive(Context context, Intent intent) {
 
-                        Log.d(TESTING_ACTIVITY_LOG, "BROADCAST LISTENER");
+                        Log.d(TESTING_ACTIVITY_LOG, "LogService BROADCAST LISTENER");
                         String toLog = intent.getStringExtra("LogMessage");
-                        Log.i(TESTING_ACTIVITY_LOG, toLog);
+
                         tv.append(toLog);
                         ScrollView sv = (ScrollView) findViewById(R.id.scrollview);
                         sv.fullScroll(ScrollView.FOCUS_DOWN);
+
                     }
                 },new IntentFilter(LogService.ACTION_BROADCAST)
 
@@ -202,16 +204,20 @@ public class TestingActivity extends AppCompatActivity {
         //KEYVALUE MANAGEMENT
         intent = new Intent(this, KeyValueManagement.class);
         bindService(intent, keyValueService, Context.BIND_AUTO_CREATE);
-/*
-        iff= new IntentFilter(LogService.ACTION_BROADCAST);
-        LocalBroadcastManager.getInstance(this).registerReceiver(logServiceReceiver, iff);  */
 
+        //LOG SERVICE
+        iff= new IntentFilter(LogService.ACTION_BROADCAST);
+        LocalBroadcastManager.getInstance(this).registerReceiver(logServiceReceiver, iff);
+
+
+        //SET THE VARIABLE FOR CONTACT NOTIFICATION STATUS
         if(((UserStatus) this.getApplication()).getContacts()) {
             FrameLayout frameLayout = findViewById(R.id.contact_frame);
             frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
             TextView tv = findViewById(R.id.contact_text);
             tv.setText(getResources().getString(R.string.contacts));
         }
+
     }
 
     @Override
@@ -226,7 +232,10 @@ public class TestingActivity extends AppCompatActivity {
 
         //KEYVALUE
         unbindService(keyValueService);
-        //LocalBroadcastManager.getInstance(this).unregisterReceiver(logServiceReceiver);
+
+        //LOGSERVICE
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(logServiceReceiver);
+
 
     }
 
@@ -637,13 +646,17 @@ public class TestingActivity extends AppCompatActivity {
     }
 
     public void readLog(View view){
-        Runnable r = new Runnable() {
-            public void run() {
-                showLog(view);
-            }
-        };
+        service.listenToLog();
+        /*
 
-        new Thread(r).start();
+        handler.postDelayed(runnable = new Runnable() {
+            public void run() {
+                handler.postDelayed(runnable, delay);
+                service.listenToLog();
+            }
+        }, delay);
+
+         */
     }
 
     public void showLog(View view) {
