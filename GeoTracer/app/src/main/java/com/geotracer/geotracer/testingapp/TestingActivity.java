@@ -44,7 +44,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-
 public class TestingActivity extends AppCompatActivity {
 
 
@@ -56,6 +55,8 @@ public class TestingActivity extends AppCompatActivity {
     NotificationSender notificationSender;
     private FirestoreManagement firestore;
     private KeyValueManagement keyValueManagement;
+
+    public static final String TESTING_ACTIVITY_LOG = "TestingActivity";
 
 
     @Override
@@ -72,7 +73,7 @@ public class TestingActivity extends AppCompatActivity {
                     @Override
                     public void onReceive(Context context, Intent intent) {
 
-                        Log.d(this.getClass().getName(), "BROADCAST LISTENER");
+                        Log.d(TESTING_ACTIVITY_LOG, "BROADCAST LISTENER");
                         String toLog = intent.getStringExtra("LogMessage");
                         tv.append(toLog);
                         ScrollView sv = (ScrollView) findViewById(R.id.scrollview);
@@ -88,12 +89,12 @@ public class TestingActivity extends AppCompatActivity {
                     @Override
                     public void onReceive(Context context, Intent intent) {
 
-                        Log.d(this.getClass().getName(), "BROADCAST LISTENER FOR CONTACTS");
+                        Log.d(TESTING_ACTIVITY_LOG, "BROADCAST LISTENER FOR CONTACTS");
                         String toLog = intent.getStringExtra("Contact");
 
                         TextView tv = new TextView(TestingActivity.this);
                         if(tv == null)
-                            Log.d(this.getClass().getName() + "BROADCAST LISTENER FOR CONTACTS", "Empty location");
+                            Log.d(TESTING_ACTIVITY_LOG + "BROADCAST LISTENER FOR CONTACTS", "Empty location");
                         else {
                             showPopupWindow(tv, toLog);
                         }
@@ -285,12 +286,10 @@ public class TestingActivity extends AppCompatActivity {
 
         String s = "DEVICE STARTED DISSEMINATING ITS SIGNATURE\n";
 
-        String name = this.getClass().getName();
-
         TextView tv = new TextView(TestingActivity.this);
-        Log.i(this.getClass().getName(), s);
+        Log.d(TESTING_ACTIVITY_LOG, s);
         showPopupWindow(tv, s);
-        //service.printLog(name, s);
+        //service.printLog(TESTING_ACTIVITY_LOG, s);
 
 
         /*
@@ -299,7 +298,7 @@ public class TestingActivity extends AppCompatActivity {
 
         /*
 
-            service.printLog(name, "Error in starting dissemination\n");
+            service.printLog(TESTING_ACTIVITY_LOG, "Error in starting dissemination\n");
         }
         */
 
@@ -320,15 +319,15 @@ public class TestingActivity extends AppCompatActivity {
         String s = "DISSEMINATION STOPPED";
         TextView tv = new TextView(TestingActivity.this);
         showPopupWindow(tv, s);
-        Log.d(this.getClass().getName(), s);
-        //service.printLog(this.getClass().getName(), "DEVICE STOPPED DISSEMINATING ITS SIGNATURE\n");
+        Log.d(TESTING_ACTIVITY_LOG, s);
+        //service.printLog(TESTING_ACTIVITY_LOG, "DEVICE STOPPED DISSEMINATING ITS SIGNATURE\n");
 
 
 
         /*
 
         }else{
-           service.printLog(name, "Error in stop dissemination\n");
+           service.printLog(TESTING_ACTIVITY_LOG, "Error in stop dissemination\n");
         }
         */
     }
@@ -352,8 +351,8 @@ public class TestingActivity extends AppCompatActivity {
         String s = "SIGNATURE COLLECTION STARTED";
         TextView tv = new TextView(TestingActivity.this);
         showPopupWindow(tv, s);
-        Log.d(this.getClass().getName(), s);
-        //service.printLog(this.getClass().getName(), "DEVICE STARTED COLLECTING SIGNATURES\n");
+        Log.d(TESTING_ACTIVITY_LOG, s);
+        //service.printLog(TESTING_ACTIVITY_LOG, "DEVICE STARTED COLLECTING SIGNATURES\n");
 
 
         /*
@@ -361,7 +360,7 @@ public class TestingActivity extends AppCompatActivity {
         }else{
 
 
-          service.printLog(name, "Error in starting signature collection\n");
+          service.printLog(TESTING_ACTIVITY_LOG, "Error in starting signature collection\n");
 
         }
         */
@@ -380,14 +379,14 @@ public class TestingActivity extends AppCompatActivity {
         String s = "SIGNATURE COLLECTION STOPPED";
         TextView tv = new TextView(TestingActivity.this);
         showPopupWindow(tv, s);
-        Log.d(this.getClass().getName(), s);
-        //service.printLog(this.getClass().getName(), "DEVICE STOPPED COLLECTING SIGNATURES\n");
+        Log.d(TESTING_ACTIVITY_LOG, s);
+        //service.printLog(TESTING_ACTIVITY_LOG, "DEVICE STOPPED COLLECTING SIGNATURES\n");
 
 
         /*
 
         }else{
-            service.printLog(name, "Error in stopping the signature collection\n");
+            service.printLog(TESTING_ACTIVITY_LOG, "Error in stopping the signature collection\n");
 
         }
         */
@@ -404,12 +403,12 @@ public class TestingActivity extends AppCompatActivity {
         if(userPositions.getStatus() == OpStatus.OK){
             firestore.insertInfectedLocations(userPositions.getValue());
             notificationSender.infectionAlert();
-            Log.d(this.getClass().getName(), "POSITIVITY REPORT ENABLED");
+            Log.d(TESTING_ACTIVITY_LOG, "POSITIVITY REPORT ENABLED");
             showPopupWindow(tv, "USER TAGGED AS INFECTED");
         }
         else {
             showPopupWindow(tv, "ERROR! USER NOT TAGGED AS INFECTED");
-            Log.d(this.getClass().getName(), "ERROR! USER NOT TAGGED AS INFECTED");
+            Log.d(TESTING_ACTIVITY_LOG, "ERROR! USER NOT TAGGED AS INFECTED");
         }
 
     }
@@ -431,11 +430,11 @@ public class TestingActivity extends AppCompatActivity {
         if(firestore.dropExpiredLocations()== OpStatus.OK) {
             TextView tv = new TextView(TestingActivity.this);
             showPopupWindow(tv, "Old data has been deleted from the database");
-            Log.d(this.getClass().getName(), "Old data has been deleted from the database");
+            Log.d(TESTING_ACTIVITY_LOG, "Old data has been deleted from the database");
         }else{
             TextView tv = new TextView(TestingActivity.this);
             showPopupWindow(tv, "Error! Data not deleted");
-            Log.d(this.getClass().getName(), "Error! Old Data not deleted");
+            Log.d(TESTING_ACTIVITY_LOG, "Error! Old Data not deleted");
         }
 
 
@@ -453,6 +452,16 @@ public class TestingActivity extends AppCompatActivity {
          */
         TextView tv = (TextView) findViewById(R.id.log_text);
         tv.setText("");
+
+        Process logcat;
+        final StringBuilder log = new StringBuilder();
+        try {
+            Runtime.getRuntime().exec("logcat -b all -c");
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -511,7 +520,6 @@ public class TestingActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        TextView tv;
         Intent i;
         switch(item.getItemId()){
             case R.id.from_testing_to_main:
@@ -549,7 +557,7 @@ public class TestingActivity extends AppCompatActivity {
         String log = ((TextView)findViewById(R.id.log_text)).getText().toString();
         outState.putString("log", log);
 
-        Log.d(this.getLocalClassName(), "Instance State Saved");
+        Log.d(TESTING_ACTIVITY_LOG, "Instance State Saved");
 */
     }
 
@@ -560,7 +568,7 @@ public class TestingActivity extends AppCompatActivity {
         //restore the display
         String log = savedInstanceState.getString("log");
         ((TextView)findViewById(R.id.log_text)).setText(log);
-        Log.d(this.getLocalClassName(), "Instance State Restored"); */
+        Log.d(TESTING_ACTIVITY_LOG, "Instance State Restored"); */
     }
 
     /*
@@ -643,8 +651,10 @@ public class TestingActivity extends AppCompatActivity {
         Process logcat;
         final StringBuilder log = new StringBuilder();
         try {
-            logcat = Runtime.getRuntime().exec(new String[]{"logcat", "-d", "*:D"});
-            BufferedReader br = new BufferedReader(new InputStreamReader(logcat.getInputStream()),4*1024);
+
+            String cmd = "logcat -d " + TESTING_ACTIVITY_LOG + ":D" + " *:S";
+            logcat = Runtime.getRuntime().exec(cmd);
+            BufferedReader br = new BufferedReader(new InputStreamReader(logcat.getInputStream()));
             String line;
             String separator = System.getProperty("line.separator");
             while ((line = br.readLine()) != null) {
@@ -654,14 +664,10 @@ public class TestingActivity extends AppCompatActivity {
             tv.append(log.toString());
             ScrollView sv = (ScrollView) findViewById(R.id.scrollview);
             sv.fullScroll(ScrollView.FOCUS_DOWN);
+
+
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-        try {
-            Runtime.getRuntime().exec(new String[]{"logcat", "-b all -c"});
-        } catch (Exception e1) {
-            e1.printStackTrace();
         }
 
     }
