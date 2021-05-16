@@ -35,7 +35,14 @@ import com.geotracer.geotracer.infoapp.InfoActivity;
 import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
 import com.geotracer.geotracer.settingapp.SettingActivity;
+import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.geotracer.geotracer.utils.generics.OpStatus;
+import com.geotracer.geotracer.utils.generics.RetStatus;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.List;
 
 
 public class TestingActivity extends AppCompatActivity {
@@ -58,7 +65,8 @@ public class TestingActivity extends AppCompatActivity {
 
 
         TextView tv = (TextView) findViewById(R.id.log_text);
-
+        tv.setText("");
+/*
         LocalBroadcastManager.getInstance(TestingActivity.this).registerReceiver(
                 logServiceReceiver = new BroadcastReceiver() {
                     @Override
@@ -72,7 +80,8 @@ public class TestingActivity extends AppCompatActivity {
                     }
                 },new IntentFilter(LogService.ACTION_BROADCAST)
 
-        );
+        );      */
+
 
         LocalBroadcastManager.getInstance(TestingActivity.this).registerReceiver(
                 notificationReceiver = new BroadcastReceiver() {
@@ -95,9 +104,16 @@ public class TestingActivity extends AppCompatActivity {
                         contact_text.setText(getResources().getString(R.string.contacts));
                         ((UserStatus) TestingActivity.this.getApplication()).setContacts(true);
                     }
-                },new IntentFilter(LogService.ACTION_BROADCAST)
+                },new IntentFilter(NotificationSender.ACTION_BROADCAST)
 
         );
+
+        try {
+            Runtime.getRuntime().exec("logcat -c");
+        } catch (IOException e) {
+            // Handle Exception
+        }
+
 
 
 
@@ -238,6 +254,9 @@ public class TestingActivity extends AppCompatActivity {
         //BIND KEYVALUE SERVICE
         intent = new Intent(this, KeyValueManagement.class);
         bindService(intent, keyValueService, Context.BIND_AUTO_CREATE);
+
+        TextView tv = (TextView) findViewById(R.id.log_text);
+        tv.setText("");
     }
 
 
@@ -269,6 +288,7 @@ public class TestingActivity extends AppCompatActivity {
         String name = this.getClass().getName();
 
         TextView tv = new TextView(TestingActivity.this);
+        Log.i(this.getClass().getName(), s);
         showPopupWindow(tv, s);
         //service.printLog(name, s);
 
@@ -297,9 +317,10 @@ public class TestingActivity extends AppCompatActivity {
          */
         //if(/*   THE DISSEMINATION STOPPED   */){
 
-
+        String s = "DISSEMINATION STOPPED";
         TextView tv = new TextView(TestingActivity.this);
-        showPopupWindow(tv, "Dissemination Stopped");
+        showPopupWindow(tv, s);
+        Log.d(this.getClass().getName(), s);
         //service.printLog(this.getClass().getName(), "DEVICE STOPPED DISSEMINATING ITS SIGNATURE\n");
 
 
@@ -328,8 +349,10 @@ public class TestingActivity extends AppCompatActivity {
         I SHOW THE COLLECTION INFORMATION IN THE LOG BOX
 
          */
+        String s = "SIGNATURE COLLECTION STARTED";
         TextView tv = new TextView(TestingActivity.this);
-        showPopupWindow(tv, "Signature Collection Started");
+        showPopupWindow(tv, s);
+        Log.d(this.getClass().getName(), s);
         //service.printLog(this.getClass().getName(), "DEVICE STARTED COLLECTING SIGNATURES\n");
 
 
@@ -351,10 +374,13 @@ public class TestingActivity extends AppCompatActivity {
             STOP TAKING THE OTHER DEVICES' SIGNATURES
             THE PROCEDURE RESULT WILL BE SHOWN IN A POPUP WINDOW
 
+
          */
         //if(/*   THE COLLECTION STOPPED   */){
+        String s = "SIGNATURE COLLECTION STOPPED";
         TextView tv = new TextView(TestingActivity.this);
-        showPopupWindow(tv, "Signature Collection Stopped");
+        showPopupWindow(tv, s);
+        Log.d(this.getClass().getName(), s);
         //service.printLog(this.getClass().getName(), "DEVICE STOPPED COLLECTING SIGNATURES\n");
 
 
@@ -372,22 +398,26 @@ public class TestingActivity extends AppCompatActivity {
             TAG THE USER AS INFECTED
             THE RESULT WILL BE SHOWN IN A POPUP WINDOW IN ADDITION TO THE LOG SECTION
          */
-        //if(/*   DONE IT   */){
-
         TextView tv = new TextView(TestingActivity.this);
-        showPopupWindow(tv, "USER TAGGED AS INFECTED");
-        //service.printLog(this.getClass().getName(), "USER TAGGED AS INFECTED\n");
 
-
-        /*
-
-        }else{
-            service.printLog(name, "Error! Unable to set the user as infected\n");
-
+        RetStatus<List<BaseLocation>> userPositions = keyValueManagement.positions.getAllPositions();
+        if(userPositions.getStatus() == OpStatus.OK){
+            firestore.insertInfectedLocations(userPositions.getValue());
+            notificationSender.infectionAlert();
+            Log.d(this.getClass().getName(), "POSITIVITY REPORT ENABLED");
+            showPopupWindow(tv, "USER TAGGED AS INFECTED");
         }
-        */
+        else {
+            showPopupWindow(tv, "ERROR! USER NOT TAGGED AS INFECTED");
+            Log.d(this.getClass().getName(), "ERROR! USER NOT TAGGED AS INFECTED");
+        }
+
     }
 
+
+    /*
+    IT DELETES THE OLD SIGNATURES FROM THE DB
+     */
 
     public void delete(View view) {
 
@@ -401,13 +431,19 @@ public class TestingActivity extends AppCompatActivity {
         if(firestore.dropExpiredLocations()== OpStatus.OK) {
             TextView tv = new TextView(TestingActivity.this);
             showPopupWindow(tv, "Old data has been deleted from the database");
+            Log.d(this.getClass().getName(), "Old data has been deleted from the database");
         }else{
             TextView tv = new TextView(TestingActivity.this);
             showPopupWindow(tv, "Error! Data not deleted");
+            Log.d(this.getClass().getName(), "Error! Old Data not deleted");
         }
 
 
     }
+
+    /*
+    IT CLEANS THE LOG WINDOW
+     */
 
     public void emptyLog(View view) {
         /*
@@ -420,6 +456,9 @@ public class TestingActivity extends AppCompatActivity {
 
     }
 
+    /*
+    IT SHOWS THE POPUP WINDOW
+     */
 
     protected void showPopupWindow(TextView location, String message){
 
@@ -459,7 +498,7 @@ public class TestingActivity extends AppCompatActivity {
     /*
 
 
-    MENU ITEMS
+    TOOLBAR MENU ITEMS
 
 
      */
@@ -524,7 +563,9 @@ public class TestingActivity extends AppCompatActivity {
         Log.d(this.getLocalClassName(), "Instance State Restored"); */
     }
 
-
+    /*
+    It manages delete menu. It discriminates between the choices and call the corrisponding drop function.
+     */
     public void manageDelete(View view) {
 
         //Creating the instance of PopupMenu
@@ -536,22 +577,54 @@ public class TestingActivity extends AppCompatActivity {
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
 
+                TextView tv = new TextView(TestingActivity.this);
                 switch(item.getItemId()){
                     case R.id.delete_my_positions:
-                        //keyValueManagement.positions.
                         //DELETE MY POSITIONS
-                        return true;
-                    case R.id.delete_rec_positions:
-                        //DELETE OTHER PEOPLE POSITIONS
+                        if(keyValueManagement.positions.dropAllPositions() != OpStatus.OK)
+                            showPopupWindow(tv, "Error in removing positions");
+                        else {
+                            showPopupWindow(tv, "All positions removed");
+                            FrameLayout frameLayout = findViewById(R.id.contact_frame);
+                            frameLayout.setBackgroundColor(getResources().getColor(R.color.white));
+                            TextView contact_text = findViewById(R.id.contact_text);
+                            contact_text.setText(getResources().getString(R.string.contacts));
+                            ((UserStatus) TestingActivity.this.getApplication()).setContacts(false);
+                        }
                         return true;
                     case R.id.delete_my_signatures:
                         //DELETE MY SIGNATURES
+                        if(keyValueManagement.signatures.removeAllSignatures() != OpStatus.OK)
+                            showPopupWindow(tv, "Error in removing signatures");
+                        else
+                            showPopupWindow(tv, "All signatures removed");
                         return true;
                     case R.id.delete_rec_beacons:
                         //DELETE RECEIVED BEACONS
+                        if(keyValueManagement.beacons.dropAllBeacons() != OpStatus.OK)
+                            showPopupWindow(tv, "Error in removing beacons");
+                        else {
+                            showPopupWindow(tv, "All beacons removed");
+                            FrameLayout frameLayout = findViewById(R.id.contact_frame);
+                            frameLayout.setBackgroundColor(getResources().getColor(R.color.white));
+                            TextView contact_text = findViewById(R.id.contact_text);
+                            contact_text.setText(getResources().getString(R.string.contacts));
+                            ((UserStatus) TestingActivity.this.getApplication()).setContacts(false);
+                        }
                         return true;
                     case R.id.delete_all:
                         //DELETE EVERYTHING
+                        if(!keyValueManagement.cleanLocalStore()) {
+                            showPopupWindow(tv, "Error in cleaning the local database");
+                        }
+                        else {
+                            showPopupWindow(tv, "All beacons removed");
+                            FrameLayout frameLayout = findViewById(R.id.contact_frame);
+                            frameLayout.setBackgroundColor(getResources().getColor(R.color.white));
+                            TextView contact_text = findViewById(R.id.contact_text);
+                            contact_text.setText(getResources().getString(R.string.contacts));
+                            ((UserStatus) TestingActivity.this.getApplication()).setContacts(false);
+                        }
                         return true;
                     default:
                         return false;
@@ -561,6 +634,35 @@ public class TestingActivity extends AppCompatActivity {
         });
 
         popup.show();//showing popup menu
+
+    }
+
+    public void showLog(View view) {
+        TextView tv = findViewById(R.id.log_text);
+
+        Process logcat;
+        final StringBuilder log = new StringBuilder();
+        try {
+            logcat = Runtime.getRuntime().exec(new String[]{"logcat", "-d", "*:D"});
+            BufferedReader br = new BufferedReader(new InputStreamReader(logcat.getInputStream()),4*1024);
+            String line;
+            String separator = System.getProperty("line.separator");
+            while ((line = br.readLine()) != null) {
+                log.append(line);
+                log.append(separator);
+            }
+            tv.append(log.toString());
+            ScrollView sv = (ScrollView) findViewById(R.id.scrollview);
+            sv.fullScroll(ScrollView.FOCUS_DOWN);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Runtime.getRuntime().exec(new String[]{"logcat", "-b all -c"});
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
 
     }
 }

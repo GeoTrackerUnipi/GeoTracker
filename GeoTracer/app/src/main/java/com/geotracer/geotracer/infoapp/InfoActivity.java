@@ -72,7 +72,7 @@ public class InfoActivity extends AppCompatActivity {
                         contact_text.setText(getResources().getString(R.string.contacts));
                         ((UserStatus) InfoActivity.this.getApplication()).setContacts(true);
                     }
-                },new IntentFilter(LogService.ACTION_BROADCAST)
+                },new IntentFilter(NotificationSender.ACTION_BROADCAST)
 
         );
     }

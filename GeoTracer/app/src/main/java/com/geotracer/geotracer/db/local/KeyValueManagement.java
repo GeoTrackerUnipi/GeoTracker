@@ -79,16 +79,16 @@ public class KeyValueManagement extends Service {
     }
 
     //  general function to remove all the elements from the local database
-    @SuppressWarnings("unused")
-    public void cleanLocalStore(){
+    public boolean cleanLocalStore(){
 
         if(signatures.removeAllSignatures() != OpStatus.OK)
-            return;
+            return false;
         if(positions.dropAllPositions() != OpStatus.OK)
-            return;
+            return false;
         if( beacons.dropAllBeacons() != OpStatus.OK)
-            return;
+            return false;
         buckets.dropAllBuckets();
+        return true;
     }
 }
 

@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                         contact_text.setText(getResources().getString(R.string.contacts));
                         ((UserStatus) MainActivity.this.getApplication()).setContacts(true);
                     }
-                },new IntentFilter(LogService.ACTION_BROADCAST)
+                },new IntentFilter(NotificationSender.ACTION_BROADCAST)
 
         );
     }
