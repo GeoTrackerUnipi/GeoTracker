@@ -71,6 +71,9 @@ public class TestingActivity extends AppCompatActivity {
         TextView tv = (TextView) findViewById(R.id.log_text);
         tv.setText("");
 
+        /*
+        BROADCAST RECEIVER FOR THE LOG SERVICE
+         */
         LocalBroadcastManager.getInstance(TestingActivity.this).registerReceiver(
                 logServiceReceiver = new BroadcastReceiver() {
                     @Override
@@ -88,7 +91,9 @@ public class TestingActivity extends AppCompatActivity {
 
         );
 
-
+        /*
+        BROADCAST RECEIVER FOR NOTIFICATIONS COMING FROM THE DB
+         */
         LocalBroadcastManager.getInstance(TestingActivity.this).registerReceiver(
                 notificationReceiver = new BroadcastReceiver() {
                     @Override
@@ -117,6 +122,9 @@ public class TestingActivity extends AppCompatActivity {
     }
 
 
+    /*
+    CONNECTION WITH THE NOTIFICATION SERVICE
+     */
     private ServiceConnection notificationService = new ServiceConnection() {
 
         @Override
@@ -136,7 +144,10 @@ public class TestingActivity extends AppCompatActivity {
 
         }
     };
-    /** Defines callbacks for service binding, passed to bindService() */
+
+    /*
+    CONNECTION WITH THE LOG SERVICE
+     */
     private ServiceConnection logServiceConnection = new ServiceConnection() {
 
         @Override
@@ -154,6 +165,9 @@ public class TestingActivity extends AppCompatActivity {
         }
     };
 
+    /*
+    CONNECTION WITH THE FIRESTORE MANAGER SERVICE
+     */
     private final ServiceConnection firestoreService = new ServiceConnection() {
 
         @Override
@@ -172,6 +186,9 @@ public class TestingActivity extends AppCompatActivity {
         }
     };
 
+    /*
+    CONNECTION WITH THE KEYVALUE MANAGER SERVICE
+     */
     private final ServiceConnection keyValueService = new ServiceConnection() {
 
         @Override
@@ -193,6 +210,9 @@ public class TestingActivity extends AppCompatActivity {
 
     protected void onResume() {
         super.onResume();
+        /*
+        RESTART ALL THE BROADCAST RECEIVERS
+        */
 
         //NOTIFICATION RECEIVER
         IntentFilter iff= new IntentFilter(NotificationSender.ACTION_BROADCAST);
@@ -224,6 +244,10 @@ public class TestingActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
+
+        /*
+        STOP THE BROADCAST RECEIVER AND UNBIND THE OTHER SERVICES.
+         */
 
         //NOTIFICATION
         LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationReceiver);
@@ -285,6 +309,10 @@ public class TestingActivity extends AppCompatActivity {
             THEN THAT PROCESS MUST BE CHECKED
          */
 
+        /*
+        startAdvertising() ??
+         */
+
         //if(/*   THE DISSEMINATION STARTED   */){
 
         String s = "DEVICE STARTED DISSEMINATING ITS SIGNATURE\n";
@@ -317,6 +345,10 @@ public class TestingActivity extends AppCompatActivity {
 
         BELOW I CHECK THAT EVERYTHING WENT WELL AND I WRITE IT IN A POPUP WINDOW
          */
+
+        /*
+        stop advertising ??
+         */
         //if(/*   THE DISSEMINATION STOPPED   */){
 
         String s = "DISSEMINATION STOPPED";
@@ -343,14 +375,12 @@ public class TestingActivity extends AppCompatActivity {
         A FUNCTION THAT DOES THIS MUST BE CALLED
 
         IN THE IF STATEMENT I HAVE TO CHECK THE RESULT OF THAT CALL
+
+        startScanning() ??
          */
         //if(/*   THE COLLECTION STARTED   */){
 
-        /*
 
-        I SHOW THE COLLECTION INFORMATION IN THE LOG BOX
-
-         */
         String s = "SIGNATURE COLLECTION STARTED";
         TextView tv = new TextView(TestingActivity.this);
         showPopupWindow(tv, s);
@@ -377,7 +407,10 @@ public class TestingActivity extends AppCompatActivity {
             THE PROCEDURE RESULT WILL BE SHOWN IN A POPUP WINDOW
 
 
+             stopScanning ??
          */
+
+
         //if(/*   THE COLLECTION STOPPED   */){
         String s = "SIGNATURE COLLECTION STOPPED";
         TextView tv = new TextView(TestingActivity.this);
@@ -650,7 +683,10 @@ public class TestingActivity extends AppCompatActivity {
     NOT USED ANYMORE, BUT CAN BE USEFUL IF YOU WANT TO ASK FOR LOG DISPLAY INSTEAD OF PERIODICALLY RECEIVE THEM.
      */
     public void showLog(View view){
-        service.listenToLog();
+
+        TextView tv = new TextView(TestingActivity.this);
+        showPopupWindow(tv, "The LogWindow is managed automatically by a service");
+        //service.listenToLog();
     }
 
 

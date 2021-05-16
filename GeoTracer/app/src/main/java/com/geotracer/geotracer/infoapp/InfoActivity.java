@@ -113,7 +113,9 @@ public class InfoActivity extends AppCompatActivity {
         boundNotification = false;
     }
 
-    /** Defines callbacks for service binding, passed to bindService() */
+    /*
+    bind with the notification manager
+     */
     private ServiceConnection notificationService = new ServiceConnection() {
 
         @Override

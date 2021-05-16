@@ -96,9 +96,18 @@ public class SettingActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     //ENABLE THE RECEIVING OF NOTIFICATION FOR BEING TOO CLOSE TO OTHER PEOPLE
+
+                    /*
+                    enableProximityWarnings()
+
+                     */
                     Log.d(this.getClass().getName(), "Proximity Notification Enabled");
                 }else{
                     //DISABLE THE RECEIVING OF NOTIFICATION FOR BEING TOO CLOSE TO OTHER PEOPLE
+
+                    /*
+                    disableProximityWarnings()
+                     */
                     Log.d(this.getClass().getName(), "Proximity Notification Disabled");
                 }
             }
@@ -133,12 +142,16 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        // Bind to LocalService
+
+        // Bind to service for contact notifications
         Intent intent = new Intent(this, NotificationSender.class);
         bindService(intent, notificationService, Context.BIND_AUTO_CREATE);
 
+        //Bind service for KeyValue management
         intent = new Intent(this, KeyValueManagement.class);
         bindService(intent, keyValueService, Context.BIND_AUTO_CREATE);
+
+        //Bind service for firestore management
         intent = new Intent(this, FirestoreManagement.class);
         bindService(intent, firestoreService, Context.BIND_AUTO_CREATE);
     }
@@ -146,8 +159,11 @@ public class SettingActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        //REGISTRATION TO NOTIFICATION SERVICE
         IntentFilter iff= new IntentFilter(NotificationSender.ACTION_BROADCAST);
         LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, iff);
+
+        //CHECK THE CONTACT STATUS AND SET THE RELATIVE LAYOUT
         if(((UserStatus) this.getApplication()).getContacts()) {
             FrameLayout frameLayout = findViewById(R.id.contact_frame);
             frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
@@ -159,19 +175,21 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     protected void onPause(){
         super.onPause();
+        //DEREGISTER FROM THE NOTIFICATION SERVICE
         LocalBroadcastManager.getInstance(this).unregisterReceiver(onNotice);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        //UNBIND ALL SERVICES
         unbindService(notificationService);
         unbindService(keyValueService);
         unbindService(firestoreService);
         boundNotification = false;
     }
 
-    /** Defines callbacks for service binding, passed to bindService() */
+    //ESTALISH A CONNECTION WITH NOTIFICATION SERVICE AND DO BIND
     private ServiceConnection notificationService = new ServiceConnection() {
 
         @Override
@@ -191,6 +209,7 @@ public class SettingActivity extends AppCompatActivity {
 
 
 
+    //BIND TO KEY VALUE MANAGER SERVICE
     private final ServiceConnection keyValueService = new ServiceConnection() {
 
         @Override
@@ -209,6 +228,7 @@ public class SettingActivity extends AppCompatActivity {
         }
     };
 
+    //BIND TO FIRESTORE MANAGEMENT SERVICE
     private final ServiceConnection firestoreService = new ServiceConnection() {
 
         @Override
@@ -262,6 +282,7 @@ public class SettingActivity extends AppCompatActivity {
     }
 
 
+    //FUNCTION TO SHOW THE POPUP WINDOW IN CASE CONTACT NOTIFICATION IS ARISEN
     protected void showPopupWindow(TextView location, String message){
 
         //instantiate the popup.xml layout file

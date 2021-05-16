@@ -24,6 +24,9 @@ public class LogService extends Service {
     // Binder given to clients
     private final IBinder binder = new LocalBinder();
 
+    /*
+    those parameters are for retrieving periodically the Log
+     */
     Handler handler = new Handler();
     Runnable runnable;
     int delay = 2000;
@@ -41,6 +44,9 @@ public class LogService extends Service {
         Log.d(this.getClass().getName(), "Service Created");
 
 
+        /*
+        HANDLER USED TO CALL THE listenToLog FUNCTION EVERY delay SECONDS.
+         */
         handler.postDelayed(runnable = new Runnable() {
             public void run() {
                 handler.postDelayed(runnable, delay);
@@ -53,6 +59,10 @@ public class LogService extends Service {
 
     public void onDestroy(){
         super.onDestroy();
+
+        /*
+        STOP THE listenToLog CALLS
+         */
         handler.removeCallbacks(runnable);
     }
 
@@ -84,6 +94,10 @@ public class LogService extends Service {
 
     /*
     THIS FUNCTION TAKES THE SYSTEM LOGS AND PRINT THEM IN THE LOG WINDOW OF THE TESTING ACTIVITY
+
+    TO ENABLE THE VISUALIZATION OF LOG OF A SPECIFIC TAG IT MUST BE ADDED TO THE cmd STRING AS FOLLOW:
+
+            "TAG_NAME:D" OR I/W/E DEPENDING OF THE LEVEL YOU WANT.
      */
 
     public void listenToLog(){
@@ -94,13 +108,15 @@ public class LogService extends Service {
 
         try {
 
+            //clean the previous log messages.
             Process process = Runtime.getRuntime().exec("logcat -c");
+
+            //takes only the specified tag logs.
             String cmd = "logcat -d " + TESTING_ACTIVITY_LOG + ":D" + " *:S";
             logcat = Runtime.getRuntime().exec(cmd);
             BufferedReader br = new BufferedReader(new InputStreamReader(logcat.getInputStream()));
             String line;
             String separator = System.getProperty("line.separator");
-            //String lastLine = "";
 
             while ((line = br.readLine()) != null) {
                 i++;
@@ -109,7 +125,15 @@ public class LogService extends Service {
             }
 
             //Log.i(TESTING_ACTIVITY_LOG, String.valueOf(i) + "VALUE " + log.toString());
+
+            /*
+            if i == 1 it prints only a system message we don't care about
+             */
             if(i > 1) {
+
+                /*
+                prepare and send back the intent to the Testing Activity
+                 */
                 Intent intent = new Intent(ACTION_BROADCAST);
                 intent.putExtra("LogMessage", log.toString());
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
