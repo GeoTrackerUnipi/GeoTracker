@@ -112,6 +112,10 @@ public class LogService extends Service {
             Process process = Runtime.getRuntime().exec("logcat -c");
 
             //takes only the specified tag logs.
+
+            /*
+            TESTING_ACTIVITY_LOG is not required to be displayed in the log_window. Can be removed afterwards
+             */
             String cmd = "logcat -d " + TESTING_ACTIVITY_LOG + ":D" + " *:S";
             logcat = Runtime.getRuntime().exec(cmd);
             BufferedReader br = new BufferedReader(new InputStreamReader(logcat.getInputStream()));

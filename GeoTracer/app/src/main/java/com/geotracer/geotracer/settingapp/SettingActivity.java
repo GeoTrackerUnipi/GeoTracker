@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -23,11 +24,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.geotracer.geotracer.R;
-import com.geotracer.geotracer.UsageTestActivity;
 import com.geotracer.geotracer.UserStatus;
 import com.geotracer.geotracer.db.local.KeyValueManagement;
 import com.geotracer.geotracer.db.remote.FirestoreManagement;
@@ -35,10 +36,8 @@ import com.geotracer.geotracer.infoapp.InfoActivity;
 import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
 import com.geotracer.geotracer.service.GeotracerService;
-import com.geotracer.geotracer.testingapp.LogService;
 import com.geotracer.geotracer.testingapp.TestingActivity;
 import com.geotracer.geotracer.utils.data.BaseLocation;
-import com.geotracer.geotracer.utils.data.Signature;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.geotracer.geotracer.utils.generics.RetStatus;
 
@@ -48,11 +47,11 @@ public class SettingActivity extends AppCompatActivity {
 
 
     NotificationSender notificationSender;
-    boolean boundNotification;
-    BroadcastReceiver onNotice;
+    BroadcastReceiver notificationBroadcast;
     FirestoreManagement firestoreManagement;
     private KeyValueManagement keyValueStore;
-    GeotracerService geotracerMainService;            /* FIXME */
+    GeotracerService geotracerMainService;
+    public static final String SETTING_ACTIVITY_LOG = "SettingActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,16 +64,16 @@ public class SettingActivity extends AppCompatActivity {
          */
 
         LocalBroadcastManager.getInstance(SettingActivity.this).registerReceiver(
-                onNotice = new BroadcastReceiver() {
+                notificationBroadcast = new BroadcastReceiver() {
                     @Override
                     public void onReceive(Context context, Intent intent) {
 
-                        Log.d(this.getClass().getName(), "BROADCAST LISTENER FOR CONTACTS");
+                        Log.d(SETTING_ACTIVITY_LOG, "BROADCAST LISTENER FOR CONTACTS");
                         String toLog = intent.getStringExtra("Contact");
 
                         TextView tv = new TextView(SettingActivity.this);
                         if(tv == null)
-                            Log.d(this.getClass().getName() + "BROADCAST LISTENER FOR CONTACTS", "Empty location");
+                            Log.d(SETTING_ACTIVITY_LOG, "BROADCAST LISTENER FOR CONTACTS: Empty location");
                         else
                             showPopupWindow(tv, toLog);
 
@@ -104,12 +103,12 @@ public class SettingActivity extends AppCompatActivity {
                         {
                             boolean result = geotracerMainService.enableProximityWarnings();
                             if(result)
-                                Log.d(this.getClass().getName(), "Proximity Warning Notifications Enabled");
+                                Log.d(SETTING_ACTIVITY_LOG, "Proximity Warning Notifications Enabled");
                             else
-                                Log.d(this.getClass().getName(), "Proximity Warning Notifications Enabled Already Enabled");
+                                Log.d(SETTING_ACTIVITY_LOG, "Proximity Warning Notifications Enabled Already Enabled");
                         }
                     else
-                        Log.w(this.getClass().getName(), "Geotracer main service is unbound!");
+                        Log.w(SETTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
 
 
                 }else{
@@ -120,17 +119,17 @@ public class SettingActivity extends AppCompatActivity {
                         {
                             boolean result = geotracerMainService.disableProximityWarnings();
                             if(result)
-                                Log.d(this.getClass().getName(), "Proximity Warning Notifications Disabled");
+                                Log.d(SETTING_ACTIVITY_LOG, "Proximity Warning Notifications Disabled");
                             else
-                                Log.d(this.getClass().getName(), "Proximity Warning Notifications Already Disabled");
+                                Log.d(SETTING_ACTIVITY_LOG, "Proximity Warning Notifications Already Disabled");
                         }
                     else
-                        Log.w(this.getClass().getName(), "Geotracer main service is unbound!");
+                        Log.w(SETTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
 
                     /*
                     disableProximityWarnings()
                      */
-                    Log.d(this.getClass().getName(), "Proximity Notification Disabled");
+                    Log.d(SETTING_ACTIVITY_LOG, "Proximity Notification Disabled");
                 }
             }
         });
@@ -146,13 +145,13 @@ public class SettingActivity extends AppCompatActivity {
                     if(userPositions.getStatus() == OpStatus.OK){
                         firestoreManagement.insertInfectedLocations(userPositions.getValue());
                         notificationSender.infectionAlert();
-                        Log.d(this.getClass().getName(), "Positivity Report Enabled");
+                        Log.d(SETTING_ACTIVITY_LOG, "Positivity Report Enabled");
                     }
 
 
                 }else{
                     //DISABLE THE RECEIVING OF NOTIFICATION FOR BEING TOO CLOSE TO OTHER PEOPLE
-                    Log.d(this.getClass().getName(), "Positivity Report Disabled");
+                    Log.d(SETTING_ACTIVITY_LOG, "Positivity Report Disabled");
                 }
             }
         });
@@ -177,13 +176,13 @@ public class SettingActivity extends AppCompatActivity {
         intent = new Intent(this, FirestoreManagement.class);
         bindService(intent, firestoreService, Context.BIND_AUTO_CREATE);
 
-        /* FIXME */
         //Bind main application service
         intent = new Intent(this, GeotracerService.class);
         bindService(intent, geotracerService, Context.BIND_AUTO_CREATE);
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     protected void onResume() {
         super.onResume();
 
@@ -193,7 +192,7 @@ public class SettingActivity extends AppCompatActivity {
 
         //REGISTRATION TO NOTIFICATION SERVICE
         IntentFilter iff= new IntentFilter(NotificationSender.ACTION_BROADCAST);
-        LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, iff);
+        LocalBroadcastManager.getInstance(this).registerReceiver(notificationBroadcast, iff);
 
         //CHECK THE CONTACT STATUS AND SET THE RELATIVE LAYOUT
         if(((UserStatus) this.getApplication()).getContacts()) {
@@ -208,22 +207,25 @@ public class SettingActivity extends AppCompatActivity {
     protected void onPause(){
         super.onPause();
         //DEREGISTER FROM THE NOTIFICATION SERVICE
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(onNotice);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationBroadcast);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         //UNBIND ALL SERVICES
-        unbindService(notificationService);
-        unbindService(keyValueService);
-        unbindService(firestoreService);
+        if(notificationService != null)
+            unbindService(notificationService);
 
-        /* FIXME: */
+        if(keyValueService != null)
+            unbindService(keyValueService);
+
+        if(firestoreService != null)
+            unbindService(firestoreService);
+
         if(geotracerMainService != null)
          unbindService(geotracerService);
 
-        boundNotification = false;
     }
 
     //ESTALISH A CONNECTION WITH NOTIFICATION SERVICE AND DO BIND
@@ -235,12 +237,12 @@ public class SettingActivity extends AppCompatActivity {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             NotificationSender.LocalBinder binder = (NotificationSender.LocalBinder) s;
             notificationSender = binder.getService();
-            boundNotification = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            boundNotification = false;
+
+            notificationSender = null;
         }
     };
 
@@ -293,6 +295,14 @@ public class SettingActivity extends AppCompatActivity {
 
             GeotracerService.GeotracerBinder binder = (GeotracerService.GeotracerBinder) service;
             geotracerMainService = binder.getService();
+
+            Switch s = findViewById(R.id.notification_proximity);
+            if(geotracerMainService.isProximityNotificationEnabled()){
+                //set the switch button to enabled.
+                s.setChecked(true);
+            }else{
+                s.setChecked(false);
+            }
 
         }
 
@@ -376,23 +386,12 @@ public class SettingActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
 
         super.onSaveInstanceState(outState);
-/*
-        //save the button status
-        String log = ((TextView)findViewById(R.id.log_text)).getText().toString();
-        outState.putString("log", log);
-
-        Log.d(this.getLocalClassName(), "Instance State Saved");
-*/
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState){
         super.onRestoreInstanceState(savedInstanceState);
-/*
-        //restore the button status
-        String log = savedInstanceState.getString("log");
-        ((TextView)findViewById(R.id.log_text)).setText(log);
-        Log.d(this.getLocalClassName(), "Instance State Restored"); */
+
     }
 
 

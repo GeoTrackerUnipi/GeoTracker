@@ -38,6 +38,7 @@ public class InfoActivity extends AppCompatActivity {
     NotificationSender service;
     boolean boundNotification;
     BroadcastReceiver notificationReceiver;
+    public static final String INFO_ACTIVITY_LOG = "InfoActivity";
 
 
     @Override
@@ -61,7 +62,7 @@ public class InfoActivity extends AppCompatActivity {
 
                         TextView tv = new TextView(InfoActivity.this);
                         if(tv == null)
-                            Log.d(this.getClass().getName() + "BROADCAST LISTENER FOR CONTACTS", "Empty location");
+                            Log.d(INFO_ACTIVITY_LOG, "BROADCAST LISTENER FOR CONTACTS: Empty location");
                         else
                             showPopupWindow(tv, toLog);
 
@@ -109,8 +110,8 @@ public class InfoActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        unbindService(notificationService);
-        boundNotification = false;
+        if(notificationService != null)
+            unbindService(notificationService);
     }
 
     /*

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -46,8 +48,9 @@ import com.geotracer.geotracer.utils.generics.OpStatus;
 public class MainActivity extends AppCompatActivity {
 
     NotificationSender notificationSender;
-    boolean boundNotification;
     BroadcastReceiver notificationReceiver;
+
+    public static final String MAIN_ACTIVITY_LOG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +63,12 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onReceive(Context context, Intent intent) {
 
-                        Log.i(this.getClass().getName(), "BROADCAST LISTENER FOR CONTACTS");
+                        Log.d(MAIN_ACTIVITY_LOG, "BROADCAST LISTENER FOR CONTACTS");
                         String toLog = intent.getStringExtra("Contact");
 
                         TextView tv = new TextView(MainActivity.this);
                         if(tv == null)
-                            Log.d(this.getClass().getName() + "BROADCAST LISTENER FOR CONTACTS", "Empty location");
+                            Log.d(MAIN_ACTIVITY_LOG, "BROADCAST LISTENER FOR CONTACTS: Empty location");
                         else
                             showPopupWindow(tv, toLog);
 
@@ -89,10 +92,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     protected void onResume() {
         super.onResume();
 
-        /* FIXME: Questo è richiesto altrimenti il main service non può partire */
+        /* Questo è richiesto altrimenti il main service non può partire */
         // Dynamic ACCESS_FINE_LOCATION permission check (required for API 23+)
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION))
@@ -118,8 +122,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        unbindService(notificationService);
-        boundNotification = false;
+
+        if(notificationService != null)
+            unbindService(notificationService);
     }
 
     @Override
@@ -137,9 +142,8 @@ public class MainActivity extends AppCompatActivity {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             NotificationSender.LocalBinder binder = (NotificationSender.LocalBinder) s;
             notificationSender = binder.getService();
-            boundNotification = true;
 
-            Log.i("INFETTATO", String.valueOf(notificationSender.canIbeInfected()));
+            Log.d(MAIN_ACTIVITY_LOG, "AM I INFECTED: " + String.valueOf(notificationSender.canIbeInfected()));
             if(notificationSender.canIbeInfected() == OpStatus.INFECTED){
                 FrameLayout frameLayout = findViewById(R.id.contact_frame);
                 frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
@@ -151,7 +155,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            boundNotification = false;
+            notificationService = null;
+
         }
     };
 

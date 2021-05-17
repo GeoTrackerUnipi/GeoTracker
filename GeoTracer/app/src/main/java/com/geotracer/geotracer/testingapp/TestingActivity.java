@@ -9,8 +9,6 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Gravity;
@@ -34,7 +32,6 @@ import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.geotracer.geotracer.R;
-import com.geotracer.geotracer.UsageTestActivity;
 import com.geotracer.geotracer.UserStatus;
 import com.geotracer.geotracer.db.local.KeyValueManagement;
 import com.geotracer.geotracer.db.remote.FirestoreManagement;
@@ -47,23 +44,18 @@ import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.geotracer.geotracer.utils.generics.RetStatus;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 
 public class TestingActivity extends AppCompatActivity {
 
 
-    LogService service;
-    boolean boundLog;
-    boolean boundNotification;
+    LogService logService;
     BroadcastReceiver notificationReceiver;
     BroadcastReceiver logServiceReceiver;
     NotificationSender notificationSender;
     private FirestoreManagement firestore;
     private KeyValueManagement keyValueManagement;
-    private GeotracerService geotracerMainService;            /* FIXME */
+    private GeotracerService geotracerMainService;
 
     public static final String TESTING_ACTIVITY_LOG = "TestingActivity";
 
@@ -138,7 +130,6 @@ public class TestingActivity extends AppCompatActivity {
 
             NotificationSender.LocalBinder binder = (NotificationSender.LocalBinder) service;
             notificationSender = binder.getService();
-            boundNotification = true;
 
         }
 
@@ -146,7 +137,6 @@ public class TestingActivity extends AppCompatActivity {
         public void onServiceDisconnected(ComponentName arg0) {
 
             notificationSender = null;
-            boundNotification = false;
 
         }
     };
@@ -161,13 +151,12 @@ public class TestingActivity extends AppCompatActivity {
                                        IBinder s) {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             LogService.LocalBinder binder = (LogService.LocalBinder) s;
-            service = binder.getService();
-            boundLog = true;
+            logService = binder.getService();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            boundLog = false;
+            logService = null;
         }
     };
 
@@ -213,7 +202,7 @@ public class TestingActivity extends AppCompatActivity {
         }
     };
 
-    /* FIXME
+    /*
     CONNECTION WITH THE MAIN APPLICATION SERVICE
       */
     private final ServiceConnection geotracerService = new ServiceConnection() {
@@ -240,7 +229,7 @@ public class TestingActivity extends AppCompatActivity {
         RESTART ALL THE BROADCAST RECEIVERS
         */
 
-        /* FIXME: Questo è richiesto altrimenti il main service non può partire */
+        /*  Questo è richiesto altrimenti il main service non può partire */
         // Dynamic ACCESS_FINE_LOCATION permission check (required for API 23+)
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION))
@@ -264,7 +253,7 @@ public class TestingActivity extends AppCompatActivity {
         iff= new IntentFilter(LogService.ACTION_BROADCAST);
         LocalBroadcastManager.getInstance(this).registerReceiver(logServiceReceiver, iff);
 
-        /* FIXME */
+
         //MAIN APPLICATION SERVICE
         intent = new Intent(this, GeotracerService.class);
         bindService(intent, geotracerService, Context.BIND_AUTO_CREATE);
@@ -291,12 +280,14 @@ public class TestingActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(notificationReceiver);
 
         //FIRESTORE
-        unbindService(firestoreService);
+        if(firestoreService != null)
+            unbindService(firestoreService);
 
         //KEYVALUE
-        unbindService(keyValueService);
+        if(keyValueService != null)
+            unbindService(keyValueService);
 
-        /* FIXME */
+
         //MAIN SERVICE
         if(geotracerMainService != null)
             unbindService(geotracerService);
@@ -326,7 +317,7 @@ public class TestingActivity extends AppCompatActivity {
         intent = new Intent(this, KeyValueManagement.class);
         bindService(intent, keyValueService, Context.BIND_AUTO_CREATE);
 
-        /* FIXME */
+
         //BIND MAIN APPLICATION SERVICE
         intent = new Intent(this, GeotracerService.class);
         bindService(intent, geotracerService, Context.BIND_AUTO_CREATE);
@@ -339,14 +330,14 @@ public class TestingActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        unbindService(logServiceConnection);
-        unbindService(notificationService);
-        boundNotification = false;
-        boundLog = false;
+        if(logServiceConnection != null)
+            unbindService(logServiceConnection);
+        if(notificationService != null)
+            unbindService(notificationService);
     }
 
 
-    /* FIXME (non so se i service.printlog() devono essere chiamati o meno) */
+
     public void startDissemination(View view) {
 
         if(geotracerMainService != null)
@@ -359,20 +350,18 @@ public class TestingActivity extends AppCompatActivity {
                         TextView tv = new TextView(TestingActivity.this);
                         Log.d(TESTING_ACTIVITY_LOG, s);
                         showPopupWindow(tv, s);
-                        //service.printLog(TESTING_ACTIVITY_LOG, s);
                     }
                 else
                     {
-                        Log.d(this.getClass().getName(),"Signature Dissemination Already Started");
-                        //service.printLog(TESTING_ACTIVITY_LOG,"Error in starting dissemination\n");
+                        Log.d(TESTING_ACTIVITY_LOG,"Signature Dissemination Already Started");
                     }
             }
         else
-            Log.w(this.getClass().getName(), "Geotracer main service is unbound!");
+            Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
 
     }
 
-    /* FIXME (non so se i service.printlog() devono essere chiamati o meno) */
+
     public void stopDissemination(View view) {
 
         if(geotracerMainService != null)
@@ -384,20 +373,18 @@ public class TestingActivity extends AppCompatActivity {
                         TextView tv = new TextView(TestingActivity.this);
                         showPopupWindow(tv, s);
                         Log.d(TESTING_ACTIVITY_LOG, s);
-                        //service.printLog(TESTING_ACTIVITY_LOG, s);
                     }
                 else
                     {
-                        Log.d(this.getClass().getName(),"Signature Dissemination Already Stopped");
-                        //service.printLog(TESTING_ACTIVITY_LOG,"Error in stopping dissemination\n");
+                        Log.d(TESTING_ACTIVITY_LOG,"Signature Dissemination Already Stopped");
                     }
             }
         else
-            Log.w(this.getClass().getName(), "Geotracer main service is unbound!");
+            Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
 
     }
 
-    /* FIXME (non so se i service.printlog() devono essere chiamati o meno) */
+
     public void startCollection(View view) {
 
         if(geotracerMainService != null)
@@ -409,20 +396,18 @@ public class TestingActivity extends AppCompatActivity {
                         TextView tv = new TextView(TestingActivity.this);
                         showPopupWindow(tv, s);
                         Log.d(TESTING_ACTIVITY_LOG, s);
-                        //service.printLog(TESTING_ACTIVITY_LOG, "DEVICE STARTED COLLECTING SIGNATURES\n");
                     }
                 else
                     {
-                        Log.d(this.getClass().getName(),"Signature Collection Already Started");
-                        //service.printLog(TESTING_ACTIVITY_LOG,"Error in starting signature collection\n");
+                        Log.d(TESTING_ACTIVITY_LOG,"Signature Collection Already Started");
                     }
             }
         else
-            Log.w(this.getClass().getName(), "Geotracer main service is unbound!");
+            Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
 
     }
 
-    /* FIXME (non so se i service.printlog() devono essere chiamati o meno) */
+
     public void stopCollection(View view) {
 
         if(geotracerMainService != null)
@@ -434,16 +419,14 @@ public class TestingActivity extends AppCompatActivity {
                         TextView tv = new TextView(TestingActivity.this);
                         showPopupWindow(tv, s);
                         Log.d(TESTING_ACTIVITY_LOG, s);
-                        //service.printLog(TESTING_ACTIVITY_LOG, "DEVICE STOPPED COLLECTING SIGNATURES\n");
                     }
                 else
                     {
-                        Log.d(this.getClass().getName(),"Signature Collection Already Stopped");
-                        //service.printLog(TESTING_ACTIVITY_LOG,"Error in stopping the signature collection\n");
+                        Log.d(TESTING_ACTIVITY_LOG,"Signature Collection Already Stopped");
                     }
             }
         else
-            Log.w(this.getClass().getName(), "Geotracer main service is unbound!");
+            Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
 
     }
 
@@ -608,23 +591,12 @@ public class TestingActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
 
         super.onSaveInstanceState(outState);
-/*
-        //save the display status
-        String log = ((TextView)findViewById(R.id.log_text)).getText().toString();
-        outState.putString("log", log);
 
-        Log.d(TESTING_ACTIVITY_LOG, "Instance State Saved");
-*/
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState){
         super.onRestoreInstanceState(savedInstanceState);
-/*
-        //restore the display
-        String log = savedInstanceState.getString("log");
-        ((TextView)findViewById(R.id.log_text)).setText(log);
-        Log.d(TESTING_ACTIVITY_LOG, "Instance State Restored"); */
     }
 
     /*
@@ -710,4 +682,41 @@ public class TestingActivity extends AppCompatActivity {
     }
 
 
+    public void startService(View view) {
+
+
+        Intent i = new Intent(TestingActivity.this, GeotracerService.class);
+        if(geotracerMainService.startService(i) != null)
+        {
+            String s = "Geotracer service started";
+            TextView tv = new TextView(TestingActivity.this);
+            showPopupWindow(tv, s);
+            Log.d(TESTING_ACTIVITY_LOG, s);
+        }
+        else
+            Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
+
+    }
+
+    public void stopService(View view) {
+        if(geotracerMainService != null)
+        {
+            unbindService(geotracerService);
+            Intent i = new Intent(TestingActivity.this, GeotracerService.class);
+            boolean result = geotracerMainService.stopService(i);
+            if(result)
+            {
+                String s = "Geotracer service stopped";
+                TextView tv = new TextView(TestingActivity.this);
+                showPopupWindow(tv, s);
+                Log.d(TESTING_ACTIVITY_LOG, s);
+            }
+            else
+            {
+                Log.d(TESTING_ACTIVITY_LOG,"Geotracer service already stopped");
+            }
+        }
+        else
+            Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
+    }
 }
