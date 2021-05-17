@@ -4,7 +4,6 @@ import com.geotracer.geotracer.utils.generics.RetStatus;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.geotracer.geotracer.utils.data.Signature;
-import static android.content.ContentValues.TAG;
 import org.jetbrains.annotations.NotNull;
 import androidx.work.WorkerParameters;
 import androidx.annotation.NonNull;
@@ -22,6 +21,7 @@ import java.util.List;
 public class InfectionAlarm extends Worker {
 
     private final FirebaseFirestore db;
+    private static final String TAG = "InfectionAlarm";
 
     public InfectionAlarm(@NonNull @NotNull Context context, @NonNull @NotNull WorkerParameters workerParams) {
         super(context, workerParams);

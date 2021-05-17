@@ -3,7 +3,6 @@ package com.geotracer.geotracer.db.local;
 import com.geotracer.geotracer.utils.generics.RetStatus;
 import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.geotracer.geotracer.utils.generics.OpStatus;
-import static android.content.ContentValues.TAG;
 import java.util.Collections;
 import com.google.gson.Gson;
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public class PositionUtility {
 
 
     private final Book positions;
-
+    private static final String TAG = "KeyValueManagement/PositionUtility";
     //  prevents the class to be instantiated outside the package
     PositionUtility(Book positions){
         this.positions = positions;

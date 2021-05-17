@@ -4,7 +4,6 @@ import com.geotracer.geotracer.utils.generics.RetStatus;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import static android.content.ContentValues.TAG;
 import java.util.Calendar;
 import android.util.Log;
 import io.paperdb.Book;
@@ -23,7 +22,7 @@ import java.util.Map;
 public class BucketUtility {
 
     private final Book buckets;
-
+    private static final String TAG = "KeyValueManagement/BucketUtility";
     BucketUtility(Book buckets){
         this.buckets = buckets;
     }

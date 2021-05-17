@@ -5,7 +5,9 @@ import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.geotracer.geotracer.utils.data.ExtLocation;
 import java.util.ArrayList;
+import android.util.Log;
 import java.util.List;
+
 
 
 //// LOCATION AGGREGATOR
@@ -19,7 +21,7 @@ public class LocationAggregator {
 
     private final static List<String> archive = new ArrayList<>();  //  maintains unique IDs
     private static ExtLocation location = null;                     //  maintains the aggregated value
-
+    private static final String TAG = "LocationAggregator";
     //  perform aggregation of the input data applying the two previous rules
     //  Returns:
     //           - OpStatus.ILLEGAL_ARGUMENT: invalid arguments provided to the class
@@ -44,14 +46,12 @@ public class LocationAggregator {
                 return new RetStatus<>(null, OpStatus.COLLECTED);
             }
 
-            //  if the ID is already used we discard the request
-            if (archive.contains(ID))
-                return new RetStatus<>(null, OpStatus.PRESENT);
+            boolean present = archive.contains(ID);
 
             //  we update the aggregated value and verify the two rules, if the function returns the
             //  UPDATE_LOCATION flag it means that a new aggregation needs to be performed
-            if (LocationAggregator.location.incrementCriticity(location) == OpStatus.UPDATE_LOCATION) {
-                //  we prepare the response
+            if (LocationAggregator.location.incrementCriticity(location, present) == OpStatus.UPDATE_LOCATION) {
+
                 RetStatus<ExtLocation> retStatus = new RetStatus<>(LocationAggregator.location, OpStatus.OK);
                 //  we start the next aggregation
                 LocationAggregator.location = new ExtLocation(location.getLocation());
@@ -59,6 +59,12 @@ public class LocationAggregator {
                 archive.add(ID);
                 return retStatus;
             }
+
+            //  if the ID is already used we discard the request
+            if (present)
+                return new RetStatus<>(null, OpStatus.PRESENT);
+
+            archive.add(ID);
 
             //  otherwise the value is used to update the aggregated value
             return new RetStatus<>(null, OpStatus.COLLECTED);

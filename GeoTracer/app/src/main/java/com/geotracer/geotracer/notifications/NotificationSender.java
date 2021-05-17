@@ -7,7 +7,6 @@ import com.geotracer.geotracer.utils.generics.RetStatus;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentChange;
-import static android.content.ContentValues.TAG;
 import android.content.ServiceConnection;
 import androidx.work.OneTimeWorkRequest;
 import com.esotericsoftware.minlog.Log;
@@ -32,6 +31,9 @@ import java.util.Date;
 
 @SuppressWarnings("all")
 public class NotificationSender extends Service {
+
+    private static final String TAG = "NotificationSender";
+
     public static final String ACTION_BROADCAST = NotificationSender.class.getName();
     public class LocalBinder extends Binder {
 

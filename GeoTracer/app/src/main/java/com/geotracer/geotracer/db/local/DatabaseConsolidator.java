@@ -4,8 +4,6 @@ import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.geotracer.geotracer.utils.data.ExtSignature;
 import com.geotracer.geotracer.utils.data.Signature;
-
-import static android.content.ContentValues.TAG;
 import org.jetbrains.annotations.NotNull;
 import androidx.work.WorkerParameters;
 import androidx.annotation.NonNull;
@@ -23,6 +21,8 @@ import java.util.List;
 //   all the no more usable data
 
 public class DatabaseConsolidator extends Worker {
+
+    private static final String TAG = "DatabaseConsolidator";
 
     public DatabaseConsolidator(@NonNull Context context, @NonNull WorkerParameters params) {
 

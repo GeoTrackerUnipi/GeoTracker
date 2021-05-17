@@ -10,7 +10,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
-import static android.content.ContentValues.TAG;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.gms.tasks.Task;
@@ -40,6 +39,7 @@ public class FirestoreManagement extends Service {
     private FirebaseFirestore firestore;
     private CollectionReference collection;
     private static final LocationAggregator aggregator = new LocationAggregator();
+    private static final String TAG = "FirestoreManagement";
 
     FirestoreCallback callback;
 
@@ -75,7 +75,20 @@ public class FirestoreManagement extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+
+        FirebaseApp.initializeApp(getBaseContext());
+        firestore = FirebaseFirestore.getInstance();
         return classBinder;
+
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+
+        FirebaseApp.initializeApp(getBaseContext());
+        firestore.terminate();
+        return true;
+
     }
 
     //  function for pushing location values inside the firestore
@@ -92,7 +105,7 @@ public class FirestoreManagement extends Service {
         switch(status.getStatus()){
             case OK:  // aggregation of a value completed, is needed to push it into the database
                 try {
-                    if( status.getValue().getCriticity() > 1)
+                    if( status.getValue().getCriticity() > 0) //1)  for testing purpouse now i registry all(because it's difficult to get data otherwise)
                         collection
                             .add(status.getValue())
                             .addOnSuccessListener(documentReference -> Log.d(TAG, "New document inserted into Firestore: " + documentReference.getId()))

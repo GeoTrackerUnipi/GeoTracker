@@ -2,7 +2,6 @@ package com.geotracer.geotracer.db.local;
 
 import com.geotracer.geotracer.utils.data.ExtSignature;
 import com.geotracer.geotracer.utils.generics.OpStatus;
-import static android.content.ContentValues.TAG;
 import android.util.Log;
 import io.paperdb.Book;
 
@@ -16,7 +15,7 @@ import io.paperdb.Book;
 public class BeaconUtility {
 
     private final Book beacons;    //  collection of beacons
-
+    private static final String TAG = "KeyValueManagement/BeaconUtility";
     // CONSTRUCTOR
 
     BeaconUtility(Book beacons){

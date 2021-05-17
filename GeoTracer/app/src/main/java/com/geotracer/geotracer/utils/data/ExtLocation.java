@@ -1,6 +1,8 @@
 package com.geotracer.geotracer.utils.data;
 
 import android.location.Location;
+import android.util.Log;
+
 import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
 import com.geotracer.geotracer.utils.generics.OpStatus;
@@ -9,6 +11,8 @@ import com.google.gson.Gson;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import static android.content.ContentValues.TAG;
 
 //// EXT LOCATION
 //   Bean class to store an heatmap point
@@ -20,9 +24,14 @@ public class ExtLocation extends BaseLocation{
     private final String geoHash;
 
     public ExtLocation(GeoPoint location){
+
         super(location);
         this.infected = false;
         this.criticity = 1;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MINUTE, 1);
+        this.expire = calendar.getTime();
         this.geoHash = GeoFireUtils.getGeoHashForLocation(new GeoLocation(location.getLatitude(), location.getLongitude()));
 
     }
@@ -57,24 +66,17 @@ public class ExtLocation extends BaseLocation{
         this.criticity = criticity;
     }
 
-    public OpStatus incrementCriticity(BaseLocation location){
+    public OpStatus incrementCriticity(BaseLocation location, boolean present){
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(this.expire);
-        calendar.add(Calendar.MINUTE, 3);
-
-        if(calendar.getTime().after(location.getExpire()))
+        if(expire.before(new Date()))
             return OpStatus.UPDATE_LOCATION;
 
-        float[] results = new float[1];
-        Location.distanceBetween(this.location.getLatitude(),this.location.getLongitude(),
-                location.getLocation().getLatitude(),location.getLocation().getLongitude(),
-                results);
-
-        if( results[0] > 100 )
+        if( pointsDistance(location) > 100 )
             return OpStatus.UPDATE_LOCATION;
 
-        this.criticity++;
+        if(!present)
+            this.criticity++;
+
         return OpStatus.OK;
     }
 

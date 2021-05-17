@@ -75,7 +75,16 @@ public class KeyValueManagement extends Service {
     @Override
     public IBinder onBind(Intent intent) {
 
+        //  initialization of Paper key-value database
+        Paper.init(getBaseContext());
         return classBinder;
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+
+        //  initialization of Paper key-value database
+        return true;
     }
 
     //  general function to remove all the elements from the local database

@@ -3,7 +3,6 @@ package com.geotracer.geotracer.db.local;
 import com.geotracer.geotracer.utils.generics.RetStatus;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.geotracer.geotracer.utils.data.Signature;
-import static android.content.ContentValues.TAG;
 import java.util.Collections;
 import java.util.ArrayList;
 import android.util.Log;
@@ -20,6 +19,7 @@ import java.util.List;
 public class SignatureUtility {
 
     private final Book signatures;
+    private static final String TAG = "KeyValueManagement/SignatureUtility";
 
     //  prevents the class to be instantiated outside the package
     SignatureUtility(Book signatures){
