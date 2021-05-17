@@ -22,7 +22,7 @@ public class ExtLocation extends BaseLocation{
     public ExtLocation(GeoPoint location){
         super(location);
         this.infected = false;
-        this.criticity = 0;
+        this.criticity = 1;
         this.geoHash = GeoFireUtils.getGeoHashForLocation(new GeoLocation(location.getLatitude(), location.getLongitude()));
 
     }

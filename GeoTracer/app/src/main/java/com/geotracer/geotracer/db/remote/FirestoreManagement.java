@@ -92,7 +92,7 @@ public class FirestoreManagement extends Service {
         switch(status.getStatus()){
             case OK:  // aggregation of a value completed, is needed to push it into the database
                 try {
-                    if( status.getValue().getCriticity() != 0)
+                    if( status.getValue().getCriticity() > 1)
                         collection
                             .add(status.getValue())
                             .addOnSuccessListener(documentReference -> Log.d(TAG, "New document inserted into Firestore: " + documentReference.getId()))
