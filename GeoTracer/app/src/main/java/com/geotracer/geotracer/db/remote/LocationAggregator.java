@@ -37,7 +37,7 @@ public class LocationAggregator {
 
             //  if no aggregated value is present we can start a new aggregation
             if (LocationAggregator.location == null) {
-                assert false;
+                assert false;                                                             /* FIXME :( */
                 LocationAggregator.location = new ExtLocation(location.getLocation());
                 archive.clear();  // for security we clean the archive of unique IDs
                 archive.add(ID);  // the given ID is setted has registered

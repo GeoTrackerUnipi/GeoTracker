@@ -29,7 +29,7 @@ import androidx.core.app.ActivityCompat;
 import com.geotracer.geotracer.R;
 import com.geotracer.geotracer.db.local.KeyValueManagement;
 import com.geotracer.geotracer.db.remote.FirestoreManagement;
-import com.geotracer.geotracer.testingapp.TestingActivity;
+import com.geotracer.geotracer.mainapp.MainActivity;
 
 
 public class GeotracerService extends Service
@@ -78,14 +78,14 @@ public class GeotracerService extends Service
      return;
     }
 
+   // Bind to the local and remote databases used by the service
+   bindToDB();
+
    // Initialize the GeoLocator Service
    initLocation();
 
    // Initialize the GeoAdvertiser and GeoScanner Services
    initBluetooth();
-
-   // Bind to the local and remote databases used by the service
-   bindToDB();
 
    // Initialize the Binder object used to bind with the Geotracer testing activity
    geoBinder = new GeotracerBinder();
@@ -174,9 +174,9 @@ public class GeotracerService extends Service
      notificationManager.createNotificationChannel(geotracer_channel);
     }
 
-   // Initialize the foreground notification displayed by the service so to launch the GeoTracer main activity when clicked TODO: Change to the actual user activity when merging
+   // Initialize the foreground notification displayed by the service so to launch the GeoTracer main activity when clicked
    PendingIntent geoTracerActivity = PendingIntent.getActivity(this,0,
-                                                               new Intent(this,TestingActivity.class),0);
+                                                               new Intent(this,MainActivity.class),0);
 
    startedNotification = new Notification.Builder(this,getString(R.string.geotracer_notif_channel_id))
            .setContentTitle(getText(R.string.geotracer_notif_channel_name))
@@ -265,7 +265,7 @@ public class GeotracerService extends Service
    Intent keyValueStoreService = new Intent(this,KeyValueManagement.class);
    bindService(keyValueStoreService,keyValueStoreServiceConnection,Context.BIND_AUTO_CREATE);
 
-   // Bind to the Firestorm database service (remtoe)
+   // Bind to the Firestorm database service (remote)
    Intent firestoreService = new Intent(this,FirestoreManagement.class);
    bindService(firestoreService,firestoreServiceConnection,Context.BIND_AUTO_CREATE);
   }
@@ -349,24 +349,49 @@ public class GeotracerService extends Service
  // Start the localization service by registering this object as a listener for GPS location updates, returning the result of the operation
  // NOTE: The actual rate and timing of GPS readings are performed by the Android OS according to its own policies, this is just a listener
  public boolean startLocalization()
-  { return geoLocator.startLocalization(); }
+  {
+   if(geoLocator != null)
+    return geoLocator.startLocalization();
+   else
+    return false;
+  }
 
  // Stops the localization service, returning the result of the operation
  public boolean stopLocalization()
-  { return geoLocator.stopLocalization(); }
+  {
+   if(geoLocator != null)
+    return geoLocator.stopLocalization();
+   else
+    return false;
+  }
 
  // Returns the last known user location, if any
  // NOTE: May return NULL if no user position is known
  public Location getLastLocation()
-  { return geoLocator.getLastLocation(); }
+  {
+   if(geoLocator != null)
+    return geoLocator.getLastLocation();
+   else
+    return null;
+  }
 
  // Returns true if the localization service is enabled
  public boolean isLocalizing()
-  { return geoLocator.isLocalizing(); }
+  {
+   if(geoLocator != null)
+    return geoLocator.isLocalizing();
+   else
+    return false;
+  }
 
  // Returns true if the GPS location provider is enabled
  public boolean isGPSEnabled()
-  { return geoLocator.isGPSEnabled(); }
+  {
+   if(geoLocator != null)
+    return geoLocator.isGPSEnabled();
+   else
+    return false;
+  }
 
  /* =========================== GeoAdvertiser Interface Functions =========================== */
 

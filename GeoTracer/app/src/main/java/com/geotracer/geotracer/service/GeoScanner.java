@@ -17,7 +17,7 @@ import androidx.core.app.NotificationCompat.Builder;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.geotracer.geotracer.R;
-import com.geotracer.geotracer.testingapp.TestingActivity;
+import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.utils.data.ExtSignature;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 
@@ -59,7 +59,7 @@ public class GeoScanner
  final private GeoLocator geoLocator;                           // GeoLocator support object
  final private BluetoothLeScanner bluetoothScanner;             // Bluetooth Advertiser object
  private Notification proximityNotification;                    // Warning notification raised to the user in case of social distancing violations
- private Hashtable<String,AdvList> advTable;                     // The Hashtable storing the lists of received advertisements before processing TODO check if final is ok
+ private Hashtable<String,AdvList> advTable;                    // The Hashtable storing the lists of received advertisements before processing TODO check if final is ok
  private Timer advParser;                                       // Timer used to parse received signatures with a fixed-delay execution
 
  /* ============ Service Status Variables ============ */
@@ -114,7 +114,8 @@ public class GeoScanner
              .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)    // Always report every advertisement associated to the (empty) filter
              .setMatchMode(ScanSettings.MATCH_MODE_STICKY)               // Return advertisements only if above a minimum RSSI and sightings
              .setNumOfMatches(ScanSettings.MATCH_NUM_MAX_ADVERTISEMENT)  // Always return ALL sensed advertisements
-             .setReportDelay(0)                                          // Return all results immediately without kernel-level buffering TODO: try to reduce?
+             .setReportDelay(0)                                          // Return all results immediately without kernel-level buffering
+                                                                         // NOTE: In fact the kernel cheats if >0, keep it == 0
              .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)            // Maximum scanning frequency
              .build();
 
@@ -123,7 +124,7 @@ public class GeoScanner
 
      // Initialize and start the scanSweeper task with a fixed-delay execution
      advParser = new Timer();
-     advParser.schedule(new AdvParserTask(),0,500);
+     advParser.schedule(new AdvParserTask(),0,650);
 
      isScanning = true;
      Log.i(TAG,"Bluetooth Scanning Started");
@@ -329,17 +330,19 @@ public class GeoScanner
     advList.samples.add(new AdvSample(RSSI,timestamp));
    advList.mutex.unlock();
 
+   /* Debugging purposes
    Log.d(TAG,"New " + advType + " received (key = " + key + "RSSI =" + RSSI + ", timestamp = " +
            new SimpleDateFormat("dd-MM-yyyy HH:mm:ss",Locale.getDefault()).format(new Date(timestamp)) + ")");
+   */
   }
 
  // Initializes the notification to be shown to the user should he come in
  // too close contact (< SAFE_DISTANCE) with a device broadcasting a signature
  private void initProximityAlert()
   {
-   // Create the proximity alert notification, which launches the main GeoTracer activity when clicked TODO: Change to the actual user activity when testing is over
+   // Create the proximity alert notification, which launches the main GeoTracer activity when clicked
    PendingIntent launchMainActivity = PendingIntent.getActivity(geotracerService,2,
-                                                                new Intent(geotracerService,TestingActivity.class),0);
+                                                                new Intent(geotracerService,MainActivity.class),0);
    // Create the notification
    proximityNotification = new Builder(geotracerService,geotracerService.getString(R.string.geotracer_notif_channel_id))
            .setSmallIcon(R.drawable.proximity_warning_icon)
@@ -371,7 +374,7 @@ public class GeoScanner
        avgTime = avgTime + timestampList.get(i);
       avgTime = avgTime/(timestampList.size());
 
-      return avgTime/(timestampList.size());
+      return avgTime;
      }
 
     // Filters the RSSIs of a distance estimation window by using their median value
@@ -445,7 +448,7 @@ public class GeoScanner
         if(dbResult != OpStatus.OK)
          Log.e(TAG,"\"Error in adding an external signature into the keyValue Database: "+dbResult);
         else
-         Log.w(TAG,"Added new external signature into the keyValue database (signature = " + key + ")");
+         Log.i(TAG,"Added external signature into the keyValue database (" + key + ")");
        }
       else
        Log.e(TAG,"Cannot add external signature, the KeyValue database service is not alive!");
@@ -488,7 +491,9 @@ public class GeoScanner
           continue;
          }
 
+        /* Debugging Purposes
         Log.d(TAG,"Start Parsing key \"" + key +"\" (sampleSize = " + samples.size() + ")");
+        */
 
         // ---IF--- (and only if) the AdvList contains at least the MIN_SAMPLES required to be aggregated
         // in a distance estimation window, browse them from the first to the (last - MIN_SAMPLES))
@@ -524,8 +529,6 @@ public class GeoScanner
             // Assert the estimated distance to fall within a validity range
             if((0 < contactDistance) && (contactDistance < 30))
              {
-              Log.i(TAG,"Estimated distance from device " + key + ": " + contactDistance);
-
               // If the current advertisement is a signature, the safe distance is violated, proximity alerts are enabled, and at least
               // PROXIMITY_NOTIF_INTERVAL ms passed from the last proximity alert, raise a proximity alert to the user via a notification
               if((advList.type == AdvType.ADV_TYPE_SIG) && (contactDistance < SAFE_DISTANCE) && (isProximityNotificationEnabled)
@@ -541,8 +544,8 @@ public class GeoScanner
               // Compute the contact time with the device by averaging the timestamps in the estimation window
               long contactTime = avgTimestamp(currTimeList);
 
-              Log.i(TAG,"Estimated distance from device " + key + ": " + contactDistance + " (time = " +
-                      new SimpleDateFormat("dd-MM-yyyy HH:mm:ss",Locale.getDefault()).format(new Date(contactTime)));
+              Log.i(TAG,"Estimated distance from device \"" + key + "\": " + contactDistance + " (time = " +
+                      new SimpleDateFormat("dd-MM-yyyy HH:mm:ss",Locale.getDefault()).format(new Date(contactTime)) + ")");
 
               // If this is a signature, attempt to insert it into the local KeyValue database
               // NOTE: Redundancy checks are performed in such module
@@ -575,11 +578,13 @@ public class GeoScanner
 
         // Delete from the AdvList all samples older than (executionTime - WINDOW_MAX_TIME), since they can no longer fit into an estimation window
         for(i=0; i<samples.size(); i++)
-         if(samples.get(i).time > (executionTime -WINDOW_MAX_TIME))   // If this sample may belong to a future estimation window,
+         if(samples.get(i).time > (executionTime-WINDOW_MAX_TIME))    // If this sample may belong to a future estimation window,
           break;                                                      // make it the new head of the advSamples
         samples.subList(0,i).clear();
 
+        /* Debugging Purposes
         Log.d(TAG,"End parsing key \"" + key +"\" (samplesSize = " + samples.size() + ")");
+        */
 
         // If the resulting list of AdvSamples is empty, remove the AdvList from the advTable
         if(samples.isEmpty())

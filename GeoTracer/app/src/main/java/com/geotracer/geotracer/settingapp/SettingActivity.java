@@ -34,6 +34,7 @@ import com.geotracer.geotracer.db.remote.FirestoreManagement;
 import com.geotracer.geotracer.infoapp.InfoActivity;
 import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
+import com.geotracer.geotracer.service.GeotracerService;
 import com.geotracer.geotracer.testingapp.LogService;
 import com.geotracer.geotracer.testingapp.TestingActivity;
 import com.geotracer.geotracer.utils.data.BaseLocation;
@@ -51,6 +52,7 @@ public class SettingActivity extends AppCompatActivity {
     BroadcastReceiver onNotice;
     FirestoreManagement firestoreManagement;
     private KeyValueManagement keyValueStore;
+    GeotracerService geotracerMainService;            /* FIXME */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,13 +99,33 @@ public class SettingActivity extends AppCompatActivity {
                 if(isChecked){
                     //ENABLE THE RECEIVING OF NOTIFICATION FOR BEING TOO CLOSE TO OTHER PEOPLE
 
-                    /*
-                    enableProximityWarnings()
+                    /* FIXME */
+                    if(geotracerMainService != null)
+                        {
+                            boolean result = geotracerMainService.enableProximityWarnings();
+                            if(result)
+                                Log.d(this.getClass().getName(), "Proximity Warning Notifications Enabled");
+                            else
+                                Log.d(this.getClass().getName(), "Proximity Warning Notifications Enabled Already Enabled");
+                        }
+                    else
+                        Log.w(this.getClass().getName(), "Geotracer main service is unbound!");
 
-                     */
-                    Log.d(this.getClass().getName(), "Proximity Notification Enabled");
+
                 }else{
                     //DISABLE THE RECEIVING OF NOTIFICATION FOR BEING TOO CLOSE TO OTHER PEOPLE
+
+                    /* FIXME */
+                    if(geotracerMainService != null)
+                        {
+                            boolean result = geotracerMainService.disableProximityWarnings();
+                            if(result)
+                                Log.d(this.getClass().getName(), "Proximity Warning Notifications Disabled");
+                            else
+                                Log.d(this.getClass().getName(), "Proximity Warning Notifications Already Disabled");
+                        }
+                    else
+                        Log.w(this.getClass().getName(), "Geotracer main service is unbound!");
 
                     /*
                     disableProximityWarnings()
@@ -154,10 +176,20 @@ public class SettingActivity extends AppCompatActivity {
         //Bind service for firestore management
         intent = new Intent(this, FirestoreManagement.class);
         bindService(intent, firestoreService, Context.BIND_AUTO_CREATE);
+
+        /* FIXME */
+        //Bind main application service
+        intent = new Intent(this, GeotracerService.class);
+        bindService(intent, geotracerService, Context.BIND_AUTO_CREATE);
+
     }
 
     protected void onResume() {
         super.onResume();
+
+        /* FIXME: Questo si assicura che il main service giri (non è un problema se gira già) */
+        Intent geoTracerService = new Intent(this,GeotracerService.class);
+        startForegroundService(geoTracerService);
 
         //REGISTRATION TO NOTIFICATION SERVICE
         IntentFilter iff= new IntentFilter(NotificationSender.ACTION_BROADCAST);
@@ -186,6 +218,11 @@ public class SettingActivity extends AppCompatActivity {
         unbindService(notificationService);
         unbindService(keyValueService);
         unbindService(firestoreService);
+
+        /* FIXME: */
+        if(geotracerMainService != null)
+         unbindService(geotracerService);
+
         boundNotification = false;
     }
 
@@ -243,6 +280,26 @@ public class SettingActivity extends AppCompatActivity {
         public void onServiceDisconnected(ComponentName arg0) {
 
             firestoreManagement = null;
+
+        }
+    };
+
+    /* FIXME */
+    //BIND TO APPLICATION MAIN SERVICE
+    private final ServiceConnection geotracerService = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+
+            GeotracerService.GeotracerBinder binder = (GeotracerService.GeotracerBinder) service;
+            geotracerMainService = binder.getService();
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+
+            geotracerMainService = null;
 
         }
     };

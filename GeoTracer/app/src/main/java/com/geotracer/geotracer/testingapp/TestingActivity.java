@@ -1,11 +1,13 @@
 package com.geotracer.geotracer.testingapp;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -23,9 +25,12 @@ import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.geotracer.geotracer.R;
@@ -36,6 +41,7 @@ import com.geotracer.geotracer.db.remote.FirestoreManagement;
 import com.geotracer.geotracer.infoapp.InfoActivity;
 import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
+import com.geotracer.geotracer.service.GeotracerService;
 import com.geotracer.geotracer.settingapp.SettingActivity;
 import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.geotracer.geotracer.utils.generics.OpStatus;
@@ -57,7 +63,7 @@ public class TestingActivity extends AppCompatActivity {
     NotificationSender notificationSender;
     private FirestoreManagement firestore;
     private KeyValueManagement keyValueManagement;
-
+    private GeotracerService geotracerMainService;            /* FIXME */
 
     public static final String TESTING_ACTIVITY_LOG = "TestingActivity";
 
@@ -207,12 +213,40 @@ public class TestingActivity extends AppCompatActivity {
         }
     };
 
+    /* FIXME
+    CONNECTION WITH THE MAIN APPLICATION SERVICE
+      */
+    private final ServiceConnection geotracerService = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+
+            GeotracerService.GeotracerBinder binder = (GeotracerService.GeotracerBinder) service;
+            geotracerMainService = binder.getService();
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+
+            geotracerMainService = null;
+
+        }
+    };
 
     protected void onResume() {
         super.onResume();
         /*
         RESTART ALL THE BROADCAST RECEIVERS
         */
+
+        /* FIXME: Questo è richiesto altrimenti il main service non può partire */
+        // Dynamic ACCESS_FINE_LOCATION permission check (required for API 23+)
+        if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION))
+                Toast.makeText(this,"Permission to access the device's location is required for using the service",Toast.LENGTH_SHORT).show();
+            else  //Compatibility purposes
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
         //NOTIFICATION RECEIVER
         IntentFilter iff= new IntentFilter(NotificationSender.ACTION_BROADCAST);
@@ -230,6 +264,10 @@ public class TestingActivity extends AppCompatActivity {
         iff= new IntentFilter(LogService.ACTION_BROADCAST);
         LocalBroadcastManager.getInstance(this).registerReceiver(logServiceReceiver, iff);
 
+        /* FIXME */
+        //MAIN APPLICATION SERVICE
+        intent = new Intent(this, GeotracerService.class);
+        bindService(intent, geotracerService, Context.BIND_AUTO_CREATE);
 
         //SET THE VARIABLE FOR CONTACT NOTIFICATION STATUS
         if(((UserStatus) this.getApplication()).getContacts()) {
@@ -258,6 +296,11 @@ public class TestingActivity extends AppCompatActivity {
         //KEYVALUE
         unbindService(keyValueService);
 
+        /* FIXME */
+        //MAIN SERVICE
+        if(geotracerMainService != null)
+            unbindService(geotracerService);
+
         //LOGSERVICE
         LocalBroadcastManager.getInstance(this).unregisterReceiver(logServiceReceiver);
 
@@ -283,6 +326,11 @@ public class TestingActivity extends AppCompatActivity {
         intent = new Intent(this, KeyValueManagement.class);
         bindService(intent, keyValueService, Context.BIND_AUTO_CREATE);
 
+        /* FIXME */
+        //BIND MAIN APPLICATION SERVICE
+        intent = new Intent(this, GeotracerService.class);
+        bindService(intent, geotracerService, Context.BIND_AUTO_CREATE);
+
         TextView tv = (TextView) findViewById(R.id.log_text);
         tv.setText("");
     }
@@ -298,135 +346,107 @@ public class TestingActivity extends AppCompatActivity {
     }
 
 
-
+    /* FIXME (non so se i service.printlog() devono essere chiamati o meno) */
     public void startDissemination(View view) {
 
-        /*
+        if(geotracerMainService != null)
+            {
+                boolean result = geotracerMainService.startAdvertising();
+                if(result)
+                    {
+                        String s = "DEVICE STARTED DISSEMINATING ITS SIGNATURE\n";
 
-            START DISSEMINATING MY SIGNATURE.
-            IT MUST E CALLED A FUNCTION WHICH STARTING THE SIGNATURE DISSEMINATION
-
-            THEN THAT PROCESS MUST BE CHECKED
-         */
-
-        /*
-        startAdvertising() ??
-         */
-
-        //if(/*   THE DISSEMINATION STARTED   */){
-
-        String s = "DEVICE STARTED DISSEMINATING ITS SIGNATURE\n";
-
-        TextView tv = new TextView(TestingActivity.this);
-        Log.d(TESTING_ACTIVITY_LOG, s);
-        showPopupWindow(tv, s);
-        //service.printLog(TESTING_ACTIVITY_LOG, s);
-
-
-        /*
-
-        }else{
-
-        /*
-
-            service.printLog(TESTING_ACTIVITY_LOG, "Error in starting dissemination\n");
-        }
-        */
-
+                        TextView tv = new TextView(TestingActivity.this);
+                        Log.d(TESTING_ACTIVITY_LOG, s);
+                        showPopupWindow(tv, s);
+                        //service.printLog(TESTING_ACTIVITY_LOG, s);
+                    }
+                else
+                    {
+                        Log.d(this.getClass().getName(),"Signature Dissemination Already Started");
+                        //service.printLog(TESTING_ACTIVITY_LOG,"Error in starting dissemination\n");
+                    }
+            }
+        else
+            Log.w(this.getClass().getName(), "Geotracer main service is unbound!");
 
     }
 
+    /* FIXME (non so se i service.printlog() devono essere chiamati o meno) */
     public void stopDissemination(View view) {
 
-        /*
+        if(geotracerMainService != null)
+            {
+                boolean result = geotracerMainService.stopAdvertising();
+                if(result)
+                    {
+                        String s = "DISSEMINATION STOPPED";
+                        TextView tv = new TextView(TestingActivity.this);
+                        showPopupWindow(tv, s);
+                        Log.d(TESTING_ACTIVITY_LOG, s);
+                        //service.printLog(TESTING_ACTIVITY_LOG, s);
+                    }
+                else
+                    {
+                        Log.d(this.getClass().getName(),"Signature Dissemination Already Stopped");
+                        //service.printLog(TESTING_ACTIVITY_LOG,"Error in stopping dissemination\n");
+                    }
+            }
+        else
+            Log.w(this.getClass().getName(), "Geotracer main service is unbound!");
 
-        THIS FUNCTION BLOCK THE PROCESS OF DISSEMINATING MY SIGNATURE
-        A FUNCTION THAT STOP THIS PROCESS SHOULD BE CALLED
-
-        BELOW I CHECK THAT EVERYTHING WENT WELL AND I WRITE IT IN A POPUP WINDOW
-         */
-
-        /*
-        stop advertising ??
-         */
-        //if(/*   THE DISSEMINATION STOPPED   */){
-
-        String s = "DISSEMINATION STOPPED";
-        TextView tv = new TextView(TestingActivity.this);
-        showPopupWindow(tv, s);
-        Log.d(TESTING_ACTIVITY_LOG, s);
-        //service.printLog(TESTING_ACTIVITY_LOG, "DEVICE STOPPED DISSEMINATING ITS SIGNATURE\n");
-
-
-
-        /*
-
-        }else{
-           service.printLog(TESTING_ACTIVITY_LOG, "Error in stop dissemination\n");
-        }
-        */
     }
 
+    /* FIXME (non so se i service.printlog() devono essere chiamati o meno) */
     public void startCollection(View view) {
 
-        /*
+        if(geotracerMainService != null)
+            {
+                boolean result = geotracerMainService.startScanning();
+                if(result)
+                    {
+                        String s = "SIGNATURE COLLECTION STARTED";
+                        TextView tv = new TextView(TestingActivity.this);
+                        showPopupWindow(tv, s);
+                        Log.d(TESTING_ACTIVITY_LOG, s);
+                        //service.printLog(TESTING_ACTIVITY_LOG, "DEVICE STARTED COLLECTING SIGNATURES\n");
+                    }
+                else
+                    {
+                        Log.d(this.getClass().getName(),"Signature Collection Already Started");
+                        //service.printLog(TESTING_ACTIVITY_LOG,"Error in starting signature collection\n");
+                    }
+            }
+        else
+            Log.w(this.getClass().getName(), "Geotracer main service is unbound!");
 
-        START TAKING THE OTHER DEVICES' SIGNATURES
-        A FUNCTION THAT DOES THIS MUST BE CALLED
-
-        IN THE IF STATEMENT I HAVE TO CHECK THE RESULT OF THAT CALL
-
-        startScanning() ??
-         */
-        //if(/*   THE COLLECTION STARTED   */){
-
-
-        String s = "SIGNATURE COLLECTION STARTED";
-        TextView tv = new TextView(TestingActivity.this);
-        showPopupWindow(tv, s);
-        Log.d(TESTING_ACTIVITY_LOG, s);
-        //service.printLog(TESTING_ACTIVITY_LOG, "DEVICE STARTED COLLECTING SIGNATURES\n");
-
-
-        /*
-
-        }else{
-
-
-          service.printLog(TESTING_ACTIVITY_LOG, "Error in starting signature collection\n");
-
-        }
-        */
     }
 
+    /* FIXME (non so se i service.printlog() devono essere chiamati o meno) */
     public void stopCollection(View view) {
 
-        /*
+        if(geotracerMainService != null)
+            {
+                boolean result = geotracerMainService.stopScanning();
+                if(result)
+                    {
+                        String s = "SIGNATURE COLLECTION STOPPED";
+                        TextView tv = new TextView(TestingActivity.this);
+                        showPopupWindow(tv, s);
+                        Log.d(TESTING_ACTIVITY_LOG, s);
+                        //service.printLog(TESTING_ACTIVITY_LOG, "DEVICE STOPPED COLLECTING SIGNATURES\n");
+                    }
+                else
+                    {
+                        Log.d(this.getClass().getName(),"Signature Collection Already Stopped");
+                        //service.printLog(TESTING_ACTIVITY_LOG,"Error in stopping the signature collection\n");
+                    }
+            }
+        else
+            Log.w(this.getClass().getName(), "Geotracer main service is unbound!");
 
-            STOP TAKING THE OTHER DEVICES' SIGNATURES
-            THE PROCEDURE RESULT WILL BE SHOWN IN A POPUP WINDOW
-
-
-             stopScanning ??
-         */
-
-
-        //if(/*   THE COLLECTION STOPPED   */){
-        String s = "SIGNATURE COLLECTION STOPPED";
-        TextView tv = new TextView(TestingActivity.this);
-        showPopupWindow(tv, s);
-        Log.d(TESTING_ACTIVITY_LOG, s);
-        //service.printLog(TESTING_ACTIVITY_LOG, "DEVICE STOPPED COLLECTING SIGNATURES\n");
-
-
-        /*
-
-        }else{
-            service.printLog(TESTING_ACTIVITY_LOG, "Error in stopping the signature collection\n");
-
-        }
-        */
     }
+
 
     public void infected(View view) {
         /*

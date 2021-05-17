@@ -140,7 +140,7 @@ class GeoLocator implements LocationListener
      // class attributes), add the position of the device broadcasting the signature into the remote Firestorm database
      if(!POS_POLICY_HIGH_ACCURACY || (isGPSEnabled && isLocalizing && LOC_MIN_DIST_CHANGE > 0) ||
              (lastLocation.getTime() > contactTime - POS_HIGH_ACCURACY_MARGIN))
-       addOtherPosition(key);
+       ;//addOtherPosition(key); // TODO: Remove when Nicola "assert false" is fixed
      else
       Log.e(TAG,"The last known user position is too old for adding the device location into the database");
     }
@@ -264,9 +264,5 @@ class GeoLocator implements LocationListener
 
  // Converts a Location into a BaseLocation object (as required by the KeyValue local database)
  private BaseLocation locToBaseLoc(Location loc)
-  {
-   int lat = (int) (loc.getLatitude() * 1E6);
-   int lng = (int) (loc.getLongitude() * 1E6);
-   return new BaseLocation(new GeoPoint(lat,lng));
-  }
+  { return new BaseLocation(new GeoPoint(loc.getLatitude(),loc.getLongitude())); }
 }
