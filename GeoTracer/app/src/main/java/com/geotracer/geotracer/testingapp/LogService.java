@@ -21,6 +21,10 @@ public class LogService extends Service {
 
     public static final String ACTION_BROADCAST = LogService.class.getName();
     private static final String TESTING_ACTIVITY_LOG = "TestingActivity";
+    private static final String GEOTRACER_SERVICE = "Geotracer Service";
+    private static final String GEOTRACER_SCANNER = "GeoScanner";
+    private static final String GEOTRACER_LOCATION = "GeoLocation";
+    private static final String GEOTRACER_ADV = "GeoAdvertiser";
     // Binder given to clients
     private final IBinder binder = new LocalBinder();
 
@@ -116,7 +120,13 @@ public class LogService extends Service {
             /*
             TESTING_ACTIVITY_LOG is not required to be displayed in the log_window. Can be removed afterwards
              */
-            String cmd = "logcat -d " + TESTING_ACTIVITY_LOG + ":D" + " *:S";
+            //String cmd = "logcat -d " + TESTING_ACTIVITY_LOG + ":D" + " *:S";
+            String cmd = "logcat -d " +
+                    GEOTRACER_SERVICE + ":I" +
+                    GEOTRACER_SCANNER + ":E"+
+                    GEOTRACER_LOCATION + ":E" +
+                    GEOTRACER_ADV + ":E" +
+                    " *:S";
             logcat = Runtime.getRuntime().exec(cmd);
             BufferedReader br = new BufferedReader(new InputStreamReader(logcat.getInputStream()));
             String line;
