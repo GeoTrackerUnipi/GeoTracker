@@ -68,11 +68,13 @@ public class ExtLocation extends BaseLocation{
 
     public OpStatus incrementCriticity(BaseLocation location, boolean present){
 
-        if(expire.before(new Date()))
+        if(expire.before(new Date()) || pointsDistance(location) > 100 ) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            expire = calendar.getTime();
             return OpStatus.UPDATE_LOCATION;
-
-        if( pointsDistance(location) > 100 )
-            return OpStatus.UPDATE_LOCATION;
+        }
 
         if(!present)
             this.criticity++;
