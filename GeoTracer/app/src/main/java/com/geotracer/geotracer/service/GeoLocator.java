@@ -140,7 +140,7 @@ class GeoLocator implements LocationListener
      // class attributes), add the position of the device broadcasting the signature into the remote Firestorm database
      if(!POS_POLICY_HIGH_ACCURACY || (isGPSEnabled && isLocalizing && LOC_MIN_DIST_CHANGE > 0) ||
              (lastLocation.getTime() > contactTime - POS_HIGH_ACCURACY_MARGIN))
-       ;//addOtherPosition(key); // TODO: Remove when Nicola "assert false" is fixed
+       addOtherPosition(key);
      else
       Log.e(TAG,"The last known user position is too old for adding the device location into the database");
     }
