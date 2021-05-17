@@ -26,9 +26,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.geotracer.geotracer.R;
+import com.geotracer.geotracer.UsageTestActivity;
 import com.geotracer.geotracer.UserStatus;
 import com.geotracer.geotracer.db.local.KeyValueManagement;
 import com.geotracer.geotracer.db.remote.FirestoreManagement;
@@ -100,13 +102,13 @@ public class SettingActivity extends AppCompatActivity {
 
                     /* FIXME */
                     if(geotracerMainService != null)
-                        {
-                            boolean result = geotracerMainService.enableProximityWarnings();
-                            if(result)
-                                Log.d(SETTING_ACTIVITY_LOG, "Proximity Warning Notifications Enabled");
-                            else
-                                Log.d(SETTING_ACTIVITY_LOG, "Proximity Warning Notifications Enabled Already Enabled");
-                        }
+                    {
+                        boolean result = geotracerMainService.enableProximityWarnings();
+                        if(result)
+                            Log.d(SETTING_ACTIVITY_LOG, "Proximity Warning Notifications Enabled");
+                        else
+                            Log.d(SETTING_ACTIVITY_LOG, "Proximity Warning Notifications Enabled Already Enabled");
+                    }
                     else
                         Log.w(SETTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
 
@@ -116,13 +118,13 @@ public class SettingActivity extends AppCompatActivity {
 
                     /* FIXME */
                     if(geotracerMainService != null)
-                        {
-                            boolean result = geotracerMainService.disableProximityWarnings();
-                            if(result)
-                                Log.d(SETTING_ACTIVITY_LOG, "Proximity Warning Notifications Disabled");
-                            else
-                                Log.d(SETTING_ACTIVITY_LOG, "Proximity Warning Notifications Already Disabled");
-                        }
+                    {
+                        boolean result = geotracerMainService.disableProximityWarnings();
+                        if(result)
+                            Log.d(SETTING_ACTIVITY_LOG, "Proximity Warning Notifications Disabled");
+                        else
+                            Log.d(SETTING_ACTIVITY_LOG, "Proximity Warning Notifications Already Disabled");
+                    }
                     else
                         Log.w(SETTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
 
@@ -156,9 +158,40 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
+        initBottomMenu();
 
     }
 
+
+    private void initBottomMenu() {
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.setting_menu);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                TextView tv;
+                Intent i;
+                switch (item.getItemId()) {
+                    case R.id.from_setting_to_main:
+                        i = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(i);
+                        return true;
+                    case R.id.from_setting_to_testing:
+                        i = new Intent(getApplicationContext(), TestingActivity.class);
+                        startActivity(i);
+                        return true;
+                    case R.id.from_setting_to_info:
+                        i = new Intent(getApplicationContext(), InfoActivity.class);
+                        startActivity(i);
+                        return true;
+
+                    default:
+                        return SettingActivity.super.onOptionsItemSelected(item);
+                }
+            }
+        });
+    }
 
     @Override
     protected void onStart() {
@@ -224,7 +257,7 @@ public class SettingActivity extends AppCompatActivity {
             unbindService(firestoreService);
 
         if(geotracerMainService != null)
-         unbindService(geotracerService);
+            unbindService(geotracerService);
 
     }
 
@@ -313,40 +346,6 @@ public class SettingActivity extends AppCompatActivity {
 
         }
     };
-
-    /*
-
-        MENU BAR
-
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.setting_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        TextView tv;
-        Intent i;
-        switch(item.getItemId()){
-            case R.id.from_setting_to_main:
-                i = new Intent(this, MainActivity.class);
-                startActivity(i);
-                return true;
-            case R.id.from_setting_to_testing:
-                i = new Intent(this, TestingActivity.class);
-                startActivity(i);
-                return true;
-            case R.id.from_setting_to_info:
-                i = new Intent(this, InfoActivity.class);
-                startActivity(i);
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
 
     //FUNCTION TO SHOW THE POPUP WINDOW IN CASE CONTACT NOTIFICATION IS ARISEN

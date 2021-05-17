@@ -28,8 +28,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.geotracer.geotracer.R;
@@ -37,6 +39,7 @@ import com.geotracer.geotracer.UsageTestActivity;
 
 import com.geotracer.geotracer.UserStatus;
 import com.geotracer.geotracer.infoapp.InfoActivity;
+import com.geotracer.geotracer.mainapp.heatMap.HeatMap;
 import com.geotracer.geotracer.notifications.NotificationSender;
 import com.geotracer.geotracer.service.GeotracerService;
 import com.geotracer.geotracer.settingapp.SettingActivity;
@@ -67,10 +70,7 @@ public class MainActivity extends AppCompatActivity {
                         String toLog = intent.getStringExtra("Contact");
 
                         TextView tv = new TextView(MainActivity.this);
-                        if(tv == null)
-                            Log.d(MAIN_ACTIVITY_LOG, "BROADCAST LISTENER FOR CONTACTS: Empty location");
-                        else
-                            showPopupWindow(tv, toLog);
+                        showPopupWindow(tv, toLog);
 
                         FrameLayout frameLayout = findViewById(R.id.contact_frame);
                         frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
@@ -81,6 +81,50 @@ public class MainActivity extends AppCompatActivity {
                 },new IntentFilter(NotificationSender.ACTION_BROADCAST)
 
         );
+
+        //initialize heat map fragment
+        Fragment heatMapFragment = new HeatMap();
+
+        //start heat map fragment
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.frame_heat_map_area, heatMapFragment) //insert heatMapFragment inside the area
+                .commit();
+
+        initBottomMenu();
+    }
+
+    private void initBottomMenu() {
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.main_menu);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent i;
+                switch(item.getItemId()){
+                    case R.id.from_main_to_testing:
+                        i = new Intent(getApplicationContext(), TestingActivity.class);
+                        startActivity(i);
+                        return true;
+                    case R.id.from_main_to_settings:
+                        i = new Intent(getApplicationContext(), SettingActivity.class);
+                        startActivity(i);
+                        return true;
+                    case R.id.from_main_to_info:
+                        i = new Intent(getApplicationContext(), InfoActivity.class);
+                        startActivity(i);
+                        return true;
+                    case R.id.from_main_to_db:
+                        i = new Intent(getApplicationContext(), UsageTestActivity.class);
+                        startActivity(i);
+                        return true;
+
+                    default:
+                        return MainActivity.super.onOptionsItemSelected(item);
+                }
+            }
+        });
     }
 
     @Override
@@ -159,39 +203,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
     };
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        TextView tv;
-        Intent i;
-        switch(item.getItemId()){
-            case R.id.from_main_to_testing:
-                i = new Intent(this, TestingActivity.class);
-                startActivity(i);
-                return true;
-            case R.id.from_main_to_settings:
-                i = new Intent(this, SettingActivity.class);
-                startActivity(i);
-                return true;
-            case R.id.from_main_to_info:
-                i = new Intent(this, InfoActivity.class);
-                startActivity(i);
-                return true;
-            case R.id.from_main_to_db:
-                i = new Intent(this, UsageTestActivity.class);
-                startActivity(i);
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {

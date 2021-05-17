@@ -11,7 +11,6 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -21,15 +20,14 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.geotracer.geotracer.R;
-import com.geotracer.geotracer.UsageTestActivity;
 import com.geotracer.geotracer.UserStatus;
 import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
 import com.geotracer.geotracer.settingapp.SettingActivity;
-import com.geotracer.geotracer.testingapp.LogService;
 import com.geotracer.geotracer.testingapp.TestingActivity;
 
 public class InfoActivity extends AppCompatActivity {
@@ -61,10 +59,7 @@ public class InfoActivity extends AppCompatActivity {
                         String toLog = intent.getStringExtra("Contact");
 
                         TextView tv = new TextView(InfoActivity.this);
-                        if(tv == null)
-                            Log.d(INFO_ACTIVITY_LOG, "BROADCAST LISTENER FOR CONTACTS: Empty location");
-                        else
-                            showPopupWindow(tv, toLog);
+                        showPopupWindow(tv, toLog);
 
 
                         FrameLayout frameLayout = findViewById(R.id.contact_frame);
@@ -76,6 +71,33 @@ public class InfoActivity extends AppCompatActivity {
                 },new IntentFilter(NotificationSender.ACTION_BROADCAST)
 
         );
+        initBottomMenu();
+    }
+
+    private void initBottomMenu() {
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.info_menu);
+        toolbar.setOnMenuItemClickListener(item -> {
+            Intent i;
+            switch (item.getItemId()) {
+
+                case R.id.from_info_to_main:
+                    i = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(i);
+                    return true;
+                case R.id.from_info_to_testing:
+                    i = new Intent(getApplicationContext(), TestingActivity.class);
+                    startActivity(i);
+                    return true;
+                case R.id.from_info_to_settings:
+                    i = new Intent(getApplicationContext(), SettingActivity.class);
+                    startActivity(i);
+                    return true;
+                default:
+                    return InfoActivity.super.onOptionsItemSelected(item);
+            }
+        });
     }
 
 
@@ -136,39 +158,6 @@ public class InfoActivity extends AppCompatActivity {
 
 
 
-    /*
-
-        MENU BAR
-
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.info_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        TextView tv;
-        Intent i;
-        switch(item.getItemId()){
-            case R.id.from_info_to_main:
-                i = new Intent(this, MainActivity.class);
-                startActivity(i);
-                return true;
-            case R.id.from_info_to_testing:
-                i = new Intent(this, TestingActivity.class);
-                startActivity(i);
-                return true;
-            case R.id.from_info_to_settings:
-                i = new Intent(this, SettingActivity.class);
-                startActivity(i);
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     protected void showPopupWindow(TextView location, String message){
 
@@ -191,12 +180,7 @@ public class InfoActivity extends AppCompatActivity {
         popup_view.setText(message);
 
         //close the popup window on button click
-        closePopupBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
+        closePopupBtn.setOnClickListener(v -> popupWindow.dismiss());
 
 
 

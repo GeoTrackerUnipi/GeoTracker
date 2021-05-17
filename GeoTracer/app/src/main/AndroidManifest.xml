@@ -25,6 +25,13 @@
         android:roundIcon="@mipmap/geotracer_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GeotracerApp">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBZ0l09dSImjD_vZ2qkOn85_jE2WLzMA2E" />
+
 
         <!-- GeotracerAutostart Broadcast Receiver -->
         <receiver

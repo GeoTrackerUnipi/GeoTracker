@@ -51,11 +51,9 @@ public class LogService extends Service {
         /*
         HANDLER USED TO CALL THE listenToLog FUNCTION EVERY delay SECONDS.
          */
-        handler.postDelayed(runnable = new Runnable() {
-            public void run() {
-                handler.postDelayed(runnable, delay);
-                listenToLog();
-            }
+        handler.postDelayed(runnable = () -> {
+            handler.postDelayed(runnable, delay);
+            listenToLog();
         }, delay);
 
 
@@ -81,6 +79,7 @@ public class LogService extends Service {
     /*
     METHOD USED BY CLIENT TO PRINT LOG MESSAGES PROVIDING A STRING AND A "TAG"
      */
+
     public void printLog(String class_name, String message){
 
         Log.d(this.getClass().getName(), "printLog function");
@@ -113,7 +112,7 @@ public class LogService extends Service {
         try {
 
             //clean the previous log messages.
-            Process process = Runtime.getRuntime().exec("logcat -c");
+            Runtime.getRuntime().exec("logcat -c");
 
             //takes only the specified tag logs.
 
@@ -121,12 +120,15 @@ public class LogService extends Service {
             TESTING_ACTIVITY_LOG is not required to be displayed in the log_window. Can be removed afterwards
              */
             //String cmd = "logcat -d " + TESTING_ACTIVITY_LOG + ":D" + " *:S";
+
             String cmd = "logcat -d " +
                     GEOTRACER_SERVICE + ":I" +
                     GEOTRACER_SCANNER + ":E"+
                     GEOTRACER_LOCATION + ":E" +
                     GEOTRACER_ADV + ":E" +
                     " *:S";
+
+
             logcat = Runtime.getRuntime().exec(cmd);
             BufferedReader br = new BufferedReader(new InputStreamReader(logcat.getInputStream()));
             String line;
