@@ -94,13 +94,16 @@
     <orderEntry type="library" name="Gradle: androidx.appcompat:appcompat:1.2.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-firestore:22.1.2@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-database:19.7.0@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-maps:17.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.viewpager2:viewpager2:1.0.0@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-location:18.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-database-collection:17.0.1@aar" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-base:17.0.0@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-base:17.5.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-auth-interop:19.0.2@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-common:19.5.0@aar" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-tasks:17.0.0@aar" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-basement:17.0.0@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-tasks:17.2.0@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-places-placereport:17.0.0@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-basement:17.5.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.fragment:fragment:1.1.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.appcompat:appcompat-resources:1.2.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.drawerlayout:drawerlayout:1.0.0@aar" level="project" />
@@ -136,5 +139,6 @@
     <orderEntry type="library" name="Gradle: com.google.firebase:protolite-well-known-types:17.1.1@aar" level="project" />
     <orderEntry type="library" name="Gradle: io.grpc:grpc-android:1.28.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.firebase:geofire-android-common:3.1.0@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.maps.android:android-maps-utils:2.2.3@aar" level="project" />
   </component>
 </module>

@@ -40,6 +40,8 @@ public class FirestoreManagement extends Service {
     private CollectionReference collection;
     private static final LocationAggregator aggregator = new LocationAggregator();
     private static final String TAG = "FirestoreManagement";
+    //listener to be notified about the data collected
+    private FirestoreCallback firestoreCallbackListener;
 
     FirestoreCallback callback;
 
@@ -47,6 +49,8 @@ public class FirestoreManagement extends Service {
     public interface FirestoreCallback {
         void onSuccess();
         void onFailure();
+
+        void onDataCollected(List<ExtLocation> location);
     }
 
     //  binder for giving the Service class
@@ -306,6 +310,9 @@ public class FirestoreManagement extends Service {
             e.printStackTrace();
             return OpStatus.ERROR;
         }
+    }
+    public void setFirestoreCallbackListener(FirestoreCallback listener){
+        this.firestoreCallbackListener = listener;
     }
 }
 

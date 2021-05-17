@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -101,11 +102,8 @@ public class TestingActivity extends AppCompatActivity {
                         String toLog = intent.getStringExtra("Contact");
 
                         TextView tv = new TextView(TestingActivity.this);
-                        if(tv == null)
-                            Log.d(TESTING_ACTIVITY_LOG + "BROADCAST LISTENER FOR CONTACTS", "Empty location");
-                        else {
-                            showPopupWindow(tv, toLog);
-                        }
+                        showPopupWindow(tv, toLog);
+
 
                         FrameLayout frameLayout = findViewById(R.id.contact_frame);
                         frameLayout.setBackgroundColor(getResources().getColor(R.color.red));
@@ -116,7 +114,40 @@ public class TestingActivity extends AppCompatActivity {
                 },new IntentFilter(NotificationSender.ACTION_BROADCAST)
 
         );
+        initBottomMenu();
 
+    }
+
+    /*
+    MENU ICON MANAGEMENT
+     */
+    private void initBottomMenu() {
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.inflateMenu(R.menu.testing_menu);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent i;
+                switch (item.getItemId()) {
+
+                    case R.id.from_testing_to_main:
+                        i = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(i);
+                        return true;
+                    case R.id.from_testing_to_settings:
+                        i = new Intent(getApplicationContext(), SettingActivity.class);
+                        startActivity(i);
+                        return true;
+                    case R.id.from_testing_to_info:
+                        i = new Intent(getApplicationContext(), InfoActivity.class);
+                        startActivity(i);
+                        return true;
+                    default:
+                        return TestingActivity.super.onOptionsItemSelected(item);
+                }
+            }
+        });
     }
 
 
@@ -341,21 +372,21 @@ public class TestingActivity extends AppCompatActivity {
     public void startDissemination(View view) {
 
         if(geotracerMainService != null)
+        {
+            boolean result = geotracerMainService.startAdvertising();
+            if(result)
             {
-                boolean result = geotracerMainService.startAdvertising();
-                if(result)
-                    {
-                        String s = "DEVICE STARTED DISSEMINATING ITS SIGNATURE\n";
+                String s = "DEVICE STARTED DISSEMINATING ITS SIGNATURE\n";
 
-                        TextView tv = new TextView(TestingActivity.this);
-                        Log.d(TESTING_ACTIVITY_LOG, s);
-                        showPopupWindow(tv, s);
-                    }
-                else
-                    {
-                        Log.d(TESTING_ACTIVITY_LOG,"Signature Dissemination Already Started");
-                    }
+                TextView tv = new TextView(TestingActivity.this);
+                Log.d(TESTING_ACTIVITY_LOG, s);
+                showPopupWindow(tv, s);
             }
+            else
+            {
+                Log.d(TESTING_ACTIVITY_LOG,"Signature Dissemination Already Started");
+            }
+        }
         else
             Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
 
@@ -365,20 +396,20 @@ public class TestingActivity extends AppCompatActivity {
     public void stopDissemination(View view) {
 
         if(geotracerMainService != null)
+        {
+            boolean result = geotracerMainService.stopAdvertising();
+            if(result)
             {
-                boolean result = geotracerMainService.stopAdvertising();
-                if(result)
-                    {
-                        String s = "DISSEMINATION STOPPED";
-                        TextView tv = new TextView(TestingActivity.this);
-                        showPopupWindow(tv, s);
-                        Log.d(TESTING_ACTIVITY_LOG, s);
-                    }
-                else
-                    {
-                        Log.d(TESTING_ACTIVITY_LOG,"Signature Dissemination Already Stopped");
-                    }
+                String s = "DISSEMINATION STOPPED";
+                TextView tv = new TextView(TestingActivity.this);
+                showPopupWindow(tv, s);
+                Log.d(TESTING_ACTIVITY_LOG, s);
             }
+            else
+            {
+                Log.d(TESTING_ACTIVITY_LOG,"Signature Dissemination Already Stopped");
+            }
+        }
         else
             Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
 
@@ -388,20 +419,20 @@ public class TestingActivity extends AppCompatActivity {
     public void startCollection(View view) {
 
         if(geotracerMainService != null)
+        {
+            boolean result = geotracerMainService.startScanning();
+            if(result)
             {
-                boolean result = geotracerMainService.startScanning();
-                if(result)
-                    {
-                        String s = "SIGNATURE COLLECTION STARTED";
-                        TextView tv = new TextView(TestingActivity.this);
-                        showPopupWindow(tv, s);
-                        Log.d(TESTING_ACTIVITY_LOG, s);
-                    }
-                else
-                    {
-                        Log.d(TESTING_ACTIVITY_LOG,"Signature Collection Already Started");
-                    }
+                String s = "SIGNATURE COLLECTION STARTED";
+                TextView tv = new TextView(TestingActivity.this);
+                showPopupWindow(tv, s);
+                Log.d(TESTING_ACTIVITY_LOG, s);
             }
+            else
+            {
+                Log.d(TESTING_ACTIVITY_LOG,"Signature Collection Already Started");
+            }
+        }
         else
             Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
 
@@ -411,20 +442,20 @@ public class TestingActivity extends AppCompatActivity {
     public void stopCollection(View view) {
 
         if(geotracerMainService != null)
+        {
+            boolean result = geotracerMainService.stopScanning();
+            if(result)
             {
-                boolean result = geotracerMainService.stopScanning();
-                if(result)
-                    {
-                        String s = "SIGNATURE COLLECTION STOPPED";
-                        TextView tv = new TextView(TestingActivity.this);
-                        showPopupWindow(tv, s);
-                        Log.d(TESTING_ACTIVITY_LOG, s);
-                    }
-                else
-                    {
-                        Log.d(TESTING_ACTIVITY_LOG,"Signature Collection Already Stopped");
-                    }
+                String s = "SIGNATURE COLLECTION STOPPED";
+                TextView tv = new TextView(TestingActivity.this);
+                showPopupWindow(tv, s);
+                Log.d(TESTING_ACTIVITY_LOG, s);
             }
+            else
+            {
+                Log.d(TESTING_ACTIVITY_LOG,"Signature Collection Already Stopped");
+            }
+        }
         else
             Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
 
@@ -492,8 +523,6 @@ public class TestingActivity extends AppCompatActivity {
         TextView tv = (TextView) findViewById(R.id.log_text);
         tv.setText("");
 
-        Process logcat;
-        final StringBuilder log = new StringBuilder();
         try {
             Runtime.getRuntime().exec("logcat -b all -c");
 
@@ -529,12 +558,7 @@ public class TestingActivity extends AppCompatActivity {
         popup_view.setText(message);
 
         //close the popup window on button click
-        closePopupBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
+        closePopupBtn.setOnClickListener(v -> popupWindow.dismiss());
 
 
 
@@ -543,41 +567,6 @@ public class TestingActivity extends AppCompatActivity {
 
 
 
-    /*
-
-
-    TOOLBAR MENU ITEMS
-
-
-     */
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.testing_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        Intent i;
-        switch(item.getItemId()){
-            case R.id.from_testing_to_main:
-                i = new Intent(this, MainActivity.class);
-                startActivity(i);
-                return true;
-            case R.id.from_testing_to_settings:
-                i = new Intent(this, SettingActivity.class);
-                startActivity(i);
-                return true;
-            case R.id.from_testing_to_info:
-                i = new Intent(this, InfoActivity.class);
-                startActivity(i);
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
 
     /*
@@ -600,8 +589,12 @@ public class TestingActivity extends AppCompatActivity {
     }
 
     /*
+
     It manages delete menu. It discriminates between the choices and call the corrisponding drop function.
+
+
      */
+
     public void manageDelete(View view) {
 
         //Creating the instance of PopupMenu
@@ -610,61 +603,59 @@ public class TestingActivity extends AppCompatActivity {
         popup.getMenuInflater().inflate(R.menu.delete_menu, popup.getMenu());
 
         //registering popup with OnMenuItemClickListener
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            public boolean onMenuItemClick(MenuItem item) {
+        popup.setOnMenuItemClickListener(item -> {
 
-                TextView tv = new TextView(TestingActivity.this);
-                switch(item.getItemId()){
-                    case R.id.delete_my_positions:
-                        //DELETE MY POSITIONS
-                        if(keyValueManagement.positions.dropAllPositions() != OpStatus.OK)
-                            showPopupWindow(tv, "Error in removing positions");
-                        else {
-                            showPopupWindow(tv, "All positions removed");
+            TextView tv = new TextView(TestingActivity.this);
+            switch(item.getItemId()){
+                case R.id.delete_my_positions:
+                    //DELETE MY POSITIONS
+                    if(keyValueManagement.positions.dropAllPositions() != OpStatus.OK)
+                        showPopupWindow(tv, "Error in removing positions");
+                    else {
+                        showPopupWindow(tv, "All positions removed");
+                    }
+                    return true;
+                case R.id.delete_my_signatures:
+                    //DELETE MY SIGNATURES
+                    if(keyValueManagement.signatures.removeAllSignatures() != OpStatus.OK)
+                        showPopupWindow(tv, "Error in removing signatures");
+                    else
+                        showPopupWindow(tv, "All signatures removed");
+                    return true;
+                case R.id.delete_rec_beacons:
+                    //DELETE RECEIVED BEACONS
+                    if(keyValueManagement.beacons.dropAllBeacons() != OpStatus.OK)
+                        showPopupWindow(tv, "Error in removing beacons");
+                    else {
+                        showPopupWindow(tv, "All beacons removed");
+                    }
+                    return true;
+                case R.id.delete_all:
+                    //DELETE EVERYTHING
+                    if(!keyValueManagement.cleanLocalStore()) {
+                        showPopupWindow(tv, "Error in cleaning the local database");
+                    }
+                    else {
+                        if(notificationSender.forceNotInfected()==OpStatus.OK) {
+                            FrameLayout frameLayout = findViewById(R.id.contact_frame);
+                            frameLayout.setBackgroundColor(getResources().getColor(R.color.white));
+                            TextView contact_text = findViewById(R.id.contact_text);
+                            contact_text.setText(getResources().getString(R.string.contacts));
+                            ((UserStatus) TestingActivity.this.getApplication()).setContacts(false);
+                            showPopupWindow(tv, "Local database cleaned");
                         }
-                        return true;
-                    case R.id.delete_my_signatures:
-                        //DELETE MY SIGNATURES
-                        if(keyValueManagement.signatures.removeAllSignatures() != OpStatus.OK)
-                            showPopupWindow(tv, "Error in removing signatures");
-                        else
-                            showPopupWindow(tv, "All signatures removed");
-                        return true;
-                    case R.id.delete_rec_beacons:
-                        //DELETE RECEIVED BEACONS
-                        if(keyValueManagement.beacons.dropAllBeacons() != OpStatus.OK)
-                            showPopupWindow(tv, "Error in removing beacons");
-                        else {
-                            showPopupWindow(tv, "All beacons removed");
-                        }
-                        return true;
-                    case R.id.delete_all:
-                        //DELETE EVERYTHING
-                        if(!keyValueManagement.cleanLocalStore()) {
-                            showPopupWindow(tv, "Error in cleaning the local database");
-                        }
-                        else {
-                            if(notificationSender.forceNotInfected()==OpStatus.OK) {
-                                FrameLayout frameLayout = findViewById(R.id.contact_frame);
-                                frameLayout.setBackgroundColor(getResources().getColor(R.color.white));
-                                TextView contact_text = findViewById(R.id.contact_text);
-                                contact_text.setText(getResources().getString(R.string.contacts));
-                                ((UserStatus) TestingActivity.this.getApplication()).setContacts(false);
-                                showPopupWindow(tv, "Local database cleaned");
-                            }
-                        }
-                        return true;
-                    case R.id.delete_bucket:
-                        if(notificationSender.removeAllBuckets() != OpStatus.OK)
-                            showPopupWindow(tv, "Error in deleting buckets");
-                        else{
-                            showPopupWindow(tv, "All buckets removed");
-                        }
-                    default:
-                        return false;
-                }
-
+                    }
+                    return true;
+                case R.id.delete_bucket:
+                    if(notificationSender.removeAllBuckets() != OpStatus.OK)
+                        showPopupWindow(tv, "Error in deleting buckets");
+                    else{
+                        showPopupWindow(tv, "All buckets removed");
+                    }
+                default:
+                    return false;
             }
+
         });
 
         popup.show();//showing popup menu

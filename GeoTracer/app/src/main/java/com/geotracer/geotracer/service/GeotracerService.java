@@ -24,6 +24,7 @@ import android.os.ParcelUuid;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 
 import com.geotracer.geotracer.R;
@@ -149,6 +150,7 @@ public class GeotracerService extends Service
   *=============================================================================================================================================*/
 
  // Sets the service as a foreground service, display an initialization notification
+ @RequiresApi(api = Build.VERSION_CODES.O)
  private void setAsForeground()
   {
    /* ======= Foreground Notification Objects ======== */
