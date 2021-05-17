@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.geotracer.geotracer">
+
+    <!-- Required Permissions -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.LOGS" />
+
+    <!-- Required Hardware Features -->
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+    <application
+        android:name=".UserStatus"
+        android:allowBackup="true"
+        android:icon="@mipmap/geotracer_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/geotracer_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.GeotracerApp">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBZ0l09dSImjD_vZ2qkOn85_jE2WLzMA2E" />
+
+        <!-- GeotracerAutostart Broadcast Receiver -->
+        <receiver
+            android:name="com.geotracer.geotracer.service.GeotracerAutostart"
+            android:enabled="true"
+            android:exported="false">
+
+            <!-- This is for starting the main service after boot has completed -->
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+
+            <!-- This is for starting the main service after the app has been reinstalled -->
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <data android:scheme="package" />
+            </intent-filter>
+
+            <!-- This is for starting the main service after the app has been updated -->
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Geotracer Main Service -->
+        <service
+            android:name="com.geotracer.geotracer.service.GeotracerService"
+            android:description="@string/geotracer_service_descr"
+            android:foregroundServiceType="location"
+            android:enabled="true"
+            android:exported="false" />
+
+
+        <service
+            android:name=".db.local.KeyValueManagement"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".notifications.NotificationSender"
+            android:enabled="true"
+            android:exported="false" />
+        <service android:name=".db.remote.FirestoreManagement"
+            android:enabled="true"
+            android:exported="false"/>
+
+        <service
+            android:name=".testingapp.LogService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity android:name=".UsageTestActivity"/>
+        <activity android:name=".infoapp.InfoActivity" />
+        <activity android:name=".settingapp.SettingActivity" />
+        <activity android:name=".testingapp.TestingActivity" />
+        <activity android:name=".mainapp.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
