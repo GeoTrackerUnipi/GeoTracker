@@ -9,6 +9,10 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.geotracer.geotracer.utils.data.BaseLocation;
+import com.geotracer.geotracer.utils.generics.OpStatus;
+import com.google.firebase.firestore.GeoPoint;
+
 import java.util.Date;
 
 // This class used the GPS location provided offered by Android OS for collecting the user's positions in time
@@ -65,13 +69,13 @@ class GeoLocator implements LocationListener
     {
      isGPSEnabled = true;
 
-     // If the last user position is recent enough, use it as initial position and push it into the local database
+     // Retrieve the last known user position, if any
      lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+     // If the last user position is recent enough, use it as initial position and
+     // push it into the local database, otherwise wait for a more recent position
      if(lastLocation != null && (lastLocation.getTime() > new Date().getTime() - POS_HIGH_ACCURACY_MARGIN))
-      {
-       Log.i(TAG,"Initial user position: "+lastLocation);
-       // TODO: Push to nicola
-      }
+      addUserPosition(lastLocation);
      else
       {
        Log.w(TAG,"The initial user position is too old and was discarded");
@@ -125,21 +129,18 @@ class GeoLocator implements LocationListener
   }
 
  // This function is called by the GeoScanner service for adding the estimated position of another device into the database
- void injectDevicePosition(double contactDistance,long contactTime)
+ void injectDevicePosition(String key,long contactTime)
   {
    // Check at least one valid position to be available
    if(lastLocation == null)
     Log.e(TAG,"No user position is known, cannot add device position into the database");
    else
     {
-     // If the last known user position is accurate enough, add the device's estimated position into the local database
-     // NOTE: This is better explained in the "Other Devices Positions Accuracy Policies" section in the class constants declarations
+     // If the last known user position is accurate enough (see the "Other Devices Positions Accuracy Policies" in the
+     // class attributes), add the position of the device broadcasting the signature into the remote Firestorm database
      if(!POS_POLICY_HIGH_ACCURACY || (isGPSEnabled && isLocalizing && LOC_MIN_DIST_CHANGE > 0) ||
              (lastLocation.getTime() > contactTime - POS_HIGH_ACCURACY_MARGIN))
-      {
-       //TODO: Nicola.OtherPositions.push(lastLocation,contactDistance,contactTime);
-       Log.w(TAG,"Added device location to the database (contactDistance = " + contactDistance + ", contactTime =  " + contactTime + ")");
-      }
+       addOtherPosition(key);
      else
       Log.e(TAG,"The last known user position is too old for adding the device location into the database");
     }
@@ -166,9 +167,9 @@ class GeoLocator implements LocationListener
  @Override
  public void onLocationChanged(@NonNull Location location)
   {
+   // Update the user location and push it into the database
    lastLocation = location;
-   Log.i(TAG,"New GPS Location! (lat = " + location.getLatitude() + ", long = " + location.getLongitude() + ")");
-   // TODO: Give to Nicola
+   addUserPosition(location);
   }
 
  // Callback function invoked by the Android OS when the GPS provider is enabled
@@ -218,5 +219,54 @@ class GeoLocator implements LocationListener
        isGPSEnabled = true;
        break;
      }
+  }
+
+ /*=============================================================================================================================================*
+ |                                                      PRIVATE UTILITY FUNCTIONS                                                               |
+ *=============================================================================================================================================*/
+
+ // Adds a new user position into the local KeyValue Database
+ private void addUserPosition(Location loc)
+  {
+   OpStatus dbResult;     // Used to check the result of the database operation
+
+   // Assert the KeyValue database service to be alive
+   if(geotracerService.keyValueDB != null)
+    {
+     dbResult = geotracerService.keyValueDB.positions.insertOrUpdatePosition(locToBaseLoc(loc));
+     if(dbResult != OpStatus.OK)
+      Log.e(TAG,"Error in adding a position into the Firestorm Database: "+dbResult);
+     else
+      Log.w(TAG,"New user position added into the Firestorm Database");
+    }
+   else
+    Log.e(TAG,"Cannot add user position, the KeyValue database service is not alive!");
+  }
+
+ // Add the position of another device into the remote Firestorm Database
+ private void addOtherPosition(String key)
+  {
+   OpStatus dbResult;     // Used to check the result of the database operation
+
+   // Assert the Firestorm database service to be alive
+   if(geotracerService.firestoreDB != null)
+    {
+     // Add the position to the remote Firestorm database
+     dbResult = geotracerService.firestoreDB.insertLocation(key,locToBaseLoc(lastLocation));
+     if(dbResult != OpStatus.OK)
+      Log.e(TAG,"Error in adding a position into the Firestorm Database: "+dbResult);
+     else
+      Log.w(TAG,"Added new device location into the firestorm database");
+    }
+   else
+    Log.e(TAG,"Cannot add other position, the Firestorm database service is not alive!");
+  }
+
+ // Converts a Location into a BaseLocation object (as required by the KeyValue local database)
+ private BaseLocation locToBaseLoc(Location loc)
+  {
+   int lat = (int) (loc.getLatitude() * 1E6);
+   int lng = (int) (loc.getLongitude() * 1E6);
+   return new BaseLocation(new GeoPoint(lat,lng));
   }
 }

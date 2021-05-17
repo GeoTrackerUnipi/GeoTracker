@@ -1,5 +1,7 @@
 package com.geotracer.geotracer.service;
 
+import org.jetbrains.annotations.NotNull;
+
 // This class represents the information contained in a bluetooth advertisement relevant to the application (signature or device MAC address excluded)
 class AdvSample
 {
@@ -22,6 +24,6 @@ class AdvSample
 
  // String serializer
  @Override
- public String toString()
+ public @NotNull String toString()
   { return "{RSSI = "+ RSSI +", time = " + time + "}"; }
 }

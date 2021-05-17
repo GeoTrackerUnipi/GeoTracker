@@ -10,8 +10,10 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.bluetooth.le.BluetoothLeScanner;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -25,6 +27,8 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 
 import com.geotracer.geotracer.R;
+import com.geotracer.geotracer.db.local.KeyValueManagement;
+import com.geotracer.geotracer.db.remote.FirestoreManagement;
 import com.geotracer.geotracer.testingapp.TestingActivity;
 
 
@@ -45,8 +49,12 @@ public class GeotracerService extends Service
  private GeoAdvertiser geoAdvertiser;                                  // The GeoAdvertiser service object
  private GeoScanner geoScanner;                                        // The GeoScanner service object
 
- /* ================ Service Binder ================ */
+ /* ================= Service Binder ================= */
  private IBinder geoBinder;
+
+ /* =============== Database Services =============== */
+ KeyValueManagement keyValueDB;                                        // Key-Value Database service object (local database)
+ FirestoreManagement firestoreDB;                                      // Firestore Database service object (remote database)
 
  /* ============ Service Status Variables ============ */
  private boolean isServiceStarted = false;                             // Whether the service has successfully started
@@ -58,13 +66,17 @@ public class GeotracerService extends Service
  @Override
  public void onCreate()
   {
-   // Assert that the dynamic ACCESS_FINE_LOCATION permission has been granted to the application (otherwise the service cannot run)
-   if(ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-    exitWithError(TAG,"The Dynamic ACCESS_FINE_LOCATION permission is not granted to the application, the Geotracer Service cannot be started");
-
    // Set the service as a foreground service
    // NOTE: This must be called within 5 seconds of the service's creation, otherwise Android kills it
    setAsForeground();
+
+   // Assert that the dynamic ACCESS_FINE_LOCATION permission has been granted to the application (otherwise the service cannot run)
+   if(ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+    {
+     Log.e(TAG,"The Dynamic ACCESS_FINE_LOCATION permission is not granted to the application, the Geotracer Service cannot be started");
+     stopSelf();
+     return;
+    }
 
    // Initialize the GeoLocator Service
    initLocation();
@@ -72,10 +84,13 @@ public class GeotracerService extends Service
    // Initialize the GeoAdvertiser and GeoScanner Services
    initBluetooth();
 
+   // Bind to the local and remote databases used by the service
+   bindToDB();
+
    // Initialize the Binder object used to bind with the Geotracer testing activity
    geoBinder = new GeotracerBinder();
 
-   // Start all the services
+   // Start all sub-services
    geoLocator.startLocalization();
    geoAdvertiser.startAdvertising();
    geoScanner.startScanning();
@@ -119,10 +134,13 @@ public class GeotracerService extends Service
  @Override
  public void onDestroy()
   {
-   // Stop all the sub-services
-   geoScanner.stopScanning();
-   geoAdvertiser.stopAdvertising();
-   geoLocator.stopLocalization();
+   // Stop all the enabled sub-services
+   if(geoLocator != null)
+    geoLocator.stopLocalization();
+   if(geoAdvertiser != null)
+    geoAdvertiser.stopAdvertising();
+   if(geoScanner != null)
+    geoScanner.stopScanning();
    Log.w(TAG,"----- Geotracer Service Stopped -----");
   }
 
@@ -239,6 +257,58 @@ public class GeotracerService extends Service
    geoAdvertiser = new GeoAdvertiser(this,bluetoothAdvertiser);
    geoScanner = new GeoScanner(this,bluetoothScanner,geoLocator);
   }
+
+ // Bind the Geotracer to the local and remote database services
+ private void bindToDB()
+  {
+   // Bind to the KeyValueStore database service (local)
+   Intent keyValueStoreService = new Intent(this,KeyValueManagement.class);
+   bindService(keyValueStoreService,keyValueStoreServiceConnection,Context.BIND_AUTO_CREATE);
+
+   // Bind to the Firestorm database service (remtoe)
+   Intent firestoreService = new Intent(this,FirestoreManagement.class);
+   bindService(firestoreService,firestoreServiceConnection,Context.BIND_AUTO_CREATE);
+  }
+
+ // ServiceConnection callback object associated to the KeyValueStore Database (local)
+ private final ServiceConnection keyValueStoreServiceConnection = new ServiceConnection()
+  {
+   // If the binding to the KeyValueStore database service was successful
+   @Override
+   public void onServiceConnected(ComponentName className,IBinder keyValueService)
+    {
+     KeyValueManagement.LocalBinder keyValueStoreBinder = (KeyValueManagement.LocalBinder) keyValueService;
+     keyValueDB = keyValueStoreBinder.getService();
+    }
+
+   // If the binding failed or the service terminates during execution
+   @Override
+   public void onServiceDisconnected(ComponentName arg0)
+    {
+     Log.e(TAG,"KeyValue Database Service unexpectedly disconnected");
+     keyValueDB = null;
+    }
+  };
+
+ // ServiceConnection callback object associated to the Firebase database (remote)
+ private final ServiceConnection firestoreServiceConnection = new ServiceConnection()
+ {
+  // If the binding to the Firestorm database service was successful
+  @Override
+  public void onServiceConnected(ComponentName className,IBinder firestormService)
+   {
+    FirestoreManagement.LocalBinder firestormBinder = (FirestoreManagement.LocalBinder) firestormService;
+    firestoreDB = firestormBinder.getService();
+   }
+
+  // If the binding failed or the service terminates during execution
+  @Override
+  public void onServiceDisconnected(ComponentName arg0)
+   {
+    Log.e(TAG,"Firestore Database Service unexpectedly disconnected");
+    firestoreDB = null;
+   }
+ };
 
  /*=============================================================================================================================================*
  |                                                 PACKAGE-VISIBILITY UTILITY FUNCTIONS                                                         |

@@ -6,6 +6,9 @@ import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.util.Log;
 
+import com.geotracer.geotracer.utils.data.Signature;
+import com.geotracer.geotracer.utils.generics.OpStatus;
+
 import java.security.SecureRandom;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -156,8 +159,8 @@ class GeoAdvertiser
   { return isAdvertising; }
 
  /*=============================================================================================================================================*
-  |                                                         PRIVATE METHODS                                                                     |
-  *=============================================================================================================================================*/
+ |                                                      PRIVATE UTILITY FUNCTIONS                                                               |
+ *=============================================================================================================================================*/
 
  // Generates a new random signature on SIGNATURE_SIZE bits
  private void generateRandomSignature()
@@ -181,12 +184,12 @@ class GeoAdvertiser
     isAdvertising = true;
     isAdvertisingStarting = false;
 
-    /* TODO: Push the new signature into the "Own Signatures" bucket
-    Nicola.OwnSignatures.push(signature) */
+    // Add the new signature into the local KeyValue database
+    addUserSignatureToDB();
 
     // Start the TimerTask for changing the user random signature at a fixed-rate of SIGNATURE_VALIDITY_PERIOD
     signatureChanger = new Timer();
-    signatureChanger.scheduleAtFixedRate(new signatureChangerTask(),SIGNATURE_VALIDITY_PERIOD,SIGNATURE_VALIDITY_PERIOD);
+    signatureChanger.scheduleAtFixedRate(new SignatureChangerTask(),SIGNATURE_VALIDITY_PERIOD,SIGNATURE_VALIDITY_PERIOD);
 
     Log.i(TAG,"Bluetooth Advertising Started");
     super.onStartSuccess(settingsInEffect);
@@ -212,11 +215,38 @@ class GeoAdvertiser
    }
  };
 
- // Inner class for changing the signature every SIGNATURE_VALIDITY_PERIOD
- private class signatureChangerTask extends TimerTask
+ // Adds the current user signature into the KeyValue database
+ private void addUserSignatureToDB()
   {
-   public void run()
-    { resetSignature(); }
+   OpStatus dbResult;     // Used to check the result of the database operation
+
+   // Assert the current user signature to be non-null
+   if(signature != null)
+     // Assert the KeyValue database service to be alive
+     if(geotracerService.keyValueDB != null)
+      {
+       // Add the new user signature into the local KeyValue Database
+       dbResult = geotracerService.keyValueDB.signatures.insertSignature(new Signature(GeotracerService.byteArrayToHex(signature)));
+       if(dbResult != OpStatus.OK)
+        Log.e(TAG,"\"Error in adding the new user signature into the KeyValue Database: "+ dbResult);
+       else
+        Log.w(TAG,"Added new user signature into the keyValue database (signature = " + GeotracerService.byteArrayToHex(signature) + ")");
+      }
+     else
+      Log.e(TAG,"Cannot add user signature, the KeyValue database service is not alive!");
+   else
+    Log.e(TAG,"Attempting to add a NULL signature into the KeyValue database!");
   }
+
+ /*=============================================================================================================================================*
+ |                                                      SignatureChangerTask Runnable                                                           |
+ *=============================================================================================================================================*/
+
+ // Periodically changes the user's signature (called every SIGNATURE_VALIDITY_PERIOD)
+ private class SignatureChangerTask extends TimerTask
+ {
+  public void run()
+   { resetSignature(); }
+ }
 
 }

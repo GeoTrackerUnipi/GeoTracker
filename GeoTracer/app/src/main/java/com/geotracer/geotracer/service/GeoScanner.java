@@ -18,6 +18,8 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.geotracer.geotracer.R;
 import com.geotracer.geotracer.testingapp.TestingActivity;
+import com.geotracer.geotracer.utils.data.ExtSignature;
+import com.geotracer.geotracer.utils.generics.OpStatus;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,7 +59,7 @@ public class GeoScanner
  final private GeoLocator geoLocator;                           // GeoLocator support object
  final private BluetoothLeScanner bluetoothScanner;             // Bluetooth Advertiser object
  private Notification proximityNotification;                    // Warning notification raised to the user in case of social distancing violations
- private Hashtable<String,AdvList> advTable;                     // The Hashtable storing the lists of received advertisements before processing
+ private Hashtable<String,AdvList> advTable;                     // The Hashtable storing the lists of received advertisements before processing TODO check if final is ok
  private Timer advParser;                                       // Timer used to parse received signatures with a fixed-delay execution
 
  /* ============ Service Status Variables ============ */
@@ -112,7 +114,7 @@ public class GeoScanner
              .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)    // Always report every advertisement associated to the (empty) filter
              .setMatchMode(ScanSettings.MATCH_MODE_STICKY)               // Return advertisements only if above a minimum RSSI and sightings
              .setNumOfMatches(ScanSettings.MATCH_NUM_MAX_ADVERTISEMENT)  // Always return ALL sensed advertisements
-             .setReportDelay(0)                                          // Return all results immediately without kernel-level buffering
+             .setReportDelay(0)                                          // Return all results immediately without kernel-level buffering TODO: try to reduce?
              .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)            // Maximum scanning frequency
              .build();
 
@@ -335,7 +337,7 @@ public class GeoScanner
  // too close contact (< SAFE_DISTANCE) with a device broadcasting a signature
  private void initProximityAlert()
   {
-   // Create the proximity alert notification, which launches the main GeoTracer activity when clicked TODO: Change to the actual user activity when merging
+   // Create the proximity alert notification, which launches the main GeoTracer activity when clicked TODO: Change to the actual user activity when testing is over
    PendingIntent launchMainActivity = PendingIntent.getActivity(geotracerService,2,
                                                                 new Intent(geotracerService,TestingActivity.class),0);
    // Create the notification
@@ -430,6 +432,25 @@ public class GeoScanner
       return Math.pow(10,((double)(TX_POW_METER-RSSI)/(10*N)));
      }
 
+    // Adds an external signature into the local KeyValue Database
+    private void addOtherSignature(String key, double contactDistance)
+     {
+      OpStatus dbResult;     // Used to check the result of the database operation
+
+      // Assert the KeyValue database service to be alive
+      if(geotracerService.keyValueDB != null)
+       {
+        // Add the external signature into the local KeyValue Database
+        dbResult = geotracerService.keyValueDB.beacons.insertBeacon(new ExtSignature(key,contactDistance));
+        if(dbResult != OpStatus.OK)
+         Log.e(TAG,"\"Error in adding an external signature into the keyValue Database: "+dbResult);
+        else
+         Log.w(TAG,"Added new external signature into the keyValue database (signature = " + key + ")");
+       }
+      else
+       Log.e(TAG,"Cannot add external signature, the KeyValue database service is not alive!");
+     }
+
     @Override
     public void run()
      {
@@ -474,7 +495,7 @@ public class GeoScanner
         for(i=0; i<=(samples.size()-WINDOW_MIN_SAMPLES); i++)
          {
           ArrayList<Integer> currRSSIList = new ArrayList<>();          // The list of RSSIs belonging to the current estimation window
-          ArrayList<Long> currTimeList = new ArrayList<>();             // The list of timestamps belonging to the current estimation window
+          ArrayList<Long> currTimeList = new ArrayList<>();             // The list of timestamps belonging to the current estimation window TODO: Simplify as time(j-1) - time(i)
           long currWindowLimit = samples.get(i).time + WINDOW_MAX_TIME; // The upper time limit for samples to belong to the current estimation window
 
           // Attempt to create a distance estimation window by browsing samples from the current to the last
@@ -523,21 +544,16 @@ public class GeoScanner
               Log.i(TAG,"Estimated distance from device " + key + ": " + contactDistance + " (time = " +
                       new SimpleDateFormat("dd-MM-yyyy HH:mm:ss",Locale.getDefault()).format(new Date(contactTime)));
 
-              /* TODO: If this is a signature AND (is not present in the Observed Signatures bucket OR the distance in such bucket is greater
-                       ("-1" excluded), insert or update the signature in the database.
-              if(AdvList.type == AdvType.ADV_TYPE_SIG && ((AdvList.dbRec == null) ||
-               (AdvList.dbRec.distance == -1) || (AdvList.dbRec.distance > contactDistance))
-               {
-                Nicola.observed.put(key,{contactDistance,contactTime});
-                AdvList.dbRec = ...;                                      // The dbRec field must also be updated
-               } */
+              // If this is a signature, attempt to insert it into the local KeyValue database
+              // NOTE: Redundancy checks are performed in such module
+              if(advList.type == AdvType.ADV_TYPE_SIG)
+               addOtherSignature(key,contactDistance);
 
               // If the GeoLocator service is active, attempt to insert the position of the device in the local database
               if(geoLocator != null)
-               geoLocator.injectDevicePosition(contactDistance,contactTime);
+               geoLocator.injectDevicePosition(key,contactTime);
               else
                Log.w(TAG,"Position of device \"" + key + "\" is NOT forwarded to the database (the GeoLocator service is disabled");
-
 
               // Delete the samples belonging to the window from the AdvList (to prevent its cluttering)
               samples.subList(i,j).clear();
@@ -550,13 +566,12 @@ public class GeoScanner
            }
          }
 
-        /* ============== AdvList Cleanup Operations ==============
+        /* ============== AdvList Cleanup Operations ============== */
 
-        /* TODO: If this is a signature AND is not in the database AND was not added during the main parsing, add the signature to the database as a
-                 "sighting", meaning a signature with no associated distance estimation
-        if((AdvList.type == AdVType.ADV_TYPE_SIG) && (dbRec == null) && (distanceEstimated == false))
-         Nicola.observed.put(key,{samples.get(samples.size()).time,-1})   // A distance of "-1" means that the distance was not estimated,
-                                                                          // and the last timestamp is used                                */
+        // If the advertisement is a signature and its distance was not estimated during the main cycle, add the signature to the KeyValue database
+        // as a "sighting", with an arbitrary (huge) distance
+        if(advList.type == AdvType.ADV_TYPE_SIG && !distanceEstimated)
+         addOtherSignature(key,1000000);
 
         // Delete from the AdvList all samples older than (executionTime - WINDOW_MAX_TIME), since they can no longer fit into an estimation window
         for(i=0; i<samples.size(); i++)
