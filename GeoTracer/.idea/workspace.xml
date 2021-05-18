@@ -6,7 +6,6 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="Topic" />
     <option name="TOOL_WINDOW_LOG_LEVEL" value="debug" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
@@ -40,9 +39,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6ea0b472-2ab6-4806-a1a1-f1653b5edd79" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/topicMessagesBroadcast/TopicMessagesActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/topicMessagesBroadcast/TopicMessagesActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/topicMessagesBroadcast/TopicMessagesBroadcastManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/topicMessagesBroadcast/TopicMessagesBroadcastManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_topic_messages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_topic_messages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -418,7 +415,21 @@
       <option name="project" value="LOCAL" />
       <updated>1621338808858</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="ActivityTopicMessages Logic Subscribe Unsubscribe completed">
+      <created>1621344720095</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1621344720095</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Custom Notification + HeatMap unbind error resolved when click on notification">
+      <created>1621346584216</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1621346584216</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -446,8 +457,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Optimized Keyvalue and Notification systems&#10;     - only one periodic thread istantiated for keyvalue management&#10;     - completed mechanism for notification receive" />
-    <MESSAGE value="Completed firestore management and all the interconnection between the components to generate the final behaviour" />
     <MESSAGE value="Merged Laura and mine components into a unique consistent application" />
     <MESSAGE value="Merging projects" />
     <MESSAGE value="Commented all the files and make some bug correction" />
@@ -471,7 +480,9 @@
     <MESSAGE value="Topic Subscriptions Screen added to menu" />
     <MESSAGE value="Animations added" />
     <MESSAGE value="ActivityTopicMessages UI completed" />
-    <option name="LAST_COMMIT_MESSAGE" value="ActivityTopicMessages UI completed" />
+    <MESSAGE value="ActivityTopicMessages Logic Subscribe Unsubscribe completed" />
+    <MESSAGE value="Custom Notification + HeatMap unbind error resolved when click on notification" />
+    <option name="LAST_COMMIT_MESSAGE" value="Custom Notification + HeatMap unbind error resolved when click on notification" />
   </component>
   <component name="WindowStateProjectService">
     <state x="688" y="277" width="960" height="533" key="#PSD" />
