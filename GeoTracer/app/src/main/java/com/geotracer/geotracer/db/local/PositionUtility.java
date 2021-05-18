@@ -4,6 +4,8 @@ import com.geotracer.geotracer.utils.generics.RetStatus;
 import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import java.util.Collections;
+
+import com.google.firebase.firestore.GeoPoint;
 import com.google.gson.Gson;
 import java.util.ArrayList;
 import android.util.Log;
@@ -113,8 +115,8 @@ public class PositionUtility {
     //  Returns:
     //      - OpStatus.OK: all the positions removed
     //      - OpStatus.ERROR: an error has occurred during the positions removal
-
     public OpStatus dropAllPositions(){
+
         try{
             positions.destroy();
             return OpStatus.OK;
@@ -122,5 +124,22 @@ public class PositionUtility {
             e.printStackTrace();
             return OpStatus.ERROR;
         }
+    }
+
+    //  returns the last position of the user
+    //  Returns:
+    //      - OpStatus.OK: all the positions removed
+    //      - OpStatus.EMPTY: no position registered
+    //      - OpStatus.ERROR: an error has occurred during the positions removal
+    public RetStatus<GeoPoint> getLastPosition(){
+
+        RetStatus<List<BaseLocation>> positions = getAllPositions();
+        if( positions.getStatus() != OpStatus.OK)
+            return new RetStatus<>(null,positions.getStatus());
+        if( positions.getValue().size() > 0 )
+            return new RetStatus<>(positions.getValue().get(0).getLocation(), OpStatus.OK);
+        else
+            return new RetStatus<>(null, OpStatus.EMPTY);
+
     }
 }

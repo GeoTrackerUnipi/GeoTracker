@@ -16,8 +16,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.geotracer.geotracer.R;
+import com.geotracer.geotracer.db.local.KeyValueManagement;
 import com.geotracer.geotracer.db.remote.FirestoreManagement;
 import com.geotracer.geotracer.utils.data.ExtLocation;
+import com.geotracer.geotracer.utils.generics.OpStatus;
+import com.geotracer.geotracer.utils.generics.RetStatus;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -43,7 +46,9 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     FirestoreManagement firestoreManagementService;
+    KeyValueManagement keyValueService;
     boolean isFirestoreManagementBounded = false;
+    boolean isKeyvalueManagementBounded = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,8 +65,11 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
          */
         supportMapFragment.getMapAsync((OnMapReadyCallback) this);
 
-
-
+        if (!isKeyvalueManagementBounded){
+            //bind with firestoremanagement service
+            Intent intent = new Intent(getContext(), KeyValueManagement.class);
+            getActivity().bindService(intent, keyValueConnection, Context.BIND_AUTO_CREATE);
+        }
         return view;
     }
 
@@ -85,11 +93,6 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
 
         //TODO: this is a marker --> i will replace it's coordinates with the user one
         // Add a marker
-        LatLng myPosition = new LatLng(-37.25, 145.76);
-        mMap.addMarker(new MarkerOptions()
-                .position(myPosition)
-                .title("Me"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(myPosition));
 
         /*
 
@@ -103,11 +106,7 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
 
          */
 
-        if (!isFirestoreManagementBounded){
-            //bind with firestoremanagement service
-            Intent intent = new Intent(getContext(), FirestoreManagement.class);
-            getActivity().bindService(intent, firestoreManagementConnection, Context.BIND_AUTO_CREATE);
-        }
+
     }
 
 
@@ -120,6 +119,13 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
             Intent intent = new Intent(getContext(), FirestoreManagement.class);
             getActivity().bindService(intent, firestoreManagementConnection, Context.BIND_AUTO_CREATE);
         }
+
+        if (!isKeyvalueManagementBounded){
+            //bind with firestoremanagement service
+            Intent intent = new Intent(getContext(), KeyValueManagement.class);
+            getActivity().bindService(intent, keyValueConnection, Context.BIND_AUTO_CREATE);
+        }
+
     }
 
     @Override
@@ -143,6 +149,44 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
             isFirestoreManagementBounded = false;
         }
     }
+
+    private final ServiceConnection keyValueConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            Log.d("HeatMap", "HeatMap bounded with firestoreManagement service");
+            isKeyvalueManagementBounded = true;
+            KeyValueManagement.LocalBinder localBinder = (KeyValueManagement.LocalBinder) iBinder;
+            keyValueService = localBinder.getService();
+            RetStatus<GeoPoint> lastPosition = keyValueService.positions.getLastPosition();
+            if( lastPosition.getStatus() == OpStatus.OK ) {
+                GeoPoint myPosition = lastPosition.getValue();
+                Log.d("TESTING", "Last position: " + myPosition.getLatitude() + " : " + myPosition.getLongitude());
+                LatLng position = new LatLng(myPosition.getLatitude(), myPosition.getLongitude());
+                mMap.addMarker(new MarkerOptions()
+                        .position(position)
+                        .title("Me"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+            }
+            if (!isFirestoreManagementBounded){
+                //bind with firestoremanagement service
+                Intent intent = new Intent(getContext(), FirestoreManagement.class);
+                getActivity().bindService(intent, firestoreManagementConnection, Context.BIND_AUTO_CREATE);
+            }else{
+                RetStatus<GeoPoint> geoPoint = keyValueService.positions.getLastPosition();
+
+                if( geoPoint.getStatus() == OpStatus.OK)
+                    firestoreManagementService.getNearLocations(geoPoint.getValue(),100);
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            Log.d("HeatMap", "HeatMap unbounded with firestoreManagement service");
+            isFirestoreManagementBounded = false;
+        }
+    };
+
 
     private final ServiceConnection firestoreManagementConnection = new ServiceConnection() {
         @Override
@@ -171,17 +215,13 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
                         Log.d("HeatMap", location.get(i)+"");
                     }
 
-                    /*TODO: per Riccardo/Nicola: qui dovrei avere la lista delle coordinate, per adesso leggo da locale
-                            ma appena hai caricato i dati togli pure
-                     */
-
                     addHeatMap(location); //per adesso leggo da locale, ma li dentro stesso gestirai la lista remota
 
                 }
             });
-            LatLng myPosition = new LatLng(-37.25, 145.76);
-            GeoPoint geoPoint = new GeoPoint(myPosition.latitude,myPosition.longitude);
-            firestoreManagementService.getNearLocations(geoPoint,100);
+
+            //  TODO per giulio, ti ho implementato una funzione ad hoc per prendere la posizione ma richiede una gestione(non è detto ci sia una posizione)
+
         }
 
         @Override
@@ -198,11 +238,11 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
             TODO: per Riccardo/Nicola: qui leggo da locale tramite readItems
                   usate la lista passata come argomento per inserire i dati nella mappa
          */
-        try {
+      /*  try {
             list = readItems(R.raw.heat_map_points); //da locale (sostituire con la lista passata)
         } catch (JSONException e) {
             Toast.makeText(getContext(), "There was a problem in reading the list of points", Toast.LENGTH_LONG).show();
-        }
+        }*/
 
         HeatmapTileProvider provider = new HeatmapTileProvider.Builder().data(list).build();
 
@@ -212,7 +252,7 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
 
 
     //TODO: per Nicola: quando usi i dati in remoto puoi anche eliminarla
-    private ArrayList<LatLng> readItems(int resource) throws JSONException {
+  /*  private ArrayList<LatLng> readItems(int resource) throws JSONException {
         ArrayList<LatLng> list = new ArrayList<LatLng>();
         InputStream inputStream = getResources().openRawResource(resource);
         @SuppressWarnings("resource")
@@ -226,7 +266,7 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
         }
 
         return list;
-    }
+    }*/
 
 
 }

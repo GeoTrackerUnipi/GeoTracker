@@ -210,8 +210,7 @@ public class FirestoreManagement extends Service {
                                         doc.getString("geohash")));
                         }
                         Log.d(TAG, "Near Location collected: " + locations.size() + " data points obtained");
-                        // callback.onDataCollected(locations);
-                        Log.d(TAG, locations.toString());
+                        callback.onDataCollected(locations);
 
                     });
             return OpStatus.OK;
