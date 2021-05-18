@@ -220,8 +220,6 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
                 }
             });
 
-            //  TODO per giulio, ti ho implementato una funzione ad hoc per prendere la posizione ma richiede una gestione(non è detto ci sia una posizione)
-
         }
 
         @Override

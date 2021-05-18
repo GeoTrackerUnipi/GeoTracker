@@ -8,11 +8,16 @@ import androidx.work.Constraints;
 import androidx.work.WorkManager;
 import android.content.Intent;
 import android.app.Service;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.IBinder;
 import android.os.Binder;
 import android.os.Build;
 
+import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.geotracer.geotracer.utils.generics.OpStatus;
+import com.geotracer.geotracer.utils.services.GeocoderManager;
+import com.google.firebase.firestore.GeoPoint;
 
 import io.paperdb.Paper;
 
@@ -50,7 +55,7 @@ public class KeyValueManagement extends Service {
         Paper.init(getBaseContext());
 
         signatures = new SignatureUtility(Paper.book("signatures"));   //  functions to operate on signatures
-        positions = new PositionUtility(Paper.book("positions"));      //  functions to operate on user positions
+        positions = new PositionUtility(Paper.book("positions"), this);      //  functions to operate on user positions
         beacons = new BeaconUtility(Paper.book("beacons"));            //  functions to operate on beacons
         buckets = new BucketUtility(Paper.book("buckets"));            //  functions to operate on buckets
         //  launch the DatabaseConsolidator worker
@@ -98,6 +103,15 @@ public class KeyValueManagement extends Service {
             return false;
         buckets.dropAllBuckets();
         return true;
+    }
+
+    public String geoCode( GeoPoint loc ){
+
+        Location location = new Location(LocationManager.GPS_PROVIDER);
+        location.setLatitude(loc.getLatitude());
+        location.setLongitude(loc.getLongitude());
+        return GeocoderManager.convertLocationToPlace(location,this);
+
     }
 }
 

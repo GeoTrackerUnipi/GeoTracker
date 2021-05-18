@@ -8,6 +8,7 @@ import java.util.Collections;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.gson.Gson;
 import java.util.ArrayList;
+
 import android.util.Log;
 import io.paperdb.Book;
 import java.util.List;
@@ -24,10 +25,12 @@ public class PositionUtility {
 
 
     private final Book positions;
+    private final KeyValueManagement keyValueService;
     private static final String TAG = "KeyValueManagement/PositionUtility";
     //  prevents the class to be instantiated outside the package
-    PositionUtility(Book positions){
+    PositionUtility(Book positions, KeyValueManagement keyValueService ){
         this.positions = positions;
+        this.keyValueService = keyValueService;
     }
 
     //  insert a new user position or update it in order to refresh the expiring time
@@ -56,6 +59,7 @@ public class PositionUtility {
                 return OpStatus.UPDATED;
 
             }
+            keyValueService.buckets.insertBucket(keyValueService.geoCode(location.getLocation()));
 
             Log.d(TAG, "Putting new position " + stringTag );
             positions.write(stringTag, location.toString());
