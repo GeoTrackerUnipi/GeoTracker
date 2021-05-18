@@ -184,7 +184,6 @@ public class TopicMessagesActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                         //notify user
                         Toast.makeText(getApplicationContext(),"There was a problem. Try later.",Toast.LENGTH_SHORT).show();
-                        Log.d("TopicMessageActvity",e.getMessage());
                     }
                 });
 
