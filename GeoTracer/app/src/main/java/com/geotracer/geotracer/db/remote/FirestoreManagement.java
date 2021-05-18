@@ -1,5 +1,6 @@
 package com.geotracer.geotracer.db.remote;
 
+import com.geotracer.geotracer.utils.data.TestData;
 import com.google.firebase.firestore.CollectionReference;
 import com.geotracer.geotracer.utils.generics.RetStatus;
 import com.geotracer.geotracer.utils.generics.OpStatus;
@@ -69,6 +70,7 @@ public class FirestoreManagement extends Service {
         FirebaseApp.initializeApp(getBaseContext());
         firestore = FirebaseFirestore.getInstance();
         collection = firestore.collection("geotraces");
+
     }
 
     @Override
@@ -312,6 +314,10 @@ public class FirestoreManagement extends Service {
     }
     public void setFirestoreCallbackListener(FirestoreCallback listener){
         this.firestoreCallbackListener = listener;
+    }
+
+    public void saveTestData(TestData data){
+        firestore.collection("test_data").add(data).addOnSuccessListener( s -> Log.d(TAG, "Test data saved"));
     }
 }
 
