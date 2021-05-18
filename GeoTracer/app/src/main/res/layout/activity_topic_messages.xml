@@ -9,31 +9,28 @@
 
 
     <Button
-        android:id="@+id/button15"
+        android:id="@+id/subscribeButton1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#E64A19"
+        android:padding="10dp"
         android:shadowColor="#FFFFFF"
-        android:text="Subscribe"
+        android:text="subscibe"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/guideline13"
         app:layout_constraintEnd_toStartOf="@+id/guideline11"
         app:layout_constraintStart_toStartOf="@+id/guideline10"
         app:layout_constraintTop_toTopOf="@+id/guideline15" />
 
     <Button
-        android:id="@+id/button16"
+        android:id="@+id/subscribeButton2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#E64A19"
+        android:padding="10dp"
         android:shadowColor="#FFFFFF"
-        android:text="Subscribe"
+        android:text="subscribe"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/guideline17"
         app:layout_constraintEnd_toStartOf="@+id/guideline11"
         app:layout_constraintStart_toStartOf="@+id/guideline10"
-        app:layout_constraintTop_toTopOf="@+id/guideline16"
-        app:layout_constraintVertical_bias="0.48" />
+        app:layout_constraintTop_toTopOf="@+id/guideline16" />
 
     <TextView
         android:id="@+id/textView11"
@@ -197,4 +194,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline7" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,10 +14,16 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.geotracer.geotracer.R;
 import com.geotracer.geotracer.mainapp.MainActivity;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class TopicMessagesBroadcastManager extends FirebaseMessagingService {
+
+    //the topic
+    public static final String RULES_CIRCULARS_ORDINANCES_TOPIC = "rules_circulars_ordinance";
+    public static final String NUMBER_OF_NEW_AND_DEATHS_CASES_TOPIC = "new_cases_and_deaths";
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
@@ -49,5 +55,18 @@ public class TopicMessagesBroadcastManager extends FirebaseMessagingService {
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
         notificationManagerCompat.notify(101,builder.build());
+    }
+
+
+    public static Task<Void> subscribeUserToTopic(String nameOfTopic){
+
+        return FirebaseMessaging.getInstance().subscribeToTopic(nameOfTopic);
+
+    }
+
+    public static Task<Void> unsubscribeUserToTopic(String nameOfTopic){
+
+        return FirebaseMessaging.getInstance().unsubscribeFromTopic(nameOfTopic);
+
     }
 }
