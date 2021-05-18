@@ -212,7 +212,7 @@ public class GeotracerService extends Service
        // If the GPS is not enabled, ask the user to do so
        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
         {
-         Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+         Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
          startActivity(gpsOptionsIntent);
          Toast.makeText(this,"Please enable GPS localization to fully utilize the Geotracer Service",Toast.LENGTH_LONG).show();
         }
