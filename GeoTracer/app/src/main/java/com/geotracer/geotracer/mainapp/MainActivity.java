@@ -45,7 +45,11 @@ import com.geotracer.geotracer.service.GeotracerService;
 import com.geotracer.geotracer.settingapp.SettingActivity;
 import com.geotracer.geotracer.testingapp.LogService;
 import com.geotracer.geotracer.testingapp.TestingActivity;
+import com.geotracer.geotracer.topicMessagesBroadcast.TopicMessagesActivity;
 import com.geotracer.geotracer.utils.generics.OpStatus;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -59,6 +63,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //FCM
+        FirebaseMessaging.getInstance().subscribeToTopic("weather")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "Done";
+                        if (!task.isSuccessful()) {
+                            msg = "Failed";
+                        }
+                        Log.d("TopicMessagesBroadcastManager", msg);
+                    }
+                });
+
+
+        //---------
 
 
         LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(
@@ -117,6 +137,10 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.from_main_to_db:
                         i = new Intent(getApplicationContext(), UsageTestActivity.class);
+                        startActivity(i);
+                        return true;
+                    case R.id.from_main_to_topicMessagesScreen:
+                        i = new Intent(getApplicationContext(), TopicMessagesActivity.class);
                         startActivity(i);
                         return true;
 

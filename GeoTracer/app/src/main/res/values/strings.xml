@@ -23,18 +23,18 @@
 
     <!-- Geotracer Main Service -->
 
-      <!-- Service Description -->
-      <string name="geotracer_service_descr">Contact Tracing and User Density Estimator Service</string>
+    <!-- Service Description -->
+    <string name="geotracer_service_descr">Contact Tracing and User Density Estimator Service</string>
 
-      <!-- Main Foreground Notification Channel -->
-      <string name="geotracer_notif_channel_id" translatable="false">geotracer_channel</string>
-      <string name="geotracer_notif_channel_name" translatable="false">Geotracer</string>
-      <string name="geotracer_notif_channel_description">Geotracer Contact Tracing System</string>
-      <string name="geotracer_notif_channel_started">You are protected</string>
+    <!-- Main Foreground Notification Channel -->
+    <string name="geotracer_notif_channel_id" translatable="false">geotracer_channel</string>
+    <string name="geotracer_notif_channel_name" translatable="false">Geotracer</string>
+    <string name="geotracer_notif_channel_description">Geotracer Contact Tracing System</string>
+    <string name="geotracer_notif_channel_started">You are protected</string>
 
-      <!-- Proximity Warning -->
-      <string name="geotracer_notif_proximity_title">Proximity Alert</string>
-      <string name="geotracer_notif_proximity_contents">You are too close to another individual!</string>
+    <!-- Proximity Warning -->
+    <string name="geotracer_notif_proximity_title">Proximity Alert</string>
+    <string name="geotracer_notif_proximity_contents">You are too close to another individual!</string>
 
     <!-- /Geotracer Main Service -->
 

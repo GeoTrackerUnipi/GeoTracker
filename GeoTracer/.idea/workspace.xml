@@ -40,9 +40,6 @@
     <list default="true" id="6ea0b472-2ab6-4806-a1a1-f1653b5edd79" name="Default Changelist" comment="Main Service Merging Completed (&quot;Other Positions&quot; insertion disabled)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/db/local/KeyValueManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/db/local/KeyValueManagement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/notifications/NotificationSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/notifications/NotificationSender.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/utils/services/GeocoderManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/utils/services/GeocoderManager.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -85,7 +82,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/.." value="fcm" />
+        <entry key="$PROJECT_DIR$/.." value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -110,19 +107,19 @@
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/app" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.geotracer.geotracer.mainapp.heatMap" />
-      <recent name="com.geotracer.geotracer.db.remote" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/app/src/main/res" />
       <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
       <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
       <recent name="C:\Users\Riccardo\Documents\GitHub\GeoTracker\GeoTracer\app\src\main\java\com\geotracer\geotracer" />
       <recent name="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.geotracer.geotracer.mainapp.heatMap" />
+      <recent name="com.geotracer.geotracer.db.remote" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app" />
     </key>
   </component>
   <component name="RunDashboard">
