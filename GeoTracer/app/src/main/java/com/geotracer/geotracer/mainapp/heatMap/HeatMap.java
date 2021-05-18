@@ -127,7 +127,7 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
         super.onDestroy();
 
         Log.d("HeatMap", "HeatMap destroyed");
-        if(firestoreManagementConnection != null) {
+        if(isFirestoreManagementBounded) {
             getActivity().unbindService(firestoreManagementConnection);
             isFirestoreManagementBounded = false;
         }

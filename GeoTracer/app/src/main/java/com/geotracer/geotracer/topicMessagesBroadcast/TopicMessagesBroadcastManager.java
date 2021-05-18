@@ -28,33 +28,25 @@ public class TopicMessagesBroadcastManager extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        Log.d("TopicMessagesBroadcastReceived","messaggio ricevuto "+remoteMessage.getNotification().getBody());
+
+        //open main activity on click on notification
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        String channelId = "myFirebasechannel";
+        String channelId = "CovidChannel";
+
         NotificationCompat.Builder builder = new  NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.geotracer_icon)
                 .setContentTitle(remoteMessage.getNotification().getTitle())
-                .setContentText(remoteMessage.getNotification().getBody()).setAutoCancel(true).setContentIntent(pendingIntent);;
+                .setContentText(remoteMessage.getNotification().getBody()).setAutoCancel(true).setContentIntent(pendingIntent);
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId, "Default channel", NotificationManager.IMPORTANCE_DEFAULT);
             manager.createNotificationChannel(channel);
         }
+
         manager.notify(0, builder.build());
-       // getFirebaseMessage(remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
-    }
-
-    public void getFirebaseMessage(String title, String body) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"myFirebasechannel")
-                .setSmallIcon(R.drawable.ic_setting_icon)
-                .setContentTitle(title)
-                .setContentText(body)
-                .setAutoCancel(true);
-
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
-        notificationManagerCompat.notify(101,builder.build());
     }
 
 
