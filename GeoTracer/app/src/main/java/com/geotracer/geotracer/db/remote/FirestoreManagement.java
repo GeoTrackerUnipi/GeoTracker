@@ -177,26 +177,33 @@ public class FirestoreManagement extends Service {
     //      - OpStatus.ERROR: some error happened during function execution
     public OpStatus getNearLocations(GeoPoint location, double radiusInM){
 
+        Log.d("HeatMap from FirestoreManagementService", "recover near locations");
+
         if( location == null || radiusInM <= 0 )
             return OpStatus.ILLEGAL_ARGUMENT;
 
         final GeoLocation center = new GeoLocation(location.getLatitude(), location.getLongitude());
         final List<Task<QuerySnapshot>> tasks = new ArrayList<>();   // lists for all the queries
-
+        Log.d("HeatMap from FirestoreManagementService", "recover near locations2");
         try {
             //  generating the bounds used for the geo-query and for every bound we create a query
             //  in order to collect all the data placed between the bounds
+
+            FirebaseApp.initializeApp(getBaseContext());
+            firestore = FirebaseFirestore.getInstance();
+            collection = firestore.collection("geotraces");
+
             GeoFireUtils.getGeoHashQueryBounds(center, radiusInM).forEach(
                     bound -> tasks.add(collection
                             .orderBy("geoHash")
                             .startAt(bound.startHash)
                             .endAt(bound.endHash).get()));
-
+            Log.d("HeatMap from FirestoreManagementService", "recover near locations3");
             //  when all the data are ready
             Tasks.whenAllComplete(tasks)
                     .addOnCompleteListener(t -> {
                         List<ExtLocation> locations = new ArrayList<>();
-
+                        Log.d("HeatMap from FirestoreManagementService", "recover near locations4");
                         for (Task<QuerySnapshot> task : tasks) {
                             QuerySnapshot snap = task.getResult();
                             assert snap != null;
@@ -209,12 +216,14 @@ public class FirestoreManagement extends Service {
                                         doc.getString("geohash")));
                         }
                         Log.d(TAG, "Near Location collected: " + locations.size() + " data points obtained");
+                        Log.d("HeatMap from FirestoreManagementService", "recover near locations5");
                         firestoreCallbackListener.onDataCollected(locations);
 
                     });
             return OpStatus.OK;
 
         }catch( RuntimeException e ){
+            Log.d("HeatMap from FirestoreManagementService", "recover near locations6 error: "+e+" --> "+e.getMessage());
             e.printStackTrace();
             return OpStatus.ERROR;
         }
