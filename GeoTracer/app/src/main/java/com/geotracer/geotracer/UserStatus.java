@@ -13,4 +13,6 @@ public class UserStatus extends Application {
         this.contacts = contacts;
     }
 
+
+
 }

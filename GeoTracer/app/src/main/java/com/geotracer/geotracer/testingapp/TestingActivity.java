@@ -41,6 +41,7 @@ import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
 import com.geotracer.geotracer.service.GeotracerService;
 import com.geotracer.geotracer.settingapp.SettingActivity;
+import com.geotracer.geotracer.utils.LogParsing;
 import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.geotracer.geotracer.utils.generics.RetStatus;
@@ -80,11 +81,13 @@ public class TestingActivity extends AppCompatActivity {
 
                         //Log.d(TESTING_ACTIVITY_LOG, "LogService BROADCAST LISTENER");
                         String toLog = intent.getStringExtra("LogMessage");
-
+                        LogParsing logParsing = new LogParsing(toLog);
+/*
                         tv.append(toLog);
                         ScrollView sv = (ScrollView) findViewById(R.id.scrollview);
                         sv.fullScroll(ScrollView.FOCUS_DOWN);
-
+                        Log.d(TESTING_ACTIVITY_LOG, toLog);
+*/
                     }
                 },new IntentFilter(LogService.ACTION_BROADCAST)
 
