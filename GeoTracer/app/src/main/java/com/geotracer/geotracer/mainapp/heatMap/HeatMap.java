@@ -1,9 +1,11 @@
 package com.geotracer.geotracer.mainapp.heatMap;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -11,9 +13,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.geotracer.geotracer.R;
@@ -38,6 +44,7 @@ import com.google.maps.android.heatmaps.HeatmapTileProvider;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -54,6 +61,9 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
     boolean isFirestoreManagementBounded = false;
     boolean isKeyvalueManagementBounded = false;
     Marker me = null;
+    ConstraintLayout loadingScreen = null;
+    TextView loadingScreenText = null;
+    ProgressBar loadingScreenProgressBar = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,6 +80,16 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
          */
         supportMapFragment.getMapAsync((OnMapReadyCallback) this);
 
+        loadingScreen = view.findViewById(R.id.loadingScreen);
+        loadingScreenText = view.findViewById(R.id.loadingScreenText);
+        loadingScreenProgressBar = view.findViewById(R.id.loadingScreenProgressBar);
+        loadingScreen.setVisibility(View.VISIBLE);
+        if(ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            loadingScreenProgressBar.setVisibility(View.INVISIBLE);
+            loadingScreenText.setText("It's not possible to recover the position without permissions.");
+        }
+
+
         return view;
     }
 
@@ -81,6 +101,8 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
             public void onPositionReady(Location location) {
                 Log.d("HeatMap","Nuova posizione: "+location);
                 LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+
+                loadingScreen.setVisibility(View.INVISIBLE);
 
                 //remove last marker to avoid multiple markers in the same scene
                 if(me!=null)
@@ -107,7 +129,7 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
                     Location lastLocation = new Location("");
                     lastLocation.setLatitude(lastPosition.getLatitude());
                     lastLocation.setLongitude(lastPosition.getLongitude());
-                    Log.d("HeatMap", "distanza con l'ultima: "+lastLocation.distanceTo(location));
+
                     if(lastLocation.distanceTo(location)>50 && isFirestoreManagementBounded){
                         lastPosition = new GeoPoint(location.getLatitude(),location.getLongitude());
                         firestoreManagementService.getNearLocations(lastPosition, 100);
@@ -119,6 +141,15 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
         });
 
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            loadingScreenProgressBar.setVisibility(View.VISIBLE);
+            loadingScreenText.setText("loading location ...");
+        }
     }
 
     //When map is ready!
@@ -141,26 +172,6 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
     }
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
-/*
-            Log.d("HeatMap", "HeatMap resumed");
-            if (!isFirestoreManagementBounded) {
-                //bind with firestoremanagement service
-                Intent intent = new Intent(getContext(), FirestoreManagement.class);
-                getActivity().bindService(intent, firestoreManagementConnection, Context.BIND_AUTO_CREATE);
-            }
-
-            if (!isKeyvalueManagementBounded) {
-                //bind with firestoremanagement service
-                Intent intent = new Intent(getContext(), KeyValueManagement.class);
-                getActivity().bindService(intent, keyValueConnection, Context.BIND_AUTO_CREATE);
-            }
-        */
-
-
-    }
 
     @Override
     public void onDestroy() {
@@ -182,17 +193,6 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
 
 
     }
-/*
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        Log.d("HeatMap", "HeatMap stopped");
-        if(isFirestoreManagementBounded) {
-            getActivity().unbindService(firestoreManagementConnection);
-            isFirestoreManagementBounded = false;
-        }
-    }*/
 
     private final ServiceConnection keyValueConnection = new ServiceConnection() {
 
