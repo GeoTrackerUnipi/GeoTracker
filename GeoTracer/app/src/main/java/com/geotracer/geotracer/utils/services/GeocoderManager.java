@@ -9,6 +9,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
+import androidx.preference.PreferenceManager;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -24,10 +26,10 @@ public class GeocoderManager {
     //This method allows you to get the city from the location given in input
     public static String convertLocationToPlace(Location location, Context context) {
 
-        SharedPreferences sharedPref = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
         //before making a request we check that the position is not sufficiently different from the last one registered
-        if(compareWithLastRegisteredLocation((Activity) context,location)){
+        if(compareWithLastRegisteredLocation(context,location)){
 
             try {
                 Geocoder geocoder = new Geocoder(context);
@@ -63,9 +65,9 @@ public class GeocoderManager {
         }
     }
 
-    private static boolean compareWithLastRegisteredLocation(Activity activity, Location currentLocation) {
+    private static boolean compareWithLastRegisteredLocation(Context context,Location currentLocation) {
 
-        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String lastLocationRegistered = sharedPref.getString("GeocoderManager_lastLocationRegistered", "empty");
         Log.d("GeocoderManager", "the last registered location is: "+lastLocationRegistered);
 

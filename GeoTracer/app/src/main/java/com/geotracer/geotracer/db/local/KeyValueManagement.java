@@ -13,6 +13,7 @@ import android.location.LocationManager;
 import android.os.IBinder;
 import android.os.Binder;
 import android.os.Build;
+import android.util.Log;
 
 import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.geotracer.geotracer.utils.generics.OpStatus;
@@ -110,7 +111,10 @@ public class KeyValueManagement extends Service {
         Location location = new Location(LocationManager.GPS_PROVIDER);
         location.setLatitude(loc.getLatitude());
         location.setLongitude(loc.getLongitude());
-        return GeocoderManager.convertLocationToPlace(location,this);
+        Log.d("TEST_GEOCODE","Test geocoding conversation...");
+        String city = GeocoderManager.convertLocationToPlace(location,getApplicationContext());
+        Log.d("TEST_GEOCODE",city);
+        return city;
 
     }
 }
