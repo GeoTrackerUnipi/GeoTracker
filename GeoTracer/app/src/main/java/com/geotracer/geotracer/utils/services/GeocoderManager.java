@@ -12,6 +12,7 @@ import android.util.Log;
 import androidx.preference.PreferenceManager;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 
 /*
@@ -32,9 +33,12 @@ public class GeocoderManager {
         if(compareWithLastRegisteredLocation(context,location)){
 
             try {
+                DecimalFormat df = new DecimalFormat();
+                df.setMaximumFractionDigits(3);
+
                 Geocoder geocoder = new Geocoder(context);
                 List<Address> addresses = null;
-                addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                addresses = geocoder.getFromLocation(Double.parseDouble(df.format(location.getLatitude())),Double.parseDouble(df.format(location.getLongitude())), 1);
                 if (addresses.size() > 0) {
                     String city = addresses.get(0).getLocality();
                     Log.d("GeocoderManager", "conversion successful: " + city);
