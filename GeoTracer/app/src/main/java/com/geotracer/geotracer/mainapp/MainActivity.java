@@ -45,6 +45,7 @@ import com.geotracer.geotracer.service.GeotracerService;
 import com.geotracer.geotracer.settingapp.SettingActivity;
 import com.geotracer.geotracer.testingapp.LogService;
 import com.geotracer.geotracer.testingapp.TestingActivity;
+import com.geotracer.geotracer.topicMessagesBroadcast.TopicMessagesActivity;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -136,6 +137,10 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.from_main_to_db:
                         i = new Intent(getApplicationContext(), UsageTestActivity.class);
+                        startActivity(i);
+                        return true;
+                    case R.id.from_main_to_topicMessagesScreen:
+                        i = new Intent(getApplicationContext(), TopicMessagesActivity.class);
                         startActivity(i);
                         return true;
 

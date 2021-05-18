@@ -13,4 +13,8 @@
     <item
         android:id="@+id/from_main_to_db"
         android:title="DB"/>
+
+    <item
+        android:id="@+id/from_main_to_topicMessagesScreen"
+        android:title="Topics and Subscriptions"/>
 </menu>
