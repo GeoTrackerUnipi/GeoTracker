@@ -45,6 +45,7 @@ import java.util.Scanner;
 public class HeatMap extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private GeoPoint lastPosition = null;
     FirestoreManagement firestoreManagementService;
     KeyValueManagement keyValueService;
     boolean isFirestoreManagementBounded = false;
@@ -91,22 +92,6 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
                 MapStyleOptions.loadRawResourceStyle(
                         getContext(), R.raw.map_style_conf));
 
-        //TODO: this is a marker --> i will replace it's coordinates with the user one
-        // Add a marker
-
-        /*
-
-        TODO: Per Riccardo/Nicola --> questo è un esempio di come chiamare la funzione per convertire la locazione in città
-        An example of location conversion
-            Location temp = new Location(LocationManager.GPS_PROVIDER);
-            temp.setLatitude(-37.25);
-            temp.setLongitude(145.79);
-            Log.d("GeocoderManager", "invio richiesta");
-            GeocoderManager.convertLocationToPlace(temp,getContext());
-
-         */
-
-
     }
 
 
@@ -144,7 +129,7 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
         super.onStop();
 
         Log.d("HeatMap", "HeatMap stopped");
-        if(firestoreManagementConnection != null) {
+        if(isFirestoreManagementBounded) {
             getActivity().unbindService(firestoreManagementConnection);
             isFirestoreManagementBounded = false;
         }
@@ -158,26 +143,22 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
             isKeyvalueManagementBounded = true;
             KeyValueManagement.LocalBinder localBinder = (KeyValueManagement.LocalBinder) iBinder;
             keyValueService = localBinder.getService();
-            RetStatus<GeoPoint> lastPosition = keyValueService.positions.getLastPosition();
-            if( lastPosition.getStatus() == OpStatus.OK ) {
-                GeoPoint myPosition = lastPosition.getValue();
-                Log.d("TESTING", "Last position: " + myPosition.getLatitude() + " : " + myPosition.getLongitude());
-                LatLng position = new LatLng(myPosition.getLatitude(), myPosition.getLongitude());
+            RetStatus<GeoPoint> last = keyValueService.positions.getLastPosition();
+            if( last.getStatus() == OpStatus.OK ) {
+                lastPosition = last.getValue();
+                LatLng position = new LatLng(lastPosition.getLatitude(), lastPosition.getLongitude());
                 mMap.addMarker(new MarkerOptions()
                         .position(position)
                         .title("Me"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
             }
+
             if (!isFirestoreManagementBounded){
                 //bind with firestoremanagement service
                 Intent intent = new Intent(getContext(), FirestoreManagement.class);
                 getActivity().bindService(intent, firestoreManagementConnection, Context.BIND_AUTO_CREATE);
-            }else{
-                RetStatus<GeoPoint> geoPoint = keyValueService.positions.getLastPosition();
-
-                if( geoPoint.getStatus() == OpStatus.OK)
-                    firestoreManagementService.getNearLocations(geoPoint.getValue(),100);
-            }
+            }else
+                collectData();
         }
 
         @Override
@@ -198,15 +179,6 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
             //once is connected call
 
             firestoreManagementService.setFirestoreCallbackListener(new FirestoreManagement.FirestoreCallback() {
-                @Override
-                public void onSuccess() {
-                    //not used
-                }
-
-                @Override
-                public void onFailure() {
-                    //not used
-                }
 
                 @Override
                 public void onDataCollected(List<ExtLocation> location) {
@@ -215,10 +187,12 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
                         Log.d("HeatMap", location.get(i)+"");
                     }
 
-                    addHeatMap(location); //per adesso leggo da locale, ma li dentro stesso gestirai la lista remota
+                    addHeatMap(location);
 
                 }
             });
+            if( lastPosition != null)
+                firestoreManagementService.getNearLocations(lastPosition,100);
 
         }
 
@@ -229,43 +203,23 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
         }
     };
 
+    private OpStatus collectData(){
+        if( isKeyvalueManagementBounded && isFirestoreManagementBounded){
+            RetStatus<GeoPoint> geoPoint = keyValueService.positions.getLastPosition();
+            if( geoPoint.getStatus() == OpStatus.OK)
+                 return firestoreManagementService.getNearLocations(geoPoint.getValue(),100);
+        }
+        return OpStatus.ERROR;
+    }
+
     private void addHeatMap(List<ExtLocation> location) {
-        List<LatLng> list = null;
 
-        /*
-            TODO: per Riccardo/Nicola: qui leggo da locale tramite readItems
-                  usate la lista passata come argomento per inserire i dati nella mappa
-         */
-      /*  try {
-            list = readItems(R.raw.heat_map_points); //da locale (sostituire con la lista passata)
-        } catch (JSONException e) {
-            Toast.makeText(getContext(), "There was a problem in reading the list of points", Toast.LENGTH_LONG).show();
-        }*/
-
+        List<LatLng> list = new ArrayList<>();
+        location.forEach( loc -> list.add(new LatLng(loc.getLocation().getLatitude(), loc.getLocation().getLongitude())));
         HeatmapTileProvider provider = new HeatmapTileProvider.Builder().data(list).build();
 
         mMap.addTileOverlay(new TileOverlayOptions().tileProvider(provider));
     }
-
-
-
-    //TODO: per Nicola: quando usi i dati in remoto puoi anche eliminarla
-  /*  private ArrayList<LatLng> readItems(int resource) throws JSONException {
-        ArrayList<LatLng> list = new ArrayList<LatLng>();
-        InputStream inputStream = getResources().openRawResource(resource);
-        @SuppressWarnings("resource")
-        String json = new Scanner(inputStream).useDelimiter("\\A").next();
-        JSONArray array = new JSONArray(json);
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject object = array.getJSONObject(i);
-            double lat = object.getDouble("lat");
-            double lng = object.getDouble("lng");
-            list.add(new LatLng(lat, lng));
-        }
-
-        return list;
-    }*/
-
 
 }
 

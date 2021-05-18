@@ -48,9 +48,6 @@ public class FirestoreManagement extends Service {
 
     //  callback function to obtain asynchronously the data from firestore
     public interface FirestoreCallback {
-        void onSuccess();
-        void onFailure();
-
         void onDataCollected(List<ExtLocation> location);
     }
 
@@ -212,7 +209,7 @@ public class FirestoreManagement extends Service {
                                         doc.getString("geohash")));
                         }
                         Log.d(TAG, "Near Location collected: " + locations.size() + " data points obtained");
-                        callback.onDataCollected(locations);
+                        firestoreCallbackListener.onDataCollected(locations);
 
                     });
             return OpStatus.OK;
