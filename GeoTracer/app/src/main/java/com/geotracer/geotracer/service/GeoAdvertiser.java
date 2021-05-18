@@ -229,8 +229,10 @@ class GeoAdvertiser
        dbResult = geotracerService.keyValueDB.signatures.insertSignature(new Signature(GeotracerService.byteArrayToHex(signature)));
        if(dbResult != OpStatus.OK)
         Log.e(TAG,"\"Error in adding the new user signature into the KeyValue Database: "+ dbResult);
+       /* Redundant log (already present in the KeyValue module
        else
         Log.w(TAG,"Added new user signature into the keyValue database (signature = " + GeotracerService.byteArrayToHex(signature) + ")");
+       */
       }
      else
       Log.e(TAG,"Cannot add user signature, the KeyValue database service is not alive!");

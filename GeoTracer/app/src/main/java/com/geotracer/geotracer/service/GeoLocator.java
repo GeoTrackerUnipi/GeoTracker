@@ -23,10 +23,10 @@ class GeoLocator implements LocationListener
  *=============================================================================================================================================*/
 
  /* =================== Constants =================== */
- private static final String TAG = "GeoLocation";               // TAG used for logging purposes
+ private static final String TAG = "GeoLocator";                // TAG used for logging purposes
 
  // ------------- GPS Sampling Parameters -------------
- private static final long LOC_MIN_TIME_INTERVAL = 15*1000;     // The minimum time interval for GPS readings to be reported by the OS  TODO: Set to an acceptable value after testing
+ private static final long LOC_MIN_TIME_INTERVAL = 15*1000;     // The minimum time interval for GPS readings to be reported by the OS
  private static final long LOC_MIN_DIST_CHANGE = 0;             // The minimum estimated distance of the user in meters
                                                                 // for GPS readings to be reported by the OS TODO: set to 15 meters after testing
 
@@ -133,7 +133,7 @@ class GeoLocator implements LocationListener
   {
    // Check at least one valid position to be available
    if(lastLocation == null)
-    Log.e(TAG,"No user position is known, cannot add device position into the database");
+    Log.w(TAG,"No user position is known, the device's position cannot be added into the database");
    else
     {
      // If the last known user position is accurate enough (see the "Other Devices Positions Accuracy Policies" in the
@@ -170,6 +170,7 @@ class GeoLocator implements LocationListener
    // Update the user location and push it into the database
    lastLocation = location;
    addUserPosition(location);
+   Log.w(TAG,"New user position collected");
   }
 
  // Callback function invoked by the Android OS when the GPS provider is enabled

@@ -14,6 +14,7 @@ class AdvList
  AdvType type;                     // The type of the advertisement stored in the "samples" list
  ArrayList<AdvSample> samples;     // The list of advertising samples
  ReentrantLock mutex;              // A mutual exclusion semaphore used for handling concurrency on the "samples" list
+ boolean addedToDB;                // If this advertisement is a signature and was added to the other signatures database during parsing
 
  /*=============================================================================================================================================*
  |                                                    PACKAGE-VISIBILITY METHODS                                                                |
@@ -25,6 +26,7 @@ class AdvList
    this.type = type;
    this.samples = new ArrayList<>();
    this.mutex = new ReentrantLock();
+   this.addedToDB = false;
   }
 
  // String serializer

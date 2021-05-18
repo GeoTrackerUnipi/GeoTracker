@@ -118,11 +118,7 @@ public class GeotracerService extends Service
  // Callback function for binding with other application components
  @Override
  public IBinder onBind(Intent intent)
-  {
-   // TODO: Check on activity name?
-   // return null;
-   return geoBinder;
-  }
+  { return geoBinder; }
 
  // Binder Class used to create the binder to this service
  public class GeotracerBinder extends Binder
@@ -142,6 +138,13 @@ public class GeotracerService extends Service
     geoAdvertiser.stopAdvertising();
    if(geoScanner != null)
     geoScanner.stopScanning();
+
+   // Unbind from the database services
+   if(keyValueDB != null)
+    unbindService(keyValueStoreServiceConnection);
+   if(firestoreDB != null)
+    unbindService(firestoreServiceConnection);
+
    Log.w(TAG,"----- Geotracer Service Stopped -----");
   }
 

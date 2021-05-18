@@ -6,7 +6,7 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_LOG_LEVEL" value="debug" />
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="info" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="AutoImportSettings">
@@ -28,40 +28,30 @@
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </expand>
-    <select />
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:myBranch" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ea0b472-2ab6-4806-a1a1-f1653b5edd79" name="Default Changelist" comment="Added TAGS to LogService for showing messages into the window.">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/mainapp/heatMap/HeatMap.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_setting_icon.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_heat_map.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/raw/heat_map_points.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/raw/map_style_conf.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/GeoTracer.app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/GeoTracer.app.iml" afterDir="false" />
+    <list default="true" id="6ea0b472-2ab6-4806-a1a1-f1653b5edd79" name="Default Changelist" comment="Main Service Merging Completed (&quot;Other Positions&quot; insertion disabled)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/db/remote/FirestoreManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/db/remote/FirestoreManagement.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/infoapp/InfoActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/infoapp/InfoActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/mainapp/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/mainapp/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/service/AdvList.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/service/AdvList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/service/GeoAdvertiser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/service/GeoAdvertiser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/service/GeoLocator.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/service/GeoLocator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/service/GeoScanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/service/GeoScanner.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/service/GeotracerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/service/GeotracerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/settingapp/SettingActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/settingapp/SettingActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/LogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/LogService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/TestingActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/TestingActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/testing_button.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/testing_button.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_info.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_info.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_setting.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_setting.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_testing.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_testing.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/themes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/themes.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[SerialNumber@GSM9X18815W02087]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[SerialNumber@ce011711a34434680c]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -88,6 +78,8 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="SerialNumber@ce011711a34434680c" />
+    <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2021-05-17T23:25:40.237846300Z" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/app/src/main/res" />
     <property name="memory.settings.postsync.last.time.stamp" value="1620650065911" />
@@ -96,19 +88,19 @@
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.geotracer.geotracer.mainapp.heatMap" />
+      <recent name="com.geotracer.geotracer.db.remote" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/app/src/main/res" />
       <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
       <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
       <recent name="C:\Users\Riccardo\Documents\GitHub\GeoTracker\GeoTracer\app\src\main\java\com\geotracer\geotracer" />
       <recent name="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.geotracer.geotracer.mainapp.heatMap" />
-      <recent name="com.geotracer.geotracer.db.remote" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/app" />
     </key>
   </component>
   <component name="RunManager">
@@ -390,7 +382,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="main" />
+                        <option value="myBranch" />
                       </list>
                     </value>
                   </entry>
@@ -465,40 +457,40 @@
     </state>
     <state x="1065" y="301" key="FileChooserDialogImpl/0.0.2752.1109@0.0.2752.1109" timestamp="1621218807558" />
     <state x="743" y="316" width="434" height="487" key="FileChooserDialogImpl/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620727434667" />
-    <state width="1392" height="250" key="GridCell.Tab.0.bottom" timestamp="1621283015981">
-      <screen x="0" y="23" width="1440" height="794" />
+    <state width="2709" height="346" key="GridCell.Tab.0.bottom" timestamp="1621303518974">
+      <screen x="0" y="0" width="2752" height="1109" />
     </state>
-    <state width="1354" height="262" key="GridCell.Tab.0.bottom/0.0.2752.1109@0.0.2752.1109" timestamp="1621231179482" />
+    <state width="2709" height="346" key="GridCell.Tab.0.bottom/0.0.2752.1109@0.0.2752.1109" timestamp="1621303518974" />
     <state width="1392" height="250" key="GridCell.Tab.0.bottom/0.23.1440.794@0.23.1440.794" timestamp="1621283015981" />
     <state width="1398" height="213" key="GridCell.Tab.0.bottom/0.23.1440.797@0.23.1440.797" timestamp="1620893505365" />
     <state width="1398" height="542" key="GridCell.Tab.0.bottom/0.23.1440.800@0.23.1440.800" timestamp="1620893030282" />
     <state width="1398" height="205" key="GridCell.Tab.0.bottom/0.23.1440.803@0.23.1440.803" timestamp="1620893240726" />
     <state width="1874" height="277" key="GridCell.Tab.0.bottom/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620741661647" />
     <state width="1874" height="277" key="GridCell.Tab.0.bottom/0.31.1920.1049@0.31.1920.1049" timestamp="1620792102257" />
-    <state width="1392" height="250" key="GridCell.Tab.0.center" timestamp="1621283015980">
-      <screen x="0" y="23" width="1440" height="794" />
+    <state width="2709" height="346" key="GridCell.Tab.0.center" timestamp="1621303518974">
+      <screen x="0" y="0" width="2752" height="1109" />
     </state>
-    <state width="1354" height="262" key="GridCell.Tab.0.center/0.0.2752.1109@0.0.2752.1109" timestamp="1621231179481" />
+    <state width="2709" height="346" key="GridCell.Tab.0.center/0.0.2752.1109@0.0.2752.1109" timestamp="1621303518974" />
     <state width="1392" height="250" key="GridCell.Tab.0.center/0.23.1440.794@0.23.1440.794" timestamp="1621283015980" />
     <state width="1398" height="213" key="GridCell.Tab.0.center/0.23.1440.797@0.23.1440.797" timestamp="1620893505365" />
     <state width="1398" height="542" key="GridCell.Tab.0.center/0.23.1440.800@0.23.1440.800" timestamp="1620893030280" />
     <state width="1398" height="205" key="GridCell.Tab.0.center/0.23.1440.803@0.23.1440.803" timestamp="1620893240725" />
     <state width="1874" height="277" key="GridCell.Tab.0.center/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620741661647" />
     <state width="1874" height="277" key="GridCell.Tab.0.center/0.31.1920.1049@0.31.1920.1049" timestamp="1620792102256" />
-    <state width="1392" height="250" key="GridCell.Tab.0.left" timestamp="1621283015979">
-      <screen x="0" y="23" width="1440" height="794" />
+    <state width="2709" height="346" key="GridCell.Tab.0.left" timestamp="1621303518974">
+      <screen x="0" y="0" width="2752" height="1109" />
     </state>
-    <state width="1354" height="262" key="GridCell.Tab.0.left/0.0.2752.1109@0.0.2752.1109" timestamp="1621231179481" />
+    <state width="2709" height="346" key="GridCell.Tab.0.left/0.0.2752.1109@0.0.2752.1109" timestamp="1621303518974" />
     <state width="1392" height="250" key="GridCell.Tab.0.left/0.23.1440.794@0.23.1440.794" timestamp="1621283015979" />
     <state width="1398" height="213" key="GridCell.Tab.0.left/0.23.1440.797@0.23.1440.797" timestamp="1620893505364" />
     <state width="1398" height="542" key="GridCell.Tab.0.left/0.23.1440.800@0.23.1440.800" timestamp="1620893030279" />
     <state width="1398" height="205" key="GridCell.Tab.0.left/0.23.1440.803@0.23.1440.803" timestamp="1620893240723" />
     <state width="1874" height="277" key="GridCell.Tab.0.left/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1620741661647" />
     <state width="1874" height="277" key="GridCell.Tab.0.left/0.31.1920.1049@0.31.1920.1049" timestamp="1620792102256" />
-    <state width="1392" height="250" key="GridCell.Tab.0.right" timestamp="1621283015980">
-      <screen x="0" y="23" width="1440" height="794" />
+    <state width="2709" height="346" key="GridCell.Tab.0.right" timestamp="1621303518974">
+      <screen x="0" y="0" width="2752" height="1109" />
     </state>
-    <state width="1354" height="262" key="GridCell.Tab.0.right/0.0.2752.1109@0.0.2752.1109" timestamp="1621231179481" />
+    <state width="2709" height="346" key="GridCell.Tab.0.right/0.0.2752.1109@0.0.2752.1109" timestamp="1621303518974" />
     <state width="1392" height="250" key="GridCell.Tab.0.right/0.23.1440.794@0.23.1440.794" timestamp="1621283015980" />
     <state width="1398" height="213" key="GridCell.Tab.0.right/0.23.1440.797@0.23.1440.797" timestamp="1620893505365" />
     <state width="1398" height="542" key="GridCell.Tab.0.right/0.23.1440.800@0.23.1440.800" timestamp="1620893030281" />

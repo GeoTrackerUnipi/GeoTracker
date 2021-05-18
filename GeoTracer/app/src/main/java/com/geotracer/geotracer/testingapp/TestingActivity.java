@@ -675,39 +675,37 @@ public class TestingActivity extends AppCompatActivity {
 
     public void startService(View view) {
 
-
-        Intent i = new Intent(TestingActivity.this, GeotracerService.class);
-        if(geotracerMainService.startService(i) != null)
+        /* FIXME */
+        if(geotracerMainService == null)
         {
+            Intent i = new Intent(this, GeotracerService.class);
+            startService(i);
+            bindService(i, geotracerService, Context.BIND_AUTO_CREATE);
             String s = "Geotracer service started";
             TextView tv = new TextView(TestingActivity.this);
             showPopupWindow(tv, s);
             Log.d(TESTING_ACTIVITY_LOG, s);
         }
         else
-            Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
+            Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is already started!");
 
     }
 
+    /* FIXME */
     public void stopService(View view) {
         if(geotracerMainService != null)
         {
             unbindService(geotracerService);
             Intent i = new Intent(TestingActivity.this, GeotracerService.class);
-            boolean result = geotracerMainService.stopService(i);
-            if(result)
-            {
-                String s = "Geotracer service stopped";
-                TextView tv = new TextView(TestingActivity.this);
-                showPopupWindow(tv, s);
-                Log.d(TESTING_ACTIVITY_LOG, s);
-            }
-            else
-            {
-                Log.d(TESTING_ACTIVITY_LOG,"Geotracer service already stopped");
-            }
+            stopService(i);
+
+            geotracerMainService = null;
+            String s = "Geotracer service stopped";
+            TextView tv = new TextView(TestingActivity.this);
+            showPopupWindow(tv, s);
+            Log.d(TESTING_ACTIVITY_LOG, s);
         }
         else
-            Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
+            Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service already stopped");
     }
 }

@@ -59,7 +59,7 @@ public class GeoScanner
  final private GeoLocator geoLocator;                           // GeoLocator support object
  final private BluetoothLeScanner bluetoothScanner;             // Bluetooth Advertiser object
  private Notification proximityNotification;                    // Warning notification raised to the user in case of social distancing violations
- private Hashtable<String,AdvList> advTable;                    // The Hashtable storing the lists of received advertisements before processing TODO check if final is ok
+ private final Hashtable<String,AdvList> advTable;              // The Hashtable storing the lists of received advertisements before processing
  private Timer advParser;                                       // Timer used to parse received signatures with a fixed-delay execution
 
  /* ============ Service Status Variables ============ */
@@ -316,19 +316,25 @@ public class GeoScanner
      advType = AdvType.ADV_TYPE_MAC;
     }
 
-   // Check whether the advTable already contains the associated AdvList, and initialize it otherwise
+   // Retrieve the AdvList associated to the advertisement in the AdvTable, if any
    advList = advTable.get(key);
+
+   // If the AdvTable contains no such AdvList, create a new AdvList containing the received advertisement and append it into the AdvTable
    if(advList == null)
     {
      advList = new AdvList(advType);
+     advList.samples.add(new AdvSample(RSSI,timestamp));
      advTable.put(key,advList);
     }
 
-   // Append the AdvSample associated to this advertisement to the corresponding AdvList,
-   // using its lock to prevent concurrent modifications in such data structure
-   advList.mutex.lock();
-    advList.samples.add(new AdvSample(RSSI,timestamp));
-   advList.mutex.unlock();
+   // Otherwise if the AdvList was found, append the received advertisement by first acquiring a mutex for synchronization purposes with the
+   // AdvParserTask TimerTask
+   else
+    {
+     advList.mutex.lock();
+       advList.samples.add(new AdvSample(RSSI,timestamp));
+     advList.mutex.unlock();
+    }
 
    /* Debugging purposes
    Log.d(TAG,"New " + advType + " received (key = " + key + "RSSI =" + RSSI + ", timestamp = " +
@@ -363,19 +369,6 @@ public class GeoScanner
    {
     /* =================== Constants =================== */
     private static final String TAG = "AdvParser Task";              // TAG used for logging purposes
-
-    // Returns the average timestamp of a distance estimation window
-    private long avgTimestamp(List<Long> timestampList)
-     {
-      long avgTime = 0;
-
-      // Compute and return the average timestamp in the list
-      for(int i=0; i<timestampList.size(); i++)
-       avgTime = avgTime + timestampList.get(i);
-      avgTime = avgTime/(timestampList.size());
-
-      return avgTime;
-     }
 
     // Filters the RSSIs of a distance estimation window by using their median value
     private int filterRSSIMedian(List<Integer> RSSIList)
@@ -463,12 +456,17 @@ public class GeoScanner
       // Process individually each AdvList in the advTable
       for (int k=0; k<AdvListKeysArray.size(); k++)
        {
+        /* ----- General AdvList Information ----- */
         String key = AdvListKeysArray.get(k);         // The key of AdvList to be parsed
         AdvList advList = advTable.get(key);          // The AdvList to be parsed
-        ArrayList<AdvSample> samples;                 // The list of samples in the AdvList (shortcut purposes)
-        boolean distanceEstimated = false;            // True if the distance from the device broadcasting
-                                                      // such advertisement was estimated during this parsing
+        ArrayList<AdvSample> samples;                 // The list of samples in the AdvList
+        int samplesSize;                              // The number of samples in the AdvList
+
+        /* ----- Processing Indexes ----- */
         int i, j;                                     // Support Indexes used during the parsing
+        int estimatedWindowLimit = -1;                // If >0 represents the index of the upper limit of the estimation window
+                                                      // that lead to a successful distance estimation
+        int startingOutdatedIndex = -1;               // If >0 Represents the starting index in searching for outdated samples
 
         // Should never happen
         if(advList == null)
@@ -480,31 +478,37 @@ public class GeoScanner
         // Lock the AdvList to prevent concurrent modifications represented by the injection of additional advertisements
         advList.mutex.lock();
 
-        // Retrieve the list of samples in the AdvList (shortcut purposes)
+        // Retrieve the list of samples in the AdvList and its size
         samples = advList.samples;
+        samplesSize = samples.size();
 
         // Assert the list of samples in the AdvList to contain at least one sample
-        if(samples.isEmpty())
+        if(samplesSize == 0)
          {
           Log.e(TAG,"Found an empty AdvList in the advTable, removing it");
           advTable.remove(key);
           continue;
          }
 
-        /* Debugging Purposes
+        // Unlock the AdvList, since concurrent insertion by new samples should cause no problem to the parsing
+        advList.mutex.unlock();
+
+        /* Debugging Purposes */
         Log.d(TAG,"Start Parsing key \"" + key +"\" (sampleSize = " + samples.size() + ")");
-        */
+        /* */
 
         // ---IF--- (and only if) the AdvList contains at least the MIN_SAMPLES required to be aggregated
         // in a distance estimation window, browse them from the first to the (last - MIN_SAMPLES))
-        for(i=0; i<=(samples.size()-WINDOW_MIN_SAMPLES); i++)
+        for(i=0; i<=(samplesSize-WINDOW_MIN_SAMPLES); i++)
          {
           ArrayList<Integer> currRSSIList = new ArrayList<>();          // The list of RSSIs belonging to the current estimation window
-          ArrayList<Long> currTimeList = new ArrayList<>();             // The list of timestamps belonging to the current estimation window TODO: Simplify as time(j-1) - time(i)
           long currWindowLimit = samples.get(i).time + WINDOW_MAX_TIME; // The upper time limit for samples to belong to the current estimation window
 
+          // If this sample is too old to partecipate in a ---FUTURE--- estimation window, update the startingOutdatedIndex
+          startingOutdatedIndex = i;
+
           // Attempt to create a distance estimation window by browsing samples from the current to the last
-          for(j=i; j<samples.size(); j++)
+          for(j=i; j<samplesSize; j++)
            {
             // If the timestamp of the current sample is beyond the currWindowLimit, we have
             // reached the limit of samples that can fit in the current estimation window
@@ -515,9 +519,8 @@ public class GeoScanner
             if((j-i) == WINDOW_MAX_SAMPLES)
              break;
 
-            // Append the RSSI and timestamp of the current sample in the respective lists associated to the current estimation window
+            // Append the RSSI of the current sample in the currRSSIList
             currRSSIList.add(samples.get(j).RSSI);
-            currTimeList.add(samples.get(j).time);
            }
 
           // If the samples window size (j-i) is large enough for estimating the distance
@@ -541,16 +544,19 @@ public class GeoScanner
                 lastProximityNotificationTime = executionTime;
                }
 
-              // Compute the contact time with the device by averaging the timestamps in the estimation window
-              long contactTime = avgTimestamp(currTimeList);
+              // Compute the contact time with the device by averaging the timestamps of the first and last advertisements in the window
+              long contactTime = (samples.get(i).time + samples.get(j-1).time)/2;
 
               Log.i(TAG,"Estimated distance from device \"" + key + "\": " + contactDistance + " (time = " +
                       new SimpleDateFormat("dd-MM-yyyy HH:mm:ss",Locale.getDefault()).format(new Date(contactTime)) + ")");
 
-              // If this is a signature, attempt to insert it into the local KeyValue database
-              // NOTE: Redundancy checks are performed in such module
+              // If this is a signature, insert it into the "Other Signatures" into the keyValue database (which takes care of redundancy checks),
+              // and set the "addedToDB" flag in the AdvList
               if(advList.type == AdvType.ADV_TYPE_SIG)
-               addOtherSignature(key,contactDistance);
+               {
+                addOtherSignature(key,contactDistance);
+                advList.addedToDB = true;
+               }
 
               // If the GeoLocator service is active, attempt to insert the position of the device in the local database
               if(geoLocator != null)
@@ -558,40 +564,60 @@ public class GeoScanner
               else
                Log.w(TAG,"Position of device \"" + key + "\" is NOT forwarded to the database (the GeoLocator service is disabled");
 
-              // Delete the samples belonging to the window from the AdvList (to prevent its cluttering)
-              samples.subList(i,j).clear();
+              // Since the distance from the device broadcasting the associated advertising has been estimated, set the upper limit
 
-              // Since the distance from the device broadcasting the associated advertising
-              // has been estimated, the parsing is to proceed with the next AdvList
-              distanceEstimated = true;
+              // Signal that the distance from the device broadcasting the associated advertisement has been estimated
+              // by setting the index of the upper limit of the estimation window, and break to cleanup operations
+              estimatedWindowLimit = j;
               break;
              }
            }
          }
 
         /* ============== AdvList Cleanup Operations ============== */
+        int dropIndex;   // If >0 represents the upper limit of the sublist of samples to be dropped during cleanup
 
-        // If the advertisement is a signature and its distance was not estimated during the main cycle, add the signature to the KeyValue database
-        // as a "sighting", with an arbitrary (huge) distance
-        if(advList.type == AdvType.ADV_TYPE_SIG && !distanceEstimated)
-         addOtherSignature(key,1000000);
+        // If the advertisement is a signature and was not added into the database during the main distance estimation cycle, add it in the database
+        // as a "sighting" with an arbitrary great distance
+        if(advList.type == AdvType.ADV_TYPE_SIG && !advList.addedToDB)
+         {
+          addOtherSignature(key,1000000);
+          advList.addedToDB = true;
+          Log.i(TAG,"Signature \""+key+"\" added into the database as a sighting");
+         }
 
-        // Delete from the AdvList all samples older than (executionTime - WINDOW_MAX_TIME), since they can no longer fit into an estimation window
-        for(i=0; i<samples.size(); i++)
-         if(samples.get(i).time > (executionTime-WINDOW_MAX_TIME))    // If this sample may belong to a future estimation window,
-          break;                                                      // make it the new head of the advSamples
-        samples.subList(0,i).clear();
+        // If at least an outdated sample was found during the main cycle, find the index of the first sample recent enough to
+        // participate in a future distance estimation window, i.e. whose timestamp is no older than (executionTime - WINDOW_MAX_TIME
+        if(startingOutdatedIndex > -1)
+         for(i=0; i<samplesSize; i++)
+          if(samples.get(i).time > (executionTime-WINDOW_MAX_TIME))
+           break;
 
-        /* Debugging Purposes
-        Log.d(TAG,"End parsing key \"" + key +"\" (samplesSize = " + samples.size() + ")");
-        */
+        // Set the ending index of the sublist of samples that should be dropped, either because they were used to successfully estimate the distance
+        // or because they are outdated, to the maximum between the estimatedWindowLimit computed in the main cycle and the index of the first sample
+        // recent enough to participate in a future window
+        dropIndex = Math.max(estimatedWindowLimit,i);
 
-        // If the resulting list of AdvSamples is empty, remove the AdvList from the advTable
-        if(samples.isEmpty())
-         advTable.remove(key);
+        // If there are samples to drop (dropIndex > 0), reacquire the lock on the AdvList and do so
+        if(dropIndex > 0)
+         {
+          advList.mutex.lock();
 
-        // Release the lock on the AdvList
-        advList.mutex.unlock();
+            samples.subList(0,dropIndex).clear();
+
+            // If the resulting list of AdvSamples is empty, remove the AdvList from the AdvTable
+            if(advList.samples.isEmpty())
+             {
+              advTable.remove(key);
+              Log.d(TAG,"End parsing key \""+key+"\" (entire AdvList was removed)");
+             }
+            else
+             Log.d(TAG,"End parsing key \"" + key + "\" (" + dropIndex + " elements were removed)");
+
+          advList.mutex.unlock();
+         }
+        else
+         Log.d(TAG,"End parsing key \"" + key + "\" (no elements were removed)");
        }
      }
    }
