@@ -6,7 +6,7 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_LOG_LEVEL" value="debug" />
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="verbose" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="AutoImportSettings">
@@ -37,9 +37,9 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ea0b472-2ab6-4806-a1a1-f1653b5edd79" name="Default Changelist" comment="">
+    <list default="true" id="6ea0b472-2ab6-4806-a1a1-f1653b5edd79" name="Default Changelist" comment="Main Service Merging Completed (&quot;Other Positions&quot; insertion disabled)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -69,8 +69,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="layoutResourceFile" />
-        <option value="Class" />
         <option value="resourceFile" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -79,6 +79,11 @@
       <list>
         <option value="GiulioFederico" />
       </list>
+    </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="main" />
+      </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
@@ -91,19 +96,17 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="SerialNumber@ce011711a34434680c" />
-    <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2021-05-17T23:25:40.237846300Z" />
+    <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="MVS4C19A16008858" />
+    <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2021-05-18T08:10:30.960Z" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/src/main/res" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="memory.settings.postsync.last.time.stamp" value="1620650065911" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
-    <key name="android.template.packageName">
-      <recent name="com.geotracer.geotracer.topicMessagesBroadcast" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/app/src/main/res" />
       <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
@@ -116,8 +119,6 @@
       <recent name="com.geotracer.geotracer.db.remote" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Asus ROG\Desktop\Personal\Artificial Intelligence Magistrale\Mobile and Social Sensing Systems\Progetto\FCM_v1\GeoTracer\app\src\main\res\raw" />
-      <recent name="C:\Users\Asus ROG\Desktop\Personal\Artificial Intelligence Magistrale\Mobile and Social Sensing Systems\Progetto\FCM_v1\GeoTracer\app\src\main\res\drawable" />
       <recent name="$PROJECT_DIR$/app" />
     </key>
   </component>
@@ -394,42 +395,21 @@
       <option name="project" value="LOCAL" />
       <updated>1621266136886</updated>
     </task>
-    <task id="LOCAL-00028" summary="Topic Subscriptions Screen added to menu">
-      <created>1621334228389</created>
+    <task id="LOCAL-00028" summary="added FLAG_ACTIVITY_NEW_TASK to resolve an internal error.">
+      <created>1621321736078</created>
       <option name="number" value="00028" />
       <option name="presentableId" value="LOCAL-00028" />
       <option name="project" value="LOCAL" />
-      <updated>1621334228389</updated>
+      <updated>1621321736078</updated>
     </task>
-    <task id="LOCAL-00029" summary="Animations added">
-      <created>1621337148390</created>
+    <task id="LOCAL-00029" summary="Integration of FCM for subscribe to a topic">
+      <created>1621327975411</created>
       <option name="number" value="00029" />
       <option name="presentableId" value="LOCAL-00029" />
       <option name="project" value="LOCAL" />
-      <updated>1621337148390</updated>
+      <updated>1621327975411</updated>
     </task>
-    <task id="LOCAL-00030" summary="ActivityTopicMessages UI completed">
-      <created>1621338808858</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1621338808858</updated>
-    </task>
-    <task id="LOCAL-00031" summary="ActivityTopicMessages Logic Subscribe Unsubscribe completed">
-      <created>1621344720095</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1621344720095</updated>
-    </task>
-    <task id="LOCAL-00032" summary="Custom Notification + HeatMap unbind error resolved when click on notification">
-      <created>1621346584216</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1621346584216</updated>
-    </task>
-    <option name="localTasksCounter" value="33" />
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -457,6 +437,9 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <MESSAGE value="Improved KeyValueManagement service&#10;     - created set of periodic Workers to clean the store&#10;     - cleaned data from expired information before be given&#10;     - add user location management&#10;     - add user bucket management&#10;     - add user signature management&#10;&#10;Created NotificationSender service&#10;     - created BoundService for its functionalities&#10;     - created connections with KeyValueManagement Service&#10;     - created listeners to manage the async requests&#10;     - created workers to send infection Notification&#10;&#10;General&#10;     - defined data passed between Riccardo and mine services&#10;     - created a set of classes to enforce the parameters sharing between services" />
+    <MESSAGE value="Optimized Keyvalue and Notification systems&#10;     - only one periodic thread istantiated for keyvalue management&#10;     - completed mechanism for notification receive" />
+    <MESSAGE value="Completed firestore management and all the interconnection between the components to generate the final behaviour" />
     <MESSAGE value="Merged Laura and mine components into a unique consistent application" />
     <MESSAGE value="Merging projects" />
     <MESSAGE value="Commented all the files and make some bug correction" />
@@ -477,12 +460,9 @@
     <MESSAGE value="Merged main with local and remote database services" />
     <MESSAGE value="removed the lock assert false" />
     <MESSAGE value="Added TAGS to LogService for showing messages into the window." />
-    <MESSAGE value="Topic Subscriptions Screen added to menu" />
-    <MESSAGE value="Animations added" />
-    <MESSAGE value="ActivityTopicMessages UI completed" />
-    <MESSAGE value="ActivityTopicMessages Logic Subscribe Unsubscribe completed" />
-    <MESSAGE value="Custom Notification + HeatMap unbind error resolved when click on notification" />
-    <option name="LAST_COMMIT_MESSAGE" value="Custom Notification + HeatMap unbind error resolved when click on notification" />
+    <MESSAGE value="added FLAG_ACTIVITY_NEW_TASK to resolve an internal error." />
+    <MESSAGE value="Integration of FCM for subscribe to a topic" />
+    <option name="LAST_COMMIT_MESSAGE" value="Integration of FCM for subscribe to a topic" />
   </component>
   <component name="WindowStateProjectService">
     <state x="688" y="277" width="960" height="533" key="#PSD" />
