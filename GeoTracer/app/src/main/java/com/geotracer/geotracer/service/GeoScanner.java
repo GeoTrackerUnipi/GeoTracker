@@ -547,7 +547,7 @@ public class GeoScanner
               // Compute the contact time with the device by averaging the timestamps of the first and last advertisements in the window
               long contactTime = (samples.get(i).time + samples.get(j-1).time)/2;
 
-              Log.i(TAG,"Estimated distance from device \"" + key + "\": " + contactDistance + " (time = " +
+              Log.i("ExperimentAnalysis","Estimated distance from device \"" + key + "\": " + contactDistance + " (time = " +
                       new SimpleDateFormat("dd-MM-yyyy HH:mm:ss",Locale.getDefault()).format(new Date(contactTime)) + ")");
 
               // If this is a signature, insert it into the "Other Signatures" into the keyValue database (which takes care of redundancy checks),

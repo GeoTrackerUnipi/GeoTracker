@@ -114,13 +114,18 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
                     getActivity().bindService(intent, keyValueConnection, Context.BIND_AUTO_CREATE);
                 }
 
-                //add new marker
-                me = mMap.addMarker(new MarkerOptions()
-                        .position(position)
-                        .title("Me"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
-                mMap.setMaxZoomPreference(17f);
-                mMap.setMinZoomPreference(15f);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //add new marker
+                        me = mMap.addMarker(new MarkerOptions()
+                                .position(position)
+                                .title("Me"));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+                        mMap.setMaxZoomPreference(17f);
+                        mMap.setMinZoomPreference(15f);
+                    }
+                });
 
                 if(lastPosition==null)
                     lastPosition = new GeoPoint(position.latitude,position.longitude);
