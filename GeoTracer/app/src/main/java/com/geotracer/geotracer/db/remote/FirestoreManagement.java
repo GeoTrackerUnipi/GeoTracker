@@ -16,8 +16,8 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.android.gms.tasks.Task;
 import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
-import com.google.firebase.FirebaseApp;
 import android.content.Intent;
+import java.io.File;
 import java.util.ArrayList;
 import android.app.Service;
 import android.os.IBinder;
@@ -63,33 +63,31 @@ public class FirestoreManagement extends Service {
     private final IBinder classBinder = new LocalBinder();
 
     @Override
-    public void onCreate(){
-        FirebaseApp.initializeApp(getBaseContext());
+    public IBinder onBind(Intent intent) {
+
+        Log.d("FirestoreManagement", "Binding firestore service");
+
+        firestore = FirebaseFirestore.getInstance();
+        collection = firestore.collection("geotraces");
+        return classBinder;
+
+    }
+
+    @Override
+    public void onRebind(Intent intent) {
+        super.onRebind(intent);
+        Log.d("FirestoreManagement", "Re-Binding firestore service");
         firestore = FirebaseFirestore.getInstance();
         collection = firestore.collection("geotraces");
 
     }
 
     @Override
-    public void onDestroy(){
-        super.onDestroy();
-        firestore.terminate();
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-
-        FirebaseApp.initializeApp(getBaseContext());
-        firestore = FirebaseFirestore.getInstance();
-        return classBinder;
-
-    }
-
-    @Override
     public boolean onUnbind(Intent intent) {
-
-        FirebaseApp.initializeApp(getBaseContext());
+        Log.d("FirestoreManagement", "Unbinding firestore service");
         firestore.terminate();
+        firestore = null;
+        collection = null;
         return true;
 
     }
@@ -177,33 +175,26 @@ public class FirestoreManagement extends Service {
     //      - OpStatus.ERROR: some error happened during function execution
     public OpStatus getNearLocations(GeoPoint location, double radiusInM){
 
-        Log.d("HeatMap from FirestoreManagementService", "recover near locations");
-
         if( location == null || radiusInM <= 0 )
             return OpStatus.ILLEGAL_ARGUMENT;
 
         final GeoLocation center = new GeoLocation(location.getLatitude(), location.getLongitude());
         final List<Task<QuerySnapshot>> tasks = new ArrayList<>();   // lists for all the queries
-        Log.d("HeatMap from FirestoreManagementService", "recover near locations2");
+
         try {
             //  generating the bounds used for the geo-query and for every bound we create a query
             //  in order to collect all the data placed between the bounds
-
-            FirebaseApp.initializeApp(getBaseContext());
-            firestore = FirebaseFirestore.getInstance();
-            collection = firestore.collection("geotraces");
-
             GeoFireUtils.getGeoHashQueryBounds(center, radiusInM).forEach(
                     bound -> tasks.add(collection
                             .orderBy("geoHash")
                             .startAt(bound.startHash)
                             .endAt(bound.endHash).get()));
-            Log.d("HeatMap from FirestoreManagementService", "recover near locations3");
+
             //  when all the data are ready
             Tasks.whenAllComplete(tasks)
                     .addOnCompleteListener(t -> {
                         List<ExtLocation> locations = new ArrayList<>();
-                        Log.d("HeatMap from FirestoreManagementService", "recover near locations4");
+
                         for (Task<QuerySnapshot> task : tasks) {
                             QuerySnapshot snap = task.getResult();
                             assert snap != null;
@@ -216,15 +207,18 @@ public class FirestoreManagement extends Service {
                                         doc.getString("geohash")));
                         }
                         Log.d(TAG, "Near Location collected: " + locations.size() + " data points obtained");
-                        Log.d("HeatMap from FirestoreManagementService", "recover near locations5");
                         firestoreCallbackListener.onDataCollected(locations);
-
+                        firestoreCallbackListener = null;
                     });
             return OpStatus.OK;
 
         }catch( RuntimeException e ){
-            Log.d("HeatMap from FirestoreManagementService", "recover near locations6 error: "+e+" --> "+e.getMessage());
-            e.printStackTrace();
+
+            Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getBaseContext().startActivity(i);
+            System.exit(0);
             return OpStatus.ERROR;
         }
 
@@ -324,6 +318,27 @@ public class FirestoreManagement extends Service {
 
     public void saveTestData(TestData data){
         firestore.collection("test_data").add(data).addOnSuccessListener( s -> Log.d(TAG, "Test data saved"));
+    }
+
+    public boolean destroyCache(){
+        return deleteDir(getBaseContext().getCacheDir());
+    }
+
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+            return dir.delete();
+        } else if(dir!= null && dir.isFile()) {
+            return dir.delete();
+        } else {
+            return false;
+        }
     }
 }
 
