@@ -29,7 +29,7 @@ public class LogService extends Service {
     private static final String GEOTRACER_SCANNER = "GeoScanner";
     private static final String GEOTRACER_LOCATION = "GeoLocation";
     private static final String GEOTRACER_ADV = "GeoAdvertiser";
-    private static final String ADV_PARSER = "AdvParserTask";
+    private static final String ADV_PARSER = "ExperimentAnalysis";
 
     // Binder given to clients
     private final IBinder binder = new LocalBinder();

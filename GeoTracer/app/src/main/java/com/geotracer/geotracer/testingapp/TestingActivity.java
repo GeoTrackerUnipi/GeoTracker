@@ -92,8 +92,6 @@ public class TestingActivity extends AppCompatActivity {
                             firestore.saveTestData(hash_map);
                         }
 
-
-
                         tv.append(toLog);
                         ScrollView sv = (ScrollView) findViewById(R.id.scrollview);
                         sv.fullScroll(ScrollView.FOCUS_DOWN);
