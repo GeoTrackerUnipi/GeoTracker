@@ -41,11 +41,14 @@ import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
 import com.geotracer.geotracer.service.GeotracerService;
 import com.geotracer.geotracer.settingapp.SettingActivity;
+import com.geotracer.geotracer.utils.HashValues;
 import com.geotracer.geotracer.utils.LogParsing;
 import com.geotracer.geotracer.utils.data.BaseLocation;
+import com.geotracer.geotracer.utils.data.TestData;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.geotracer.geotracer.utils.generics.RetStatus;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class TestingActivity extends AppCompatActivity {
@@ -82,13 +85,22 @@ public class TestingActivity extends AppCompatActivity {
                         //Log.d(TESTING_ACTIVITY_LOG, "LogService BROADCAST LISTENER");
                         String toLog = intent.getStringExtra("LogMessage");
                         LogParsing logParsing = new LogParsing(toLog);
-/*
+                        //HashMap<String, HashValues> hash_map = logParsing.getLog_values();
+                        TestData hash_map = logParsing.getLog_values();
+
+                        if (hash_map.getData().size() > 0) {
+                            firestore.saveTestData(hash_map);
+                        }
+
+
+
                         tv.append(toLog);
                         ScrollView sv = (ScrollView) findViewById(R.id.scrollview);
                         sv.fullScroll(ScrollView.FOCUS_DOWN);
                         Log.d(TESTING_ACTIVITY_LOG, toLog);
-*/
+
                     }
+
                 },new IntentFilter(LogService.ACTION_BROADCAST)
 
         );
