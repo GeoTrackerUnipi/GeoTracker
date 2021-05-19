@@ -102,11 +102,6 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
                 Log.d("HeatMap","Nuova posizione: "+location);
                 LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
 
-                loadingScreen.setVisibility(View.INVISIBLE);
-
-                //remove last marker to avoid multiple markers in the same scene
-                if(me!=null)
-                    me.remove();
 
                 if (!isKeyvalueManagementBounded){
                     //bind with firestoremanagement service
@@ -117,6 +112,12 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        loadingScreen.setVisibility(View.INVISIBLE);
+
+                        //remove last marker to avoid multiple markers in the same scene
+                        if(me!=null)
+                            me.remove();
+
                         //add new marker
                         me = mMap.addMarker(new MarkerOptions()
                                 .position(position)
