@@ -30,7 +30,6 @@
         <activity android:name=".topicMessagesBroadcast.TopicMessagesActivity" />
         <activity android:name=".UsageTestActivity" />
         <activity android:name=".infoapp.InfoActivity" /> <!-- GeotracerAutostart Broadcast Receiver -->
-        <activity android:name=".settingapp.SettingActivity" /> <!-- Geotracer Main Service -->
         <activity android:name=".mainapp.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

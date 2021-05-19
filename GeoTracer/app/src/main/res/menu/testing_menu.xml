@@ -7,4 +7,8 @@
     <item
         android:id="@+id/from_testing_to_info"
         android:title="@string/menu_info_item"/>
+
+    <item
+        android:id="@+id/from_testing_to_topic"
+        android:title="Topics and Subscriptions"/>
 </menu>

@@ -44,6 +44,7 @@ import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
 import com.geotracer.geotracer.service.GeoLocator;
 import com.geotracer.geotracer.service.GeotracerService;
+import com.geotracer.geotracer.topicMessagesBroadcast.TopicMessagesActivity;
 import com.geotracer.geotracer.utils.LogParsing;
 import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.geotracer.geotracer.utils.data.TestData;
@@ -495,6 +496,10 @@ public class TestingActivity extends AppCompatActivity {
                         return true;
                     case R.id.from_testing_to_info:
                         i = new Intent(getApplicationContext(), InfoActivity.class);
+                        startActivity(i);
+                        return true;
+                    case R.id.from_testing_to_topic:
+                        i = new Intent(getApplicationContext(), TopicMessagesActivity.class);
                         startActivity(i);
                         return true;
                     default:

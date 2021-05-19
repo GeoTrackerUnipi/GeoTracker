@@ -6,5 +6,8 @@
     <item
         android:id="@+id/from_info_to_testing"
         android:title="@string/menu_testing_item"/>
+    <item
+        android:id="@+id/from_main_to_topicMessagesScreen"
+        android:title="Topics and Subscriptions"/>
 
 </menu>

@@ -27,6 +27,7 @@ import com.geotracer.geotracer.UserStatus;
 import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
 import com.geotracer.geotracer.testingapp.TestingActivity;
+import com.geotracer.geotracer.topicMessagesBroadcast.TopicMessagesActivity;
 
 public class InfoActivity extends AppCompatActivity {
 
@@ -86,6 +87,10 @@ public class InfoActivity extends AppCompatActivity {
                     return true;
                 case R.id.from_info_to_testing:
                     i = new Intent(getApplicationContext(), TestingActivity.class);
+                    startActivity(i);
+                    return true;
+                case R.id.from_info_to_topic:
+                    i = new Intent(getApplicationContext(), TopicMessagesActivity.class);
                     startActivity(i);
                     return true;
                 default:

@@ -36,16 +36,12 @@
       <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/UsageTestActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/UsageTestActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/infoapp/InfoActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/infoapp/InfoActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/mainapp/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/mainapp/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/settingapp/SettingActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/settingapp/SettingActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/LogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/LogService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/settingapp/SettingActivity.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/TestingActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/TestingActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_testing.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_testing.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_testing_new.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/infection_bar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/infection_bar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_info.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_info.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/info_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/info_menu.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/main_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/main_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/setting_menu.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/testing_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/testing_menu.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
@@ -443,7 +439,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621416430799</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Layout has been modified.">
+      <created>1621441381721</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1621441381722</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -471,7 +474,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Commented all the files and make some bug correction" />
     <MESSAGE value="Fixed some bug." />
     <MESSAGE value="Solved an error occured during the previous merge" />
     <MESSAGE value="Ho commentato delle cose" />
@@ -496,7 +498,8 @@
     <MESSAGE value="Fixed a bug in a tag name" />
     <MESSAGE value="Fix a bug in a tag name" />
     <MESSAGE value="Added the possibility of setting the physical distance" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added the possibility of setting the physical distance" />
+    <MESSAGE value="Layout has been modified." />
+    <option name="LAST_COMMIT_MESSAGE" value="Layout has been modified." />
   </component>
   <component name="WindowStateProjectService">
     <state x="688" y="277" width="960" height="533" key="#PSD" timestamp="1621365499347" />
@@ -511,10 +514,10 @@
     <state x="768" y="264" width="384" height="590" key="#com.intellij.ide.util.MemberChooser/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
     <state x="589" y="276" key="#com.intellij.refactoring.memberPullUp.PullUpDialog" timestamp="1621365499347" />
     <state x="589" y="276" key="#com.intellij.refactoring.memberPullUp.PullUpDialog/0.23.1440.794@0.23.1440.794" timestamp="1621365499347" />
-    <state x="693" y="306" width="534" height="506" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1621440711646">
+    <state x="693" y="306" width="534" height="506" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1621442124337">
       <screen x="0" y="23" width="1440" height="794" />
     </state>
-    <state x="693" y="306" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.23.1440.794@0.23.1440.794" timestamp="1621440711646" />
+    <state x="693" y="306" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.23.1440.794@0.23.1440.794" timestamp="1621442124337" />
     <state x="693" y="306" width="534" height="506" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
     <state x="100" y="123" width="1240" height="594" key="AVDManager" timestamp="1621365499347" />
     <state x="100" y="123" width="1240" height="594" key="AVDManager/0.23.1440.794@0.23.1440.794" timestamp="1621365499347" />
@@ -579,10 +582,10 @@
     <state width="1398" height="2" key="GridCell.Tab.1.right" timestamp="1621365499347" />
     <state width="1398" height="2" key="GridCell.Tab.1.right/0.23.1440.794@0.23.1440.794" timestamp="1621365499347" />
     <state width="1398" height="2" key="GridCell.Tab.1.right/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
-    <state x="416" y="223" width="810" height="531" key="Vcs.Push.Dialog.v2" timestamp="1621416438145">
-      <screen x="0" y="23" width="1440" height="797" />
+    <state x="416" y="222" width="810" height="531" key="Vcs.Push.Dialog.v2" timestamp="1621441386143">
+      <screen x="0" y="23" width="1440" height="794" />
     </state>
-    <state x="416" y="222" key="Vcs.Push.Dialog.v2/0.23.1440.794@0.23.1440.794" timestamp="1621409940271" />
+    <state x="416" y="222" key="Vcs.Push.Dialog.v2/0.23.1440.794@0.23.1440.794" timestamp="1621441386143" />
     <state x="416" y="223" key="Vcs.Push.Dialog.v2/0.23.1440.797@0.23.1440.797" timestamp="1621416438145" />
     <state x="416" y="224" key="Vcs.Push.Dialog.v2/0.23.1440.800@0.23.1440.800" timestamp="1621365499347" />
     <state x="416" y="224" key="Vcs.Push.Dialog.v2/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
@@ -594,8 +597,11 @@
     <state x="559" y="379" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1621365499347" />
     <state x="559" y="357" width="404" height="158" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1440.794@0.23.1440.794" timestamp="1621435005693" />
     <state x="745" y="472" width="430" height="175" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
-    <state x="893" y="245" width="964" height="717" key="search.everywhere.popup" timestamp="1621365499347" />
+    <state x="770" y="245" width="964" height="717" key="search.everywhere.popup" timestamp="1621442866498">
+      <screen x="0" y="23" width="1440" height="794" />
+    </state>
     <state x="893" y="245" width="964" height="717" key="search.everywhere.popup/0.0.2752.1109@0.0.2752.1109" timestamp="1621365499347" />
+    <state x="770" y="245" width="964" height="717" key="search.everywhere.popup/0.23.1440.794@0.23.1440.794" timestamp="1621442866498" />
     <state x="623" y="263" width="672" height="678" key="search.everywhere.popup/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
   </component>
 </project>

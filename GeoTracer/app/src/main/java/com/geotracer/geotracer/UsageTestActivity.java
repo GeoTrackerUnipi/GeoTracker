@@ -32,8 +32,8 @@ import com.geotracer.geotracer.db.remote.FirestoreManagement;
 import com.geotracer.geotracer.infoapp.InfoActivity;
 import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
-import com.geotracer.geotracer.settingapp.SettingActivity;
 import com.geotracer.geotracer.testingapp.LogService;
+import com.geotracer.geotracer.testingapp.TestingActivity;
 import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.geotracer.geotracer.utils.data.ExtLocation;
 import com.geotracer.geotracer.utils.data.ExtSignature;
@@ -298,11 +298,7 @@ public class UsageTestActivity extends AppCompatActivity {
                 startActivity(i);
                 return true;
             case R.id.from_DB_to_testing:
-                i = new Intent(this, TestingActivityOld.class);
-                startActivity(i);
-                return true;
-            case R.id.from_DB_to_settings:
-                i = new Intent(this, SettingActivity.class);
+                i = new Intent(this, TestingActivity.class);
                 startActivity(i);
                 return true;
             case R.id.from_DB_to_info:
