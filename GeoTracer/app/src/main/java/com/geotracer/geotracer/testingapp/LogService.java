@@ -23,7 +23,7 @@ import java.text.SimpleDateFormat;
 public class LogService extends Service {
 
     public static final String ACTION_BROADCAST = LogService.class.getName();
-    private static final String TESTING_ACTIVITY_LOG = "TestingActivity";
+    private static final String TESTING_ACTIVITY_LOG = "TestingActivityOld";
     private static final String LOGSERVICE = "LogService";
     private static final String GEOTRACER_SERVICE = "Geotracer Service";
     private static final String GEOTRACER_SCANNER = "GeoScanner";

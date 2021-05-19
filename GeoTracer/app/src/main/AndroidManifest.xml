@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.geotracer.geotracer">
-    <!-- Required Permissions -->
+
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- Required Hardware Features -->
+    <uses-permission android:name="android.permission.LOGS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".UserStatus"
         android:allowBackup="true"
@@ -10,12 +26,11 @@
         android:roundIcon="@mipmap/geotracer_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GeotracerApp">
-        <activity android:name=".topicMessagesBroadcast.TopicMessagesActivity"></activity>
-
+        <activity android:name=".testingapp.TestingActivity"></activity>
+        <activity android:name=".topicMessagesBroadcast.TopicMessagesActivity" />
         <activity android:name=".UsageTestActivity" />
         <activity android:name=".infoapp.InfoActivity" /> <!-- GeotracerAutostart Broadcast Receiver -->
         <activity android:name=".settingapp.SettingActivity" /> <!-- Geotracer Main Service -->
-        <activity android:name=".testingapp.TestingActivity" />
         <activity android:name=".mainapp.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,12 +38,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBZ0l09dSImjD_vZ2qkOn85_jE2WLzMA2E" />
+
         <receiver
             android:name=".service.GeotracerAutostart"
             android:enabled="true"
@@ -76,7 +93,6 @@
             android:name=".testingapp.LogService"
             android:enabled="true"
             android:exported="false" />
-
         <service
             android:name=".topicMessagesBroadcast.TopicMessagesBroadcastManager"
             android:enabled="true"
@@ -86,21 +102,5 @@
             </intent-filter>
         </service>
     </application>
-    <uses-feature
-        android:name="android.hardware.bluetooth_le"
-        android:required="true" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- Required Hardware Features -->
-    <uses-permission android:name="android.permission.LOGS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

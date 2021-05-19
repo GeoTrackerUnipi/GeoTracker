@@ -6,9 +6,5 @@
     <item
         android:id="@+id/from_info_to_testing"
         android:title="@string/menu_testing_item"/>
-    <item
-        android:id="@+id/from_info_to_settings"
-        android:title="@string/menu_setting_item"/>
-
 
 </menu>

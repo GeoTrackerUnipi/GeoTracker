@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -16,12 +17,14 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,8 +42,8 @@ import com.geotracer.geotracer.db.remote.FirestoreManagement;
 import com.geotracer.geotracer.infoapp.InfoActivity;
 import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
+import com.geotracer.geotracer.service.GeoLocator;
 import com.geotracer.geotracer.service.GeotracerService;
-import com.geotracer.geotracer.settingapp.SettingActivity;
 import com.geotracer.geotracer.utils.LogParsing;
 import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.geotracer.geotracer.utils.data.TestData;
@@ -60,9 +63,10 @@ public class TestingActivity extends AppCompatActivity {
     private FirestoreManagement firestore;
     private KeyValueManagement keyValueManagement;
     private GeotracerService geotracerMainService;
+    private GeoLocator geoLocation;
     private String physical_distance = null;
 
-    public static final String TESTING_ACTIVITY_LOG = "TestingActivity";
+    public static final String TESTING_ACTIVITY_LOG = "TestingActivityOld";
 
 
     @Override
@@ -73,6 +77,12 @@ public class TestingActivity extends AppCompatActivity {
 
         TextView tv = (TextView) findViewById(R.id.log_text);
         tv.setText("");
+
+        /*
+        SET THE BUTTON STATUS
+         */
+
+
 
         /*
         BROADCAST RECEIVER FOR THE LOG SERVICE
@@ -135,6 +145,333 @@ public class TestingActivity extends AppCompatActivity {
                 },new IntentFilter(NotificationSender.ACTION_BROADCAST)
 
         );
+
+
+        /*
+        ENABLE/DISABLE MAIN SERVICE
+         */
+
+        Switch main_service = (Switch) findViewById(R.id.mainServiceToggle);
+        main_service.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    /* FIXME */
+                    if(geotracerMainService == null)
+                    {
+                        Intent i = new Intent(TestingActivity.this, GeotracerService.class);
+                        startService(i);
+                        bindService(i, geotracerService, Context.BIND_AUTO_CREATE);
+
+                        String s = "Geotracer service started";
+
+
+                        Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.BOTTOM, 0, 0);
+                        toast.show();
+
+
+                    }
+                    else
+                        Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is already started!");
+
+                }else{
+                    if(geotracerMainService != null)
+                    {
+                        unbindService(geotracerService);
+                        Intent i = new Intent(TestingActivity.this, GeotracerService.class);
+                        stopService(i);
+
+                        geotracerMainService = null;
+                        String s = "Geotracer service stopped";
+                        Log.d(TESTING_ACTIVITY_LOG, s);
+
+
+                        Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.BOTTOM, 0, 0);
+                        toast.show();
+
+
+                    }
+                    else
+                        Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service already stopped");
+
+                }
+            }
+        });
+
+        /*
+        ENABLE/DISABLE SIGNATURE DISSEMINATION
+         */
+
+        Switch signature_dissemination = (Switch) findViewById(R.id.signaturesDisseminationToggle);
+        signature_dissemination.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    if(geotracerMainService != null)
+                    {
+                        boolean result = geotracerMainService.startAdvertising();
+                        if(result)
+                        {
+                            String s = "Signature dissemination started";
+
+
+                            Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.BOTTOM, 0, 0);
+                            toast.show();
+
+
+
+                        }
+                        else
+                        {
+                            Log.d(TESTING_ACTIVITY_LOG,"Signature Dissemination Already Started");
+                        }
+                    }
+                    else
+                        Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
+
+                }
+                else{
+                    if(geotracerMainService != null)
+                    {
+                        boolean result = geotracerMainService.stopAdvertising();
+                        if(result)
+                        {
+
+
+                            String s = "Signature Dissemination stopped";
+
+
+                            Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.BOTTOM, 0, 0);
+                            toast.show();
+
+
+                        }
+                        else
+                        {
+                            Log.d(TESTING_ACTIVITY_LOG,"Signature Dissemination Already Stopped");
+                        }
+                    }
+                    else
+                        Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
+
+                    }
+
+
+            }
+        });
+
+        /*
+        ENABLE/DISABLE SIGNATURE COLLECTION
+         */
+
+        Switch signature_collection = (Switch) findViewById(R.id.signaturesCollectionToggle);
+        signature_collection.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    if(geotracerMainService != null)
+                    {
+                        boolean result = geotracerMainService.startScanning();
+                        if(result)
+                        {
+                            String s = "Signature Collection Started";
+
+                            Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.BOTTOM, 0, 0);
+                            toast.show();
+
+                            Log.d(TESTING_ACTIVITY_LOG, s);
+                        }
+                        else
+                        {
+                            Log.d(TESTING_ACTIVITY_LOG,"Signature Collection Already Started");
+                        }
+                    }
+                    else
+                        Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
+
+                }
+                else{
+                    if(geotracerMainService != null)
+                    {
+                        boolean result = geotracerMainService.stopScanning();
+                        if(result)
+                        {
+                            String s = "Signature Collection Stopped";
+                            Log.d(TESTING_ACTIVITY_LOG, s);
+
+                            Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.BOTTOM, 0, 0);
+                            toast.show();
+
+                        }
+                        else
+                        {
+                            Log.d(TESTING_ACTIVITY_LOG,"Signature Collection Already Stopped");
+                        }
+                    }
+                    else
+                        Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
+
+                }
+
+
+            }
+        });
+
+        /*
+        FIXME: ENABLE/DISABLE GEOLOCALIZATION
+
+         */
+
+        Switch user_localization = (Switch) findViewById(R.id.userLocalizationToggle);
+        user_localization.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    if(geotracerMainService != null)
+                    {
+                        boolean result = geotracerMainService.startLocalization();
+                        if(result)
+                        {
+                            String s = "Localization Started";
+                            Log.d(TESTING_ACTIVITY_LOG, s);
+
+
+                            Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.BOTTOM, 0, 0);
+                            toast.show();
+
+
+                        }
+                        else
+                        {
+                            Log.d(TESTING_ACTIVITY_LOG,"Localization Already Started");
+                        }
+                    }
+                    else
+                        Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
+
+                }
+                else{
+                    if(geotracerMainService != null)
+                    {
+                        boolean result = geotracerMainService.stopLocalization();
+                        if(result)
+                        {
+                            String s = "Localization stopped";
+                            Log.d(TESTING_ACTIVITY_LOG, s);
+
+
+                            Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.BOTTOM, 0, 0);
+                            toast.show();
+
+                        }
+                        else
+                        {
+                            Log.d(TESTING_ACTIVITY_LOG,"Localization Already Stopped");
+                        }
+                    }
+                    else
+                        Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
+
+                }
+
+
+            }
+        });
+
+        /*
+
+        USER INFECTION NOTIFICATION
+
+         */
+
+        Switch user_infected = (Switch) findViewById(R.id.userInfectedToggle);
+        user_infected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    RetStatus<List<BaseLocation>> userPositions = keyValueManagement.positions.getAllPositions();
+                    if(userPositions.getStatus() == OpStatus.OK){
+                        firestore.insertInfectedLocations(userPositions.getValue());
+                        notificationSender.infectionAlert();
+
+                        String s = "Positivity Report Activated";
+                        Log.d(TESTING_ACTIVITY_LOG, s);
+
+                        Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.BOTTOM, 0, 0);
+                        toast.show();
+
+                    }
+
+
+                }else{
+                    //DISABLE THE RECEIVING OF NOTIFICATION FOR BEING TOO CLOSE TO OTHER PEOPLE
+                    Log.d(TESTING_ACTIVITY_LOG, "Positivity Report Disabled");
+                }
+
+
+            }
+        });
+
+        /*
+        FIXME: ENABLE/DISABLE PROXIMITY NOTIFICATION
+         */
+
+        Switch proximity_notifications = (Switch) findViewById(R.id.proximityNotificationToggle);
+        proximity_notifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    //ENABLE THE RECEIVING OF NOTIFICATION FOR BEING TOO CLOSE TO OTHER PEOPLE
+
+
+                    if(geotracerMainService != null)
+                    {
+                        boolean result = geotracerMainService.enableProximityWarnings();
+                        if(result) {
+                            String s = "Proximity Warning Notifications Enabled";
+                            Log.d(TESTING_ACTIVITY_LOG, s);
+
+                            Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.BOTTOM, 0, 0);
+                            toast.show();
+
+                        }
+                        else
+                            Log.d(TESTING_ACTIVITY_LOG, "Proximity Warning Notifications Enabled Already Enabled");
+                    }
+                    else
+                        Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
+
+
+                }else{
+                    //DISABLE THE RECEIVING OF NOTIFICATION FOR BEING TOO CLOSE TO OTHER PEOPLE
+
+
+                    if(geotracerMainService != null)
+                    {
+                        boolean result = geotracerMainService.disableProximityWarnings();
+                        if(result) {
+
+                            String s = "Proximity Warning Notifications Disabled";
+                            Log.d(TESTING_ACTIVITY_LOG, s);
+
+
+                            Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.BOTTOM, 0, 0);
+                            toast.show();
+
+                        }else
+                            Log.d(TESTING_ACTIVITY_LOG, "Proximity Warning Notifications Already Disabled");
+                    }
+                    else
+                        Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
+
+                }
+            }
+        });
         initBottomMenu();
 
     }
@@ -154,10 +491,6 @@ public class TestingActivity extends AppCompatActivity {
 
                     case R.id.from_testing_to_main:
                         i = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(i);
-                        return true;
-                    case R.id.from_testing_to_settings:
-                        i = new Intent(getApplicationContext(), SettingActivity.class);
                         startActivity(i);
                         return true;
                     case R.id.from_testing_to_info:
@@ -264,6 +597,42 @@ public class TestingActivity extends AppCompatActivity {
 
             GeotracerService.GeotracerBinder binder = (GeotracerService.GeotracerBinder) service;
             geotracerMainService = binder.getService();
+
+            /*
+            FIXME: DEVO SETTARE LO STATO THE TOGGLES
+             */
+
+            Switch main_service = (findViewById(R.id.mainServiceToggle));
+            Switch dissemination = (findViewById(R.id.signaturesDisseminationToggle));
+            Switch collection = (findViewById(R.id.signaturesCollectionToggle));
+            Switch localization = (findViewById(R.id.userLocalizationToggle));
+            Switch proximity = findViewById(R.id.proximityNotificationToggle);
+
+
+            if(geotracerMainService.isServiceStarted()){
+                main_service.setChecked(true);
+            }else
+                main_service.setChecked(false);
+
+            if(geotracerMainService.isAdvertising())
+                dissemination.setChecked(true);
+            else
+                dissemination.setChecked(false);
+            if(geotracerMainService.isScanning())
+                collection.setChecked(true);
+            else
+                collection.setChecked(false);
+
+            if(geotracerMainService.isLocalizing())
+                localization.setChecked(true);
+            else
+                localization.setChecked(false);
+
+            if(geotracerMainService.isProximityNotificationEnabled())
+                proximity.setChecked(true);
+            else
+                proximity.setChecked(false);
+
 
         }
 
@@ -390,120 +759,6 @@ public class TestingActivity extends AppCompatActivity {
 
 
 
-    public void startDissemination(View view) {
-
-        if(geotracerMainService != null)
-        {
-            boolean result = geotracerMainService.startAdvertising();
-            if(result)
-            {
-                String s = "DEVICE STARTED DISSEMINATING ITS SIGNATURE\n";
-
-                TextView tv = new TextView(TestingActivity.this);
-                Log.d(TESTING_ACTIVITY_LOG, s);
-                showPopupWindow(tv, s);
-            }
-            else
-            {
-                Log.d(TESTING_ACTIVITY_LOG,"Signature Dissemination Already Started");
-            }
-        }
-        else
-            Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
-
-    }
-
-
-    public void stopDissemination(View view) {
-
-        if(geotracerMainService != null)
-        {
-            boolean result = geotracerMainService.stopAdvertising();
-            if(result)
-            {
-                String s = "DISSEMINATION STOPPED";
-                TextView tv = new TextView(TestingActivity.this);
-                showPopupWindow(tv, s);
-                Log.d(TESTING_ACTIVITY_LOG, s);
-            }
-            else
-            {
-                Log.d(TESTING_ACTIVITY_LOG,"Signature Dissemination Already Stopped");
-            }
-        }
-        else
-            Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
-
-    }
-
-
-    public void startCollection(View view) {
-
-        if(geotracerMainService != null)
-        {
-            boolean result = geotracerMainService.startScanning();
-            if(result)
-            {
-                String s = "SIGNATURE COLLECTION STARTED";
-                TextView tv = new TextView(TestingActivity.this);
-                showPopupWindow(tv, s);
-                Log.d(TESTING_ACTIVITY_LOG, s);
-            }
-            else
-            {
-                Log.d(TESTING_ACTIVITY_LOG,"Signature Collection Already Started");
-            }
-        }
-        else
-            Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
-
-    }
-
-
-    public void stopCollection(View view) {
-
-        if(geotracerMainService != null)
-        {
-            boolean result = geotracerMainService.stopScanning();
-            if(result)
-            {
-                String s = "SIGNATURE COLLECTION STOPPED";
-                TextView tv = new TextView(TestingActivity.this);
-                showPopupWindow(tv, s);
-                Log.d(TESTING_ACTIVITY_LOG, s);
-            }
-            else
-            {
-                Log.d(TESTING_ACTIVITY_LOG,"Signature Collection Already Stopped");
-            }
-        }
-        else
-            Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is unbound!");
-
-    }
-
-
-    public void infected(View view) {
-        /*
-            TAG THE USER AS INFECTED
-            THE RESULT WILL BE SHOWN IN A POPUP WINDOW IN ADDITION TO THE LOG SECTION
-         */
-        TextView tv = new TextView(TestingActivity.this);
-
-        RetStatus<List<BaseLocation>> userPositions = keyValueManagement.positions.getAllPositions();
-        if(userPositions.getStatus() == OpStatus.OK){
-            firestore.insertInfectedLocations(userPositions.getValue());
-            notificationSender.infectionAlert();
-            Log.d(TESTING_ACTIVITY_LOG, "POSITIVITY REPORT ENABLED");
-            showPopupWindow(tv, "USER TAGGED AS INFECTED");
-        }
-        else {
-            showPopupWindow(tv, "ERROR! USER NOT TAGGED AS INFECTED");
-            Log.d(TESTING_ACTIVITY_LOG, "ERROR! USER NOT TAGGED AS INFECTED");
-        }
-
-    }
-
 
     /*
     IT DELETES THE OLD SIGNATURES FROM THE DB
@@ -519,13 +774,20 @@ public class TestingActivity extends AppCompatActivity {
          */
 
         if(firestore.dropExpiredLocations()== OpStatus.OK) {
-            TextView tv = new TextView(TestingActivity.this);
-            showPopupWindow(tv, "Old data has been deleted from the database");
-            Log.d(TESTING_ACTIVITY_LOG, "Old data has been deleted from the database");
+            String s = "Old data has been deleted from the database";
+            Log.d(TESTING_ACTIVITY_LOG, s);
+
+            Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.BOTTOM, 0, 0);
+            toast.show();
+
         }else{
-            TextView tv = new TextView(TestingActivity.this);
-            showPopupWindow(tv, "Error! Data not deleted");
-            Log.d(TESTING_ACTIVITY_LOG, "Error! Old Data not deleted");
+            String s = "Error! Data not deleted";
+            Log.d(TESTING_ACTIVITY_LOG, s);
+
+            Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.BOTTOM, 0, 0);
+            toast.show();
         }
 
 
@@ -630,48 +892,101 @@ public class TestingActivity extends AppCompatActivity {
             switch(item.getItemId()){
                 case R.id.delete_my_positions:
                     //DELETE MY POSITIONS
-                    if(keyValueManagement.positions.dropAllPositions() != OpStatus.OK)
-                        showPopupWindow(tv, "Error in removing positions");
-                    else {
-                        showPopupWindow(tv, "All positions removed");
+                    if(keyValueManagement.positions.dropAllPositions() != OpStatus.OK) {
+                        String s = "Error in removing positions";
+                        Log.d(TESTING_ACTIVITY_LOG, s);
+
+                        Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.BOTTOM, 0, 0);
+                        toast.show();
+
+                    }else {
+                        String s = "All positions removed";
+                        Log.d(TESTING_ACTIVITY_LOG, s);
+
+                        Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.BOTTOM, 0, 0);
+                        toast.show();
                     }
                     return true;
                 case R.id.delete_my_signatures:
                     //DELETE MY SIGNATURES
-                    if(keyValueManagement.signatures.removeAllSignatures() != OpStatus.OK)
-                        showPopupWindow(tv, "Error in removing signatures");
-                    else
-                        showPopupWindow(tv, "All signatures removed");
+                    if(keyValueManagement.signatures.removeAllSignatures() != OpStatus.OK) {
+                        String s = "Error in removing signatures";
+                        Log.d(TESTING_ACTIVITY_LOG, s);
+
+                        Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.BOTTOM, 0, 0);
+                        toast.show();
+
+                    }else {
+                        String s = "All signatures removed";
+                        Log.d(TESTING_ACTIVITY_LOG, s);
+
+                        Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.BOTTOM, 0, 0);
+                        toast.show();
+                    }
                     return true;
                 case R.id.delete_rec_beacons:
                     //DELETE RECEIVED BEACONS
-                    if(keyValueManagement.beacons.dropAllBeacons() != OpStatus.OK)
-                        showPopupWindow(tv, "Error in removing beacons");
+                    if(keyValueManagement.beacons.dropAllBeacons() != OpStatus.OK){
+                        String s = "Error in removing beacons";
+                        Log.d(TESTING_ACTIVITY_LOG, s);
+
+                        Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.BOTTOM, 0, 0);
+                        toast.show();
+                    }
+
                     else {
-                        showPopupWindow(tv, "All beacons removed");
+                        String s = "All beacons removed";
+                        Log.d(TESTING_ACTIVITY_LOG, s);
+
+                        Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.BOTTOM, 0, 0);
+                        toast.show();
+
                     }
                     return true;
                 case R.id.delete_all:
                     //DELETE EVERYTHING
                     if(!keyValueManagement.cleanLocalStore()) {
-                        showPopupWindow(tv, "Error in cleaning the local database");
+                        String s = "Error in cleaning the local database";
+                        Log.d(TESTING_ACTIVITY_LOG, s);
+
+                        Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.BOTTOM, 0, 0);
+                        toast.show();
                     }
                     else {
                         if(notificationSender.forceNotInfected()==OpStatus.OK) {
                             FrameLayout frameLayout = findViewById(R.id.contact_frame);
                             frameLayout.setBackgroundColor(getResources().getColor(R.color.white));
                             TextView contact_text = findViewById(R.id.contact_text);
-                            contact_text.setText(getResources().getString(R.string.contacts));
+                            contact_text.setText(getResources().getString(R.string.no_contacts));
                             ((UserStatus) TestingActivity.this.getApplication()).setContacts(false);
                             showPopupWindow(tv, "Local database cleaned");
                         }
                     }
                     return true;
                 case R.id.delete_bucket:
-                    if(notificationSender.removeAllBuckets() != OpStatus.OK)
-                        showPopupWindow(tv, "Error in deleting buckets");
+                    if(notificationSender.removeAllBuckets() != OpStatus.OK){
+                        String s = "Error in deleting buckets";
+                        Log.d(TESTING_ACTIVITY_LOG, s);
+
+                        Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.BOTTOM, 0, 0);
+                        toast.show();
+                    }
+
                     else{
-                        showPopupWindow(tv, "All buckets removed");
+                        String s = "All buckets removed";
+                        Log.d(TESTING_ACTIVITY_LOG, s);
+
+                        Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.BOTTOM, 0, 0);
+                        toast.show();
                     }
                 default:
                     return false;
@@ -733,39 +1048,45 @@ public class TestingActivity extends AppCompatActivity {
     }
 
 
-    public void startService(View view) {
+    /*
 
-        /* FIXME */
-        if(geotracerMainService == null)
-        {
-            Intent i = new Intent(this, GeotracerService.class);
-            startService(i);
-            bindService(i, geotracerService, Context.BIND_AUTO_CREATE);
-            String s = "Geotracer service started";
-            TextView tv = new TextView(TestingActivity.this);
-            showPopupWindow(tv, s);
-            Log.d(TESTING_ACTIVITY_LOG, s);
+    FIXME: CONTROLLARE TUTTE LE FUNZIONI SOTTOSTANTI
+
+     */
+
+
+    public void getSignature(View view) {
+        String signature = geotracerMainService.getSignature();
+        Toast toast = Toast.makeText(getApplicationContext(), "Your signature is: " + signature, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.BOTTOM, 0, 0);
+        toast.show();
+    }
+
+    public void changeSignature(View view) {
+        if(geotracerMainService.resetSignature()){
+            String s = "Signature changed successfully";
+            Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.BOTTOM, 0, 0);
+            toast.show();
         }
-        else
-            Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service is already started!");
 
     }
 
-    /* FIXME */
-    public void stopService(View view) {
-        if(geotracerMainService != null)
-        {
-            unbindService(geotracerService);
-            Intent i = new Intent(TestingActivity.this, GeotracerService.class);
-            stopService(i);
+    public void getPosition(View view) {
+        Location location = geotracerMainService.getLastLocation();
+        String lat = String.valueOf(location.getLatitude());
+        String longitude = String.valueOf(location.getLongitude());
+        Toast toast = Toast.makeText(getApplicationContext(), "Latitude: " + lat + ", Longitude: " + longitude, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.BOTTOM, 0, 0);
+        toast.show();
+    }
 
-            geotracerMainService = null;
-            String s = "Geotracer service stopped";
-            TextView tv = new TextView(TestingActivity.this);
-            showPopupWindow(tv, s);
-            Log.d(TESTING_ACTIVITY_LOG, s);
+    public void gpsStatus(View view) {
+        if(geotracerMainService.isGPSEnabled()){
+            String s = "GPS is Enabled";
+            Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.BOTTOM, 0, 0);
+            toast.show();
         }
-        else
-            Log.w(TESTING_ACTIVITY_LOG, "Geotracer main service already stopped");
     }
 }

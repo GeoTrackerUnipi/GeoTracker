@@ -11,7 +11,6 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -27,7 +26,6 @@ import com.geotracer.geotracer.R;
 import com.geotracer.geotracer.UserStatus;
 import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
-import com.geotracer.geotracer.settingapp.SettingActivity;
 import com.geotracer.geotracer.testingapp.TestingActivity;
 
 public class InfoActivity extends AppCompatActivity {
@@ -88,10 +86,6 @@ public class InfoActivity extends AppCompatActivity {
                     return true;
                 case R.id.from_info_to_testing:
                     i = new Intent(getApplicationContext(), TestingActivity.class);
-                    startActivity(i);
-                    return true;
-                case R.id.from_info_to_settings:
-                    i = new Intent(getApplicationContext(), SettingActivity.class);
                     startActivity(i);
                     return true;
                 default:

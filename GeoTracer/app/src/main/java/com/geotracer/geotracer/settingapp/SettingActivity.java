@@ -12,7 +12,6 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +29,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.geotracer.geotracer.R;
-import com.geotracer.geotracer.UsageTestActivity;
 import com.geotracer.geotracer.UserStatus;
 import com.geotracer.geotracer.db.local.KeyValueManagement;
 import com.geotracer.geotracer.db.remote.FirestoreManagement;
@@ -38,7 +36,6 @@ import com.geotracer.geotracer.infoapp.InfoActivity;
 import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
 import com.geotracer.geotracer.service.GeotracerService;
-import com.geotracer.geotracer.testingapp.TestingActivity;
 import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.geotracer.geotracer.utils.generics.RetStatus;
@@ -178,7 +175,7 @@ public class SettingActivity extends AppCompatActivity {
                         startActivity(i);
                         return true;
                     case R.id.from_setting_to_testing:
-                        i = new Intent(getApplicationContext(), TestingActivity.class);
+                        i = new Intent(getApplicationContext(), TestingActivityOld.class);
                         startActivity(i);
                         return true;
                     case R.id.from_setting_to_info:

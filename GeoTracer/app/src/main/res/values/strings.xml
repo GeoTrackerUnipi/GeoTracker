@@ -37,5 +37,24 @@
     <string name="geotracer_notif_proximity_contents">You are too close to another individual!</string>
 
     <!-- /Geotracer Main Service -->
+    <string name="testing_settings">Settings</string>
+    <string name="user_signature">User Signature</string>
+    <string name="get">Get</string>
+    <string name="change">Change</string>
+    <string name="user_position">User Position</string>
+    <string name="gps_status">GPS Status</string>
+    <string name="application_data">Application Data</string>
+    <string name="clean_data">Delete Old Data</string>
+    <string name="clean_menu">Delete</string>
+    <string name="log">Log</string>
+    <string name="main_service">Main Service</string>
+    <string name="signatures_dissemination">Signatures Dissemination</string>
+    <string name="signatures_collection">Signatures Collection</string>
+    <string name="user_localization">User Localization</string>
+    <string name="user_infected">User Infected</string>
+    <string name="proximity_notification">Proximity Notification</string>
+    <string name="empty">Empty</string>
+    <string name="show_log">Show Log</string>
+    <string name="set_distance">Set Distance</string>
 
 </resources>

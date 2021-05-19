@@ -32,20 +32,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6ea0b472-2ab6-4806-a1a1-f1653b5edd79" name="Default Changelist" comment="Main Service Merging Completed (&quot;Other Positions&quot; insertion disabled)">
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/testing_linear_layouts.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/testing_linear_layouts_subsections.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/testing_sections_contents.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/testing_sections_headings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/testing_sections_headings_subsections.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/testing_sections_log.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_testing_new.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/popup_insert.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/UsageTestActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/UsageTestActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/infoapp/InfoActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/infoapp/InfoActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/mainapp/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/mainapp/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/settingapp/SettingActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/settingapp/SettingActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/LogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/LogService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/TestingActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/TestingActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/utils/HashValues.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/utils/LogParsing.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/utils/LogParsing.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/utils/data/TestData.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/utils/data/TestData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_testing.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_testing.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_testing_new.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/infection_bar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/infection_bar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/info_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/info_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/main_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/main_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/testing_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/testing_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,6 +117,9 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
       <recent name="$PROJECT_DIR$/app" />
+    </key>
+    <key name="android.template.696445468">
+      <recent name="com.geotracer.geotracer.testingapp" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.geotracer.geotracer.mainapp.heatMap" />
@@ -431,7 +436,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621409842601</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="Added the possibility of setting the physical distance">
+      <created>1621416430799</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1621416430799</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -459,7 +471,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Merging projects" />
     <MESSAGE value="Commented all the files and make some bug correction" />
     <MESSAGE value="Fixed some bug." />
     <MESSAGE value="Solved an error occured during the previous merge" />
@@ -484,7 +495,8 @@
     <MESSAGE value="Log parsing and insert into database of &lt;key, distance&gt; values." />
     <MESSAGE value="Fixed a bug in a tag name" />
     <MESSAGE value="Fix a bug in a tag name" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix a bug in a tag name" />
+    <MESSAGE value="Added the possibility of setting the physical distance" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added the possibility of setting the physical distance" />
   </component>
   <component name="WindowStateProjectService">
     <state x="688" y="277" width="960" height="533" key="#PSD" timestamp="1621365499347" />
@@ -499,7 +511,10 @@
     <state x="768" y="264" width="384" height="590" key="#com.intellij.ide.util.MemberChooser/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
     <state x="589" y="276" key="#com.intellij.refactoring.memberPullUp.PullUpDialog" timestamp="1621365499347" />
     <state x="589" y="276" key="#com.intellij.refactoring.memberPullUp.PullUpDialog/0.23.1440.794@0.23.1440.794" timestamp="1621365499347" />
-    <state x="693" y="306" width="534" height="506" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1621365499347" />
+    <state x="693" y="306" width="534" height="506" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1621440711646">
+      <screen x="0" y="23" width="1440" height="794" />
+    </state>
+    <state x="693" y="306" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.23.1440.794@0.23.1440.794" timestamp="1621440711646" />
     <state x="693" y="306" width="534" height="506" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
     <state x="100" y="123" width="1240" height="594" key="AVDManager" timestamp="1621365499347" />
     <state x="100" y="123" width="1240" height="594" key="AVDManager/0.23.1440.794@0.23.1440.794" timestamp="1621365499347" />
@@ -512,42 +527,42 @@
     <state x="1065" y="301" width="434" height="487" key="FileChooserDialogImpl" timestamp="1621365499347" />
     <state x="1065" y="301" key="FileChooserDialogImpl/0.0.2752.1109@0.0.2752.1109" timestamp="1621365499347" />
     <state x="743" y="316" width="434" height="487" key="FileChooserDialogImpl/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1621365499347" />
-    <state width="1395" height="563" key="GridCell.Tab.0.bottom" timestamp="1621416324005">
-      <screen x="0" y="23" width="1440" height="797" />
+    <state width="1330" height="74" key="GridCell.Tab.0.bottom" timestamp="1621440516523">
+      <screen x="0" y="23" width="1440" height="794" />
     </state>
     <state width="2709" height="346" key="GridCell.Tab.0.bottom/0.0.2752.1109@0.0.2752.1109" timestamp="1621365499347" />
-    <state width="1375" height="110" key="GridCell.Tab.0.bottom/0.23.1440.794@0.23.1440.794" timestamp="1621409957012" />
-    <state width="1395" height="563" key="GridCell.Tab.0.bottom/0.23.1440.797@0.23.1440.797" timestamp="1621416324005" />
+    <state width="1330" height="74" key="GridCell.Tab.0.bottom/0.23.1440.794@0.23.1440.794" timestamp="1621440516523" />
+    <state width="1395" height="563" key="GridCell.Tab.0.bottom/0.23.1440.797@0.23.1440.797" timestamp="1621416527339" />
     <state width="1398" height="542" key="GridCell.Tab.0.bottom/0.23.1440.800@0.23.1440.800" timestamp="1621365499347" />
     <state width="1398" height="205" key="GridCell.Tab.0.bottom/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
     <state width="1874" height="277" key="GridCell.Tab.0.bottom/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1621365499347" />
     <state width="1874" height="277" key="GridCell.Tab.0.bottom/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
-    <state width="1395" height="563" key="GridCell.Tab.0.center" timestamp="1621416324004">
-      <screen x="0" y="23" width="1440" height="797" />
+    <state width="1330" height="74" key="GridCell.Tab.0.center" timestamp="1621440516520">
+      <screen x="0" y="23" width="1440" height="794" />
     </state>
     <state width="2709" height="346" key="GridCell.Tab.0.center/0.0.2752.1109@0.0.2752.1109" timestamp="1621365499347" />
-    <state width="1375" height="110" key="GridCell.Tab.0.center/0.23.1440.794@0.23.1440.794" timestamp="1621409957011" />
-    <state width="1395" height="563" key="GridCell.Tab.0.center/0.23.1440.797@0.23.1440.797" timestamp="1621416324004" />
+    <state width="1330" height="74" key="GridCell.Tab.0.center/0.23.1440.794@0.23.1440.794" timestamp="1621440516520" />
+    <state width="1395" height="563" key="GridCell.Tab.0.center/0.23.1440.797@0.23.1440.797" timestamp="1621416527337" />
     <state width="1398" height="542" key="GridCell.Tab.0.center/0.23.1440.800@0.23.1440.800" timestamp="1621365499347" />
     <state width="1398" height="205" key="GridCell.Tab.0.center/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
     <state width="1874" height="277" key="GridCell.Tab.0.center/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1621365499347" />
     <state width="1874" height="277" key="GridCell.Tab.0.center/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
-    <state width="1395" height="563" key="GridCell.Tab.0.left" timestamp="1621416324003">
-      <screen x="0" y="23" width="1440" height="797" />
+    <state width="1330" height="74" key="GridCell.Tab.0.left" timestamp="1621440516519">
+      <screen x="0" y="23" width="1440" height="794" />
     </state>
     <state width="2709" height="346" key="GridCell.Tab.0.left/0.0.2752.1109@0.0.2752.1109" timestamp="1621365499347" />
-    <state width="1375" height="110" key="GridCell.Tab.0.left/0.23.1440.794@0.23.1440.794" timestamp="1621409957011" />
-    <state width="1395" height="563" key="GridCell.Tab.0.left/0.23.1440.797@0.23.1440.797" timestamp="1621416324003" />
+    <state width="1330" height="74" key="GridCell.Tab.0.left/0.23.1440.794@0.23.1440.794" timestamp="1621440516519" />
+    <state width="1395" height="563" key="GridCell.Tab.0.left/0.23.1440.797@0.23.1440.797" timestamp="1621416527336" />
     <state width="1398" height="542" key="GridCell.Tab.0.left/0.23.1440.800@0.23.1440.800" timestamp="1621365499347" />
     <state width="1398" height="205" key="GridCell.Tab.0.left/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
     <state width="1874" height="277" key="GridCell.Tab.0.left/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1621365499347" />
     <state width="1874" height="277" key="GridCell.Tab.0.left/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
-    <state width="1395" height="563" key="GridCell.Tab.0.right" timestamp="1621416324005">
-      <screen x="0" y="23" width="1440" height="797" />
+    <state width="1330" height="74" key="GridCell.Tab.0.right" timestamp="1621440516521">
+      <screen x="0" y="23" width="1440" height="794" />
     </state>
     <state width="2709" height="346" key="GridCell.Tab.0.right/0.0.2752.1109@0.0.2752.1109" timestamp="1621365499347" />
-    <state width="1375" height="110" key="GridCell.Tab.0.right/0.23.1440.794@0.23.1440.794" timestamp="1621409957011" />
-    <state width="1395" height="563" key="GridCell.Tab.0.right/0.23.1440.797@0.23.1440.797" timestamp="1621416324005" />
+    <state width="1330" height="74" key="GridCell.Tab.0.right/0.23.1440.794@0.23.1440.794" timestamp="1621440516521" />
+    <state width="1395" height="563" key="GridCell.Tab.0.right/0.23.1440.797@0.23.1440.797" timestamp="1621416527338" />
     <state width="1398" height="542" key="GridCell.Tab.0.right/0.23.1440.800@0.23.1440.800" timestamp="1621365499347" />
     <state width="1398" height="205" key="GridCell.Tab.0.right/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
     <state width="1874" height="277" key="GridCell.Tab.0.right/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1621365499347" />
@@ -564,20 +579,20 @@
     <state width="1398" height="2" key="GridCell.Tab.1.right" timestamp="1621365499347" />
     <state width="1398" height="2" key="GridCell.Tab.1.right/0.23.1440.794@0.23.1440.794" timestamp="1621365499347" />
     <state width="1398" height="2" key="GridCell.Tab.1.right/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
-    <state x="416" y="222" width="810" height="531" key="Vcs.Push.Dialog.v2" timestamp="1621409940271">
-      <screen x="0" y="23" width="1440" height="794" />
+    <state x="416" y="223" width="810" height="531" key="Vcs.Push.Dialog.v2" timestamp="1621416438145">
+      <screen x="0" y="23" width="1440" height="797" />
     </state>
     <state x="416" y="222" key="Vcs.Push.Dialog.v2/0.23.1440.794@0.23.1440.794" timestamp="1621409940271" />
-    <state x="416" y="223" key="Vcs.Push.Dialog.v2/0.23.1440.797@0.23.1440.797" timestamp="1621365499347" />
+    <state x="416" y="223" key="Vcs.Push.Dialog.v2/0.23.1440.797@0.23.1440.797" timestamp="1621416438145" />
     <state x="416" y="224" key="Vcs.Push.Dialog.v2/0.23.1440.800@0.23.1440.800" timestamp="1621365499347" />
     <state x="416" y="224" key="Vcs.Push.Dialog.v2/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
     <state x="555" y="294" width="810" height="531" key="Vcs.Push.Dialog.v2/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1621365499347" />
     <state x="555" y="294" width="810" height="531" key="Vcs.Push.Dialog.v2/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
-    <state x="559" y="357" width="404" height="158" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1621409814888">
+    <state x="559" y="357" width="404" height="158" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1621435005693">
       <screen x="0" y="23" width="1440" height="794" />
     </state>
     <state x="559" y="379" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1621365499347" />
-    <state x="559" y="357" width="404" height="158" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1440.794@0.23.1440.794" timestamp="1621409814888" />
+    <state x="559" y="357" width="404" height="158" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1440.794@0.23.1440.794" timestamp="1621435005693" />
     <state x="745" y="472" width="430" height="175" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
     <state x="893" y="245" width="964" height="717" key="search.everywhere.popup" timestamp="1621365499347" />
     <state x="893" y="245" width="964" height="717" key="search.everywhere.popup/0.0.2752.1109@0.0.2752.1109" timestamp="1621365499347" />

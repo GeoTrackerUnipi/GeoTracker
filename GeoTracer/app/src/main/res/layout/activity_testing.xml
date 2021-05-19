@@ -1,290 +1,392 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/service_status"
+        android:id="@+id/settingsTitle"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/rounded_corner"
-        android:gravity="center"
-        android:text="Service Status"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/guideline8"
+        android:background="@drawable/testing_sections_headings"
+        android:backgroundTint="#FF7EA6E0"
+        android:paddingBottom="2dp"
+        android:text="@string/settings"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/guideline20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline8"
+        android:id="@+id/guideline20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.05" />
+        app:layout_constraintGuide_percent="0.07" />
 
-    <Button
-        android:id="@+id/start_service"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start"
-        android:textSize="10dp"
-        android:onClick="startService"
-        app:layout_constraintBottom_toTopOf="@+id/signature_dissemination_top"
-        app:layout_constraintEnd_toStartOf="@+id/button_guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/service_status" />
-
-    <Button
-        android:id="@+id/stop_service"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stop"
-        android:textSize="10dp"
-        android:onClick="stopService"
-        app:layout_constraintBottom_toTopOf="@+id/signature_dissemination_top"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/button_guideline"
-        app:layout_constraintTop_toTopOf="@+id/guideline8" />
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/signature_dissemination_top"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.12" />
-
-
-    <TextView
-        android:id="@+id/signature_dissemination"
+    <ScrollView
+        android:id="@+id/settingsScroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/rounded_corner"
-        android:gravity="center"
-        android:text="Signature Dissemination"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/dissemination_title_guideline"
+        android:background="@drawable/testing_sections_contents"
+        android:backgroundTint="#FFDAE8FC"
+        app:layout_constraintBottom_toTopOf="@+id/half"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/signature_dissemination_top" />
+        app:layout_constraintTop_toBottomOf="@+id/settingsTitle">
+
+        <LinearLayout
+            android:id="@+id/settingScrollLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Switch
+                android:id="@+id/mainServiceToggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="sans-serif"
+                android:showText="false"
+                android:text="@string/main_service"
+                android:textAlignment="viewStart"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="20sp"
+                tools:checked="false" />
+
+            <Switch
+                android:id="@+id/signaturesDisseminationToggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="sans-serif"
+                android:showText="false"
+                android:text="@string/signatures_dissemination"
+                android:textAlignment="viewStart"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="20sp"
+                tools:checked="false" />
+
+            <Switch
+                android:id="@+id/signaturesCollectionToggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="sans-serif"
+                android:showText="false"
+                android:text="@string/signatures_collection"
+                android:textAlignment="viewStart"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="20sp"
+                tools:checked="false" />
+
+            <Switch
+                android:id="@+id/userLocalizationToggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="sans-serif"
+                android:showText="false"
+                android:text="@string/user_localization"
+                android:textAlignment="viewStart"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="20sp"
+                tools:checked="false" />
+
+            <Switch
+                android:id="@+id/userInfectedToggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="sans-serif"
+                android:showText="false"
+                android:text="@string/user_infected"
+                android:textAlignment="viewStart"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="20sp"
+                tools:checked="false" />
+
+            <Switch
+                android:id="@+id/proximityNotificationToggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="sans-serif"
+                android:showText="false"
+                android:text="@string/proximity_notification"
+                android:textAlignment="viewStart"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="20sp"
+                tools:checked="false" />
+
+            <LinearLayout
+                android:id="@+id/userSignatureLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="5dp"
+                android:background="@drawable/testing_linear_layouts_subsections"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/userSignatureHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/testing_sections_headings_subsections"
+                    android:backgroundTint="#FF7EA6E0"
+                    android:paddingHorizontal="5dp"
+                    android:paddingVertical="1dp"
+                    android:text="@string/user_signature"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:id="@+id/userSignatureContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="4dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/userSignatureButtonGet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="15dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="#FF91ACD3"
+                        android:padding="2dp"
+                        android:text="@string/get"
+                        android:onClick="getSignature"/>
+
+                    <Space
+                        android:id="@+id/userSignatureSpace"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:id="@+id/userSignatureButtonChange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="15dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="#FF91ACD3"
+                        android:text="@string/change"
+                        android:onClick="changeSignature"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/userPositionLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="5dp"
+                android:background="@drawable/testing_linear_layouts_subsections"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/userPositionHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/testing_sections_headings_subsections"
+                    android:backgroundTint="#FF7EA6E0"
+                    android:paddingHorizontal="5dp"
+                    android:paddingVertical="1dp"
+                    android:text="@string/user_position"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:id="@+id/userPositionContents"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="2dp"
+                    android:orientation="horizontal">
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline21"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal" />
+
+                    <Button
+                        android:id="@+id/userPositionButtonGet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="15dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="#FF91ACD3"
+                        android:padding="2dp"
+                        android:text="@string/get"
+                        android:onClick="getPosition"/>
+
+                    <Space
+                        android:id="@+id/userPositionSpace"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:id="@+id/userPositionGPSStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="15dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="#FF91ACD3"
+                        android:paddingHorizontal="0dp"
+                        android:text="@string/gps_status"
+                        android:onClick="gpsStatus"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/applicationDataLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="5dp"
+                android:background="@drawable/testing_linear_layouts_subsections"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/applicationDataHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/testing_sections_headings_subsections"
+                    android:backgroundTint="#FF7EA6E0"
+                    android:paddingHorizontal="5dp"
+                    android:paddingVertical="1dp"
+                    android:text="@string/application_data"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:id="@+id/applicationDataContents"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/applicationDataCleanData"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="15dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="#FF91ACD3"
+                        android:padding="2dp"
+                        android:text="@string/clean_data"
+                        android:onClick="delete"/>
+
+                    <Space
+                        android:id="@+id/applicationDataSpace"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:id="@+id/applicationDataCleanMenu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="15dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="#FF91ACD3"
+                        android:paddingHorizontal="0dp"
+                        android:text="@string/clean_menu"
+                        android:onClick="manageDelete"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/dissemination_title_guideline"
+        android:id="@+id/half"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.17" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/button_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="startDissemination"
-        android:text="Start"
-        android:textSize="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
-        app:layout_constraintEnd_toStartOf="@+id/button_guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/dissemination_title_guideline" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stop"
-        android:onClick="stopDissemination"
-        android:textSize="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/button_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/signature_dissemination" />
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.24" />
-
     <TextView
-        android:id="@+id/signature_collection"
+        android:id="@+id/logHeader"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/rounded_corner"
-        android:gravity="center"
-        android:text="Signature Collection"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/collection_title_guideline"
+        android:background="@drawable/testing_sections_headings"
+        android:backgroundTint="#FF7EA6E0"
+        android:paddingBottom="2dp"
+        android:text="@string/log"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="#000000"
+        app:layout_constraintTop_toTopOf="@+id/half"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline5" />
+        app:layout_constraintBottom_toTopOf="@+id/log_guide"
+        />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/collection_title_guideline"
+        android:id="@+id/log_guide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.29" />
-
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="startCollection"
-        android:text="Start"
-        android:textSize="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline4"
-        app:layout_constraintEnd_toStartOf="@+id/button_guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/collection_title_guideline" />
-
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stop"
-        android:onClick="stopCollection"
-        android:textSize="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/button_guideline"
-        app:layout_constraintTop_toTopOf="@+id/collection_title_guideline" />
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.36" />
-
-    <TextView
-        android:id="@+id/user_status"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/rounded_corner"
-        android:gravity="center"
-        android:text="User Status"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/user_title_guideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline4" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/user_title_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.41" />
-
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="infected"
-        android:text="Infected"
-        android:textSize="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/user_title_guideline" />
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.48" />
-
-    <TextView
-        android:id="@+id/deleteSignature"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/rounded_corner"
-        android:gravity="center"
-        android:text="Delete Data"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/delete_title_guideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline6" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/delete_title_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.53" />
-
-
-    <Button
-        android:id="@+id/button7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="delete"
-        android:text="Delete Old Data"
-        android:textSize="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintEnd_toStartOf="@+id/button_guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/delete_title_guideline" />
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.6" />
-
-    <TextView
-        android:id="@+id/log"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/rounded_corner"
-        android:gravity="center"
-        android:text="Log"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/log_title_guideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/log_title_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.65" />
-
+        app:layout_constraintGuide_percent="0.57" />
 
     <ScrollView
         android:id="@+id/scrollview"
@@ -292,10 +394,10 @@
         android:layout_height="0dp"
         android:background="@color/white"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/empty_button_guideline"
+        app:layout_constraintBottom_toTopOf="@+id/log_buttons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/log_title_guideline">
+        app:layout_constraintTop_toTopOf="@+id/log_guide">
 
         <LinearLayout
             android:id="@+id/linearLayoutScrolling"
@@ -310,33 +412,53 @@
         </LinearLayout>
     </ScrollView>
 
+
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/empty_button_guideline"
+        android:id="@+id/log_buttons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.87" />
+        app:layout_constraintGuide_percent="0.85" />
 
 
     <Button
-        android:id="@+id/button8"
+        android:id="@+id/clean_log"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:layout_weight="1"
+        android:backgroundTint="#FF91ACD3"
+        android:padding="2dp"
+        android:text="@string/empty"
         android:onClick="emptyLog"
-        android:text="Empty"
-        android:textSize="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintEnd_toStartOf="@+id/button_guideline"
+        app:layout_constraintTop_toTopOf="@+id/log_buttons"
+        app:layout_constraintEnd_toStartOf="@+id/setDistance"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/empty_button_guideline"
-        app:layout_constraintVertical_bias="0.09" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"/>
+
+
+    <Button
+        android:id="@+id/setDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:layout_weight="1"
+        android:backgroundTint="#FF91ACD3"
+        android:paddingHorizontal="0dp"
+        android:text="@string/set_distance"
+        android:onClick="setDistance"
+        app:layout_constraintTop_toTopOf="@+id/log_buttons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/clean_log"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"/>
+
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline3"
+        android:id="@+id/guideline18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.94" />
+        app:layout_constraintGuide_percent="0.91" />
 
     <include
         layout="@layout/infection_bar"
@@ -345,31 +467,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline3" />
-
-    <Button
-        android:id="@+id/button10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="manageDelete"
-        android:textSize="10dp"
-        android:text="Delete Menu"
-        app:layout_constraintBottom_toTopOf="@+id/log"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/button_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/deleteSignature" />
-
-    <Button
-        android:id="@+id/button14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="10dp"
-        android:text="Set Distance"
-        android:onClick="setDistance"
-        app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/button_guideline"
-        app:layout_constraintTop_toTopOf="@+id/empty_button_guideline" />
+        app:layout_constraintTop_toTopOf="@+id/guideline18" />
 
 
     <androidx.appcompat.widget.Toolbar
@@ -380,7 +478,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/signature_dissemination_top"/>
+        app:layout_constraintBottom_toTopOf="@+id/guideline20"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

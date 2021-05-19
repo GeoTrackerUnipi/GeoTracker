@@ -1,7 +1,6 @@
 package com.geotracer.geotracer.mainapp;
 
 import android.Manifest;
-import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -15,7 +14,6 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -42,8 +40,6 @@ import com.geotracer.geotracer.infoapp.InfoActivity;
 import com.geotracer.geotracer.mainapp.heatMap.HeatMap;
 import com.geotracer.geotracer.notifications.NotificationSender;
 import com.geotracer.geotracer.service.GeotracerService;
-import com.geotracer.geotracer.settingapp.SettingActivity;
-import com.geotracer.geotracer.testingapp.LogService;
 import com.geotracer.geotracer.testingapp.TestingActivity;
 import com.geotracer.geotracer.topicMessagesBroadcast.TopicMessagesActivity;
 import com.geotracer.geotracer.utils.generics.OpStatus;
@@ -125,10 +121,6 @@ public class MainActivity extends AppCompatActivity {
                 switch(item.getItemId()){
                     case R.id.from_main_to_testing:
                         i = new Intent(getApplicationContext(), TestingActivity.class);
-                        startActivity(i);
-                        return true;
-                    case R.id.from_main_to_settings:
-                        i = new Intent(getApplicationContext(), SettingActivity.class);
                         startActivity(i);
                         return true;
                     case R.id.from_main_to_info:
