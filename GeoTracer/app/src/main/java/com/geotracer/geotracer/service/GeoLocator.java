@@ -9,8 +9,12 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.geotracer.geotracer.db.remote.LocationAggregator;
 import com.geotracer.geotracer.utils.data.BaseLocation;
+import com.geotracer.geotracer.utils.data.ExtLocation;
 import com.geotracer.geotracer.utils.generics.OpStatus;
+import com.geotracer.geotracer.utils.generics.RetStatus;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Date;
@@ -45,6 +49,7 @@ class GeoLocator implements LocationListener
  GeotracerService geotracerService;                             // A reference to the main service object
  private final LocationManager locationManager;                 // The location manager object used by the service
  private Location lastLocation;                                 // The user's last known location
+ private final LocationAggregator aggregator;
 
  /* ============ Service Status Variables ============ */
  private boolean isLocalizing;                                  // Whether the localization system is enabled or not
@@ -63,7 +68,7 @@ class GeoLocator implements LocationListener
    this.geotracerService = geotracerService;
    this.locationManager = locationManager;
    this.isLocalizing = false;
-
+   this.aggregator = new LocationAggregator();
    // If the GPS provider is enabled
    if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
     {
@@ -253,7 +258,8 @@ class GeoLocator implements LocationListener
    if(geotracerService.firestoreDB != null)
     {
      // Add the position to the remote Firestorm database
-     dbResult = geotracerService.firestoreDB.insertLocation(key,locToBaseLoc(lastLocation));
+
+     dbResult = insertLocation(key,locToBaseLoc(lastLocation));
      if(dbResult != OpStatus.OK)
       Log.e(TAG,"Error in adding a position into the Firestorm Database: "+dbResult);
      else
@@ -263,7 +269,53 @@ class GeoLocator implements LocationListener
     Log.e(TAG,"Cannot add other position, the Firestorm database service is not alive!");
   }
 
+
  // Converts a Location into a BaseLocation object (as required by the KeyValue local database)
  private BaseLocation locToBaseLoc(Location loc)
   { return new BaseLocation(new GeoPoint(loc.getLatitude(),loc.getLongitude())); }
+
+
+  // FIRESTORE
+
+ //  function for pushing location values inside the firestore
+ private OpStatus insertLocation(String ID, BaseLocation location){
+
+  if( ID == null || ID.length() == 0 || location == null)
+    return OpStatus.ILLEGAL_ARGUMENT;
+
+  //  we aggregate the value provided
+  RetStatus<ExtLocation> status = aggregator.insertValue(ID, location);
+
+  FirebaseFirestore store = FirebaseFirestore.getInstance();
+
+  //  basing on the result of the aggregating operation we choose a reaction
+  switch(status.getStatus()){
+   case OK:  // aggregation of a value completed, is needed to push it into the database
+    try {
+     if( status.getValue().getCriticity() > 0) //1)  for testing purpouse now i registry all(because it's difficult to get data otherwise)
+      store.collection("geotraces")
+              .add(status.getValue())
+              .addOnSuccessListener(documentReference -> Log.d(TAG, "New document inserted into Firestore: " + documentReference.getId()))
+              .addOnFailureListener(e -> Log.d(TAG, "Error adding a document" + e));
+    }catch( RuntimeException e){
+     e.printStackTrace();
+     return OpStatus.ERROR;
+    }
+    break;
+
+   case COLLECTED:  //  given value aggregated
+    Log.d(TAG,"New measure aggregated");
+    break;
+
+   case PRESENT:    //  given value already aggregated
+    Log.d(TAG,"Data already aggregated. Operation rejected");
+    break;
+
+   default:         //  errors
+    Log.d(TAG,"An error has occurred during the request management");
+    return status.getStatus();
+  }
+
+  return OpStatus.OK;
+ }
 }
