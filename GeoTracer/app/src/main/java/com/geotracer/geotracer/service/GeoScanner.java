@@ -46,9 +46,9 @@ public class GeoScanner
  private static final long WINDOW_MAX_TIME = 10000;             // Maximum time interval for samples to be aggregated in the same window (ms)
 
  // ---------- Distance Estimation parameters ----------
- private static final int TX_POW_METER = -81;                   // The supposed RSSI at 1 meter from the transmitter
+ private static final int TX_POW_METER = -69; //-81             // The supposed RSSI at 1 meter from the transmitter
  // to be used in the distance estimation formula
- private static final double N = 2.5;                           // The path-loss exponent to be used in the distance estimation formula
+ private static final double N = 2.9;                           // The path-loss exponent to be used in the distance estimation formula
 
  // ------------ Proximity Alert parameters ------------
  private static final double SAFE_DISTANCE = 1.5;               // Safe distance below which proximity alerts should be raised to the user
@@ -340,6 +340,8 @@ public class GeoScanner
    Log.d(TAG,"New " + advType + " received (key = " + key + "RSSI =" + RSSI + ", timestamp = " +
            new SimpleDateFormat("dd-MM-yyyy HH:mm:ss",Locale.getDefault()).format(new Date(timestamp)) + ")");
    */
+
+   Log.d("RSSI",RSSI+"");
   }
 
  // Initializes the notification to be shown to the user should he come in
@@ -547,8 +549,16 @@ public class GeoScanner
               // Compute the contact time with the device by averaging the timestamps of the first and last advertisements in the window
               long contactTime = (samples.get(i).time + samples.get(j-1).time)/2;
 
-              Log.i("ExperimentAnalysis","Estimated distance from device \"" + key + "\": " + contactDistance + " (time = " +
+              Log.i(TAG,"Estimated distance from device \"" + key + "\": " + contactDistance + " (time = " +
                       new SimpleDateFormat("dd-MM-yyyy HH:mm:ss",Locale.getDefault()).format(new Date(contactTime)) + ")");
+
+              //THIS IS FOR THE TEST-----------------------------------------------
+              if(key.length()>30)
+                Log.d("Experiment",key+","+contactDistance);
+
+
+
+              //-------------------------------------------------------------------
 
               // If this is a signature, insert it into the "Other Signatures" into the keyValue database (which takes care of redundancy checks),
               // and set the "addedToDB" flag in the AdvList
