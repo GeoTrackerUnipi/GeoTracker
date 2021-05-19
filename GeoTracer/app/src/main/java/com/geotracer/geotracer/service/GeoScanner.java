@@ -493,9 +493,9 @@ public class GeoScanner
         // Unlock the AdvList, since concurrent insertion by new samples should cause no problem to the parsing
         advList.mutex.unlock();
 
-        /* Debugging Purposes */
+        /* Debugging Purposes
         Log.d(TAG,"Start Parsing key \"" + key +"\" (sampleSize = " + samples.size() + ")");
-        /* */
+        */
 
         // ---IF--- (and only if) the AdvList contains at least the MIN_SAMPLES required to be aggregated
         // in a distance estimation window, browse them from the first to the (last - MIN_SAMPLES))
@@ -610,17 +610,11 @@ public class GeoScanner
 
             // If the resulting list of AdvSamples is empty, remove the AdvList from the AdvTable
             if(advList.samples.isEmpty())
-             {
               advTable.remove(key);
-              Log.d(TAG,"End parsing key \""+key+"\" (entire AdvList was removed)");
-             }
             else
-             Log.d(TAG,"End parsing key \"" + key + "\" (" + dropIndex + " elements were removed)");
 
           advList.mutex.unlock();
          }
-        else
-         Log.d(TAG,"End parsing key \"" + key + "\" (no elements were removed)");
        }
      }
    }
