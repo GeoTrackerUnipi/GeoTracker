@@ -13,10 +13,10 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -41,14 +41,13 @@ import com.geotracer.geotracer.mainapp.MainActivity;
 import com.geotracer.geotracer.notifications.NotificationSender;
 import com.geotracer.geotracer.service.GeotracerService;
 import com.geotracer.geotracer.settingapp.SettingActivity;
-import com.geotracer.geotracer.utils.HashValues;
 import com.geotracer.geotracer.utils.LogParsing;
 import com.geotracer.geotracer.utils.data.BaseLocation;
 import com.geotracer.geotracer.utils.data.TestData;
 import com.geotracer.geotracer.utils.generics.OpStatus;
 import com.geotracer.geotracer.utils.generics.RetStatus;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestingActivity extends AppCompatActivity {
@@ -61,6 +60,7 @@ public class TestingActivity extends AppCompatActivity {
     private FirestoreManagement firestore;
     private KeyValueManagement keyValueManagement;
     private GeotracerService geotracerMainService;
+    private String physical_distance = null;
 
     public static final String TESTING_ACTIVITY_LOG = "TestingActivity";
 
@@ -84,18 +84,26 @@ public class TestingActivity extends AppCompatActivity {
 
                         //Log.d(TESTING_ACTIVITY_LOG, "LogService BROADCAST LISTENER");
                         String toLog = intent.getStringExtra("LogMessage");
-                        LogParsing logParsing = new LogParsing(toLog);
-                        //HashMap<String, HashValues> hash_map = logParsing.getLog_values();
-                        TestData hash_map = logParsing.getLog_values();
 
-                        if (hash_map.getData().size() > 0) {
-                            firestore.saveTestData(hash_map);
+                        if(physical_distance != null) {
+                            LogParsing logParsing = new LogParsing(toLog, physical_distance);
+                            ArrayList<TestData> test_data = logParsing.getLog_values();
+
+                            for (int i = 0; i < test_data.size(); i++) {
+                                if (test_data.get(i).getData().size() > 0) {
+                                    firestore.saveTestData(test_data.get(i));
+                                }
+                            }
+                            Log.d(TESTING_ACTIVITY_LOG, "Collected data stored");
                         }
+
 
                         tv.append(toLog);
                         ScrollView sv = (ScrollView) findViewById(R.id.scrollview);
                         sv.fullScroll(ScrollView.FOCUS_DOWN);
                         Log.d(TESTING_ACTIVITY_LOG, toLog);
+
+
 
                     }
 
@@ -676,13 +684,52 @@ public class TestingActivity extends AppCompatActivity {
     }
 
     /*
-    NOT USED ANYMORE, BUT CAN BE USEFUL IF YOU WANT TO ASK FOR LOG DISPLAY INSTEAD OF PERIODICALLY RECEIVE THEM.
+    SET DISTANCE
      */
-    public void showLog(View view){
-
+    public void setDistance(View view){
         TextView tv = new TextView(TestingActivity.this);
-        showPopupWindow(tv, "The LogWindow is managed automatically by a service");
-        //service.listenToLog();
+        popupInsertDistance(tv);
+
+    }
+
+    private void popupInsertDistance(TextView location) {
+        //instantiate the popup.xml layout file
+        LayoutInflater layoutInflater = (LayoutInflater) TestingActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        //it is used to take the resources from the popup.xml file
+        View customView = layoutInflater.inflate(R.layout.popup_insert,null);
+
+
+        TextView popup_view = (TextView) customView.findViewById(R.id.popup_text);
+        popup_view.setText("Type the physical distance");
+
+        Button insertPopupBtn = (Button) customView.findViewById(R.id.insertPopupBtn);
+
+        //instantiate popup window
+        PopupWindow popupWindow = new PopupWindow(customView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        //display the popup window
+        popupWindow.showAtLocation(location, Gravity.CENTER, 0, 0);
+        popupWindow.setFocusable(true);
+        popupWindow.update();
+
+
+        //close the popup window on button click
+
+        insertPopupBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Code here executes on main thread after user presses button
+                EditText ed = customView.findViewById(R.id.insert_distance);
+                physical_distance = ed.getText().toString();
+                Log.d(TESTING_ACTIVITY_LOG, "Real distance set to: " + physical_distance);
+
+
+                popupWindow.dismiss();
+
+            }
+        });
+
+
     }
 
 

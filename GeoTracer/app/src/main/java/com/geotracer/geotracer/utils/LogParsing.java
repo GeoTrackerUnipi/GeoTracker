@@ -11,14 +11,13 @@ import java.util.HashMap;
 
 public class LogParsing {
 
-    //HashMap<String, HashValues> log_values = new HashMap<>();
-    TestData log_values = new TestData();
+    ArrayList<TestData> log_values = new ArrayList<>();
     private final String TAG = "LogParsing";
 
 
 
 
-    public LogParsing(String toBeParsed){
+    public LogParsing(String toBeParsed, String phy_distance){
 
         /*
         THIS IS THE STRING YOU GET
@@ -51,19 +50,22 @@ public class LogParsing {
                 }
             }
             if(key != null && distance_estimation != null && timestamp != null){
-                HashValues hv = new HashValues(timestamp, distance_estimation);
-                log_values.putData(key, distance_estimation);
+                TestData testData = new TestData();
+                testData.putData("KEY", key);
+                testData.putData("Estimated Distance", distance_estimation);
+                testData.putData("Physical Distance", phy_distance);
+                testData.putData("Timestamp", timestamp);
+                log_values.add(testData);
 
             }
 
         }
 
-
-        //String[] keys = log_values.getData().keySet().toArray(new String[0]);
-        String[] keys = log_values.getData().keySet().toArray(new String[0]);
-        for(int j = 0; j < keys.length; j++) {
-            //Log.d(TAG, "KEY " + keys[j] + " VALUES " + log_values.get(keys[j]));
-            Log.d(TAG, "KEY " + keys[j] + " VALUES " + log_values.getData(keys[j]));
+        for(int k = 0; k < log_values.size(); k++) {
+            String[] keys = log_values.get(k).getData().keySet().toArray(new String[0]);
+            for (int j = 0; j < keys.length; j++) {
+                Log.d(TAG, "KEY " + keys[j] + " VALUES " + log_values.get(k).getData(keys[j]));
+            }
         }
 
 
@@ -71,7 +73,7 @@ public class LogParsing {
 
     }
 
-    public TestData getLog_values(){
+    public ArrayList<TestData> getLog_values(){
         return log_values;
     }
 
