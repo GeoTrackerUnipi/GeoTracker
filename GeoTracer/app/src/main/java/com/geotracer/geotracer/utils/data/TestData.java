@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class TestData{
 
-    private final HashMap<String,String> data = new HashMap<>();
+    private final HashMap<String, String> data = new HashMap<>();
 
     //  insert a new data
     public void putData(String key, String value){

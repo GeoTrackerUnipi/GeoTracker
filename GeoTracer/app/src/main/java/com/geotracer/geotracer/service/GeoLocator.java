@@ -20,7 +20,7 @@ import com.google.firebase.firestore.GeoPoint;
 import java.util.Date;
 
 // This class used the GPS location provided offered by Android OS for collecting the user's positions in time
-class GeoLocator implements LocationListener
+public class GeoLocator implements LocationListener
 {
  /*=============================================================================================================================================*
  |                                                             ATTRIBUTES                                                                       |
@@ -58,6 +58,12 @@ class GeoLocator implements LocationListener
  /*=============================================================================================================================================*
  |                                                    PACKAGE-VISIBILITY METHODS                                                                |
  *=============================================================================================================================================*/
+
+ public GeoLocator (){
+  this.geoLocatorListener = null;
+  locationManager = null;
+  this.aggregator = new LocationAggregator();
+ }
 
  // Constructor (the android dynamic location permission check is disabled for it was already checked in the main service)
  @SuppressLint("MissingPermission")
@@ -176,6 +182,8 @@ class GeoLocator implements LocationListener
    lastLocation = location;
    addUserPosition(location);
    Log.w(TAG,"New user position collected");
+   if(geoLocatorListener!=null)
+     geoLocatorListener.onPositionReady(location);
   }
 
  // Callback function invoked by the Android OS when the GPS provider is enabled
@@ -262,8 +270,11 @@ class GeoLocator implements LocationListener
      dbResult = insertLocation(key,locToBaseLoc(lastLocation));
      if(dbResult != OpStatus.OK)
       Log.e(TAG,"Error in adding a position into the Firestorm Database: "+dbResult);
-     else
-      Log.w(TAG,"Added new device location into the firestorm database");
+     else {
+      Log.w(TAG, "Added new device location into the firestorm database");
+      if(geoLocatorListener!=null)
+         geoLocatorListener.onPositionReady(lastLocation);
+     }
     }
    else
     Log.e(TAG,"Cannot add other position, the Firestorm database service is not alive!");
@@ -273,6 +284,18 @@ class GeoLocator implements LocationListener
  // Converts a Location into a BaseLocation object (as required by the KeyValue local database)
  private BaseLocation locToBaseLoc(Location loc)
   { return new BaseLocation(new GeoPoint(loc.getLatitude(),loc.getLongitude())); }
+
+
+
+ public interface GeoLocatorListener {
+  void onPositionReady(Location location);
+ }
+
+ private static GeoLocatorListener geoLocatorListener;
+
+ public static void setGeoLocatorListener(GeoLocatorListener geolistener){
+  geoLocatorListener = geolistener;
+ }
 
 
   // FIRESTORE

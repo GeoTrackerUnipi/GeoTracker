@@ -28,26 +28,31 @@
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </expand>
-    <select>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:myBranch" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-    </select>
+    <select />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6ea0b472-2ab6-4806-a1a1-f1653b5edd79" name="Default Changelist" comment="Main Service Merging Completed (&quot;Other Positions&quot; insertion disabled)">
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/testing_linear_layouts.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/testing_linear_layouts_subsections.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/testing_sections_contents.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/testing_sections_headings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/testing_sections_headings_subsections.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/testing_sections_log.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_testing_new.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/popup_insert.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/TestingActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/TestingActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/utils/HashValues.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/utils/LogParsing.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/utils/LogParsing.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/utils/data/TestData.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/utils/data/TestData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_testing.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_testing.xml" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="MVS4C19A16008858" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[SerialNumber@GSM9X18815W02087]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -68,9 +73,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="layoutResourceFile" />
         <option value="resourceFile" />
         <option value="Class" />
+        <option value="layoutResourceFile" />
       </list>
     </option>
   </component>
@@ -107,6 +112,14 @@
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
+      <recent name="$PROJECT_DIR$/app" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.geotracer.geotracer.mainapp.heatMap" />
+      <recent name="com.geotracer.geotracer.db.remote" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/app/src/main/res" />
       <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
@@ -114,25 +127,6 @@
       <recent name="C:\Users\Riccardo\Documents\GitHub\GeoTracker\GeoTracer\app\src\main\java\com\geotracer\geotracer" />
       <recent name="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer" />
     </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.geotracer.geotracer.mainapp.heatMap" />
-      <recent name="com.geotracer.geotracer.db.remote" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/app" />
-    </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager">
     <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
@@ -143,12 +137,14 @@
       </method>
     </configuration>
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
-      <module name="app" />
+      <module name="GeoTracer.app" />
       <option name="DEPLOY" value="true" />
       <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
       <option name="DEPLOY_AS_INSTANT" value="false" />
       <option name="ARTIFACT_NAME" value="" />
       <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
       <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="" />
       <option name="MODE" value="default_activity" />
@@ -184,17 +180,22 @@
       </Native>
       <Profilers>
         <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
         <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
         <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
       </Profilers>
       <option name="DEEP_LINK" value="" />
       <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
       <method v="2">
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
   </component>
-  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -409,7 +410,28 @@
       <option name="project" value="LOCAL" />
       <updated>1621327975411</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="Main Service Merging Completed (&quot;Other Positions&quot; insertion disabled)">
+      <created>1621371329963</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1621371329963</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Log parsing and insert into database of &lt;key, distance&gt; values.">
+      <created>1621409149040</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1621409149040</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Fix a bug in a tag name">
+      <created>1621409842601</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1621409842601</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -429,18 +451,14 @@
                   </entry>
                 </map>
               </option>
-              <option name="COLUMN_ORDER" />
             </State>
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Improved KeyValueManagement service&#10;     - created set of periodic Workers to clean the store&#10;     - cleaned data from expired information before be given&#10;     - add user location management&#10;     - add user bucket management&#10;     - add user signature management&#10;&#10;Created NotificationSender service&#10;     - created BoundService for its functionalities&#10;     - created connections with KeyValueManagement Service&#10;     - created listeners to manage the async requests&#10;     - created workers to send infection Notification&#10;&#10;General&#10;     - defined data passed between Riccardo and mine services&#10;     - created a set of classes to enforce the parameters sharing between services" />
-    <MESSAGE value="Optimized Keyvalue and Notification systems&#10;     - only one periodic thread istantiated for keyvalue management&#10;     - completed mechanism for notification receive" />
-    <MESSAGE value="Completed firestore management and all the interconnection between the components to generate the final behaviour" />
-    <MESSAGE value="Merged Laura and mine components into a unique consistent application" />
     <MESSAGE value="Merging projects" />
     <MESSAGE value="Commented all the files and make some bug correction" />
     <MESSAGE value="Fixed some bug." />
@@ -462,85 +480,107 @@
     <MESSAGE value="Added TAGS to LogService for showing messages into the window." />
     <MESSAGE value="added FLAG_ACTIVITY_NEW_TASK to resolve an internal error." />
     <MESSAGE value="Integration of FCM for subscribe to a topic" />
-    <option name="LAST_COMMIT_MESSAGE" value="Integration of FCM for subscribe to a topic" />
+    <MESSAGE value="Main Service Merging Completed (&quot;Other Positions&quot; insertion disabled)" />
+    <MESSAGE value="Log parsing and insert into database of &lt;key, distance&gt; values." />
+    <MESSAGE value="Fixed a bug in a tag name" />
+    <MESSAGE value="Fix a bug in a tag name" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix a bug in a tag name" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="688" y="277" width="960" height="533" key="#PSD" />
-    <state x="688" y="277" key="#PSD/0.0.2752.1109@0.0.2752.1109" />
-    <state x="480" y="293" key="#PSD/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" />
-    <state x="480" y="293" width="960" height="533" key="#PSD/0.31.1920.1049@0.31.1920.1049" />
-    <state x="768" y="264" width="384" height="590" key="#com.intellij.ide.util.MemberChooser" />
-    <state x="768" y="264" width="384" height="590" key="#com.intellij.ide.util.MemberChooser/0.31.1920.1049@0.31.1920.1049" />
-    <state x="589" y="276" key="#com.intellij.refactoring.memberPullUp.PullUpDialog" />
-    <state x="589" y="276" key="#com.intellij.refactoring.memberPullUp.PullUpDialog/0.23.1440.794@0.23.1440.794" />
-    <state x="693" y="306" width="534" height="506" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" />
-    <state x="693" y="306" width="534" height="506" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.31.1920.1049@0.31.1920.1049" />
-    <state x="100" y="123" width="1240" height="594" key="AVDManager" />
-    <state x="100" y="123" width="1240" height="594" key="AVDManager/0.23.1440.794@0.23.1440.794" />
-    <state x="308" y="180" width="824" height="472" key="AndroidCreateResourceFileDialog" />
-    <state x="308" y="180" key="AndroidCreateResourceFileDialog/0.23.1440.794@0.23.1440.794" />
-    <state x="308" y="181" width="824" height="472" key="AndroidCreateResourceFileDialog/0.23.1440.797@0.23.1440.797" />
-    <state x="308" y="182" key="AndroidCreateResourceFileDialog/0.23.1440.800@0.23.1440.800" />
-    <state x="1065" y="301" width="434" height="487" key="FileChooserDialogImpl" />
-    <state x="1065" y="301" key="FileChooserDialogImpl/0.0.2752.1109@0.0.2752.1109" />
-    <state x="743" y="316" width="434" height="487" key="FileChooserDialogImpl/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" />
-    <state width="2709" height="346" key="GridCell.Tab.0.bottom" />
-    <state width="2709" height="346" key="GridCell.Tab.0.bottom/0.0.2752.1109@0.0.2752.1109" />
-    <state width="1392" height="250" key="GridCell.Tab.0.bottom/0.23.1440.794@0.23.1440.794" />
-    <state width="1398" height="213" key="GridCell.Tab.0.bottom/0.23.1440.797@0.23.1440.797" />
-    <state width="1398" height="542" key="GridCell.Tab.0.bottom/0.23.1440.800@0.23.1440.800" />
-    <state width="1398" height="205" key="GridCell.Tab.0.bottom/0.23.1440.803@0.23.1440.803" />
-    <state width="1874" height="277" key="GridCell.Tab.0.bottom/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" />
-    <state width="1874" height="277" key="GridCell.Tab.0.bottom/0.31.1920.1049@0.31.1920.1049" />
-    <state width="2709" height="346" key="GridCell.Tab.0.center" />
-    <state width="2709" height="346" key="GridCell.Tab.0.center/0.0.2752.1109@0.0.2752.1109" />
-    <state width="1392" height="250" key="GridCell.Tab.0.center/0.23.1440.794@0.23.1440.794" />
-    <state width="1398" height="213" key="GridCell.Tab.0.center/0.23.1440.797@0.23.1440.797" />
-    <state width="1398" height="542" key="GridCell.Tab.0.center/0.23.1440.800@0.23.1440.800" />
-    <state width="1398" height="205" key="GridCell.Tab.0.center/0.23.1440.803@0.23.1440.803" />
-    <state width="1874" height="277" key="GridCell.Tab.0.center/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" />
-    <state width="1874" height="277" key="GridCell.Tab.0.center/0.31.1920.1049@0.31.1920.1049" />
-    <state width="2709" height="346" key="GridCell.Tab.0.left" />
-    <state width="2709" height="346" key="GridCell.Tab.0.left/0.0.2752.1109@0.0.2752.1109" />
-    <state width="1392" height="250" key="GridCell.Tab.0.left/0.23.1440.794@0.23.1440.794" />
-    <state width="1398" height="213" key="GridCell.Tab.0.left/0.23.1440.797@0.23.1440.797" />
-    <state width="1398" height="542" key="GridCell.Tab.0.left/0.23.1440.800@0.23.1440.800" />
-    <state width="1398" height="205" key="GridCell.Tab.0.left/0.23.1440.803@0.23.1440.803" />
-    <state width="1874" height="277" key="GridCell.Tab.0.left/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" />
-    <state width="1874" height="277" key="GridCell.Tab.0.left/0.31.1920.1049@0.31.1920.1049" />
-    <state width="2709" height="346" key="GridCell.Tab.0.right" />
-    <state width="2709" height="346" key="GridCell.Tab.0.right/0.0.2752.1109@0.0.2752.1109" />
-    <state width="1392" height="250" key="GridCell.Tab.0.right/0.23.1440.794@0.23.1440.794" />
-    <state width="1398" height="213" key="GridCell.Tab.0.right/0.23.1440.797@0.23.1440.797" />
-    <state width="1398" height="542" key="GridCell.Tab.0.right/0.23.1440.800@0.23.1440.800" />
-    <state width="1398" height="205" key="GridCell.Tab.0.right/0.23.1440.803@0.23.1440.803" />
-    <state width="1874" height="277" key="GridCell.Tab.0.right/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" />
-    <state width="1874" height="277" key="GridCell.Tab.0.right/0.31.1920.1049@0.31.1920.1049" />
-    <state width="1398" height="2" key="GridCell.Tab.1.bottom" />
-    <state width="1398" height="2" key="GridCell.Tab.1.bottom/0.23.1440.794@0.23.1440.794" />
-    <state width="1398" height="2" key="GridCell.Tab.1.bottom/0.23.1440.803@0.23.1440.803" />
-    <state width="1398" height="2" key="GridCell.Tab.1.center" />
-    <state width="1398" height="2" key="GridCell.Tab.1.center/0.23.1440.794@0.23.1440.794" />
-    <state width="1398" height="2" key="GridCell.Tab.1.center/0.23.1440.803@0.23.1440.803" />
-    <state width="1398" height="2" key="GridCell.Tab.1.left" />
-    <state width="1398" height="2" key="GridCell.Tab.1.left/0.23.1440.794@0.23.1440.794" />
-    <state width="1398" height="2" key="GridCell.Tab.1.left/0.23.1440.803@0.23.1440.803" />
-    <state width="1398" height="2" key="GridCell.Tab.1.right" />
-    <state width="1398" height="2" key="GridCell.Tab.1.right/0.23.1440.794@0.23.1440.794" />
-    <state width="1398" height="2" key="GridCell.Tab.1.right/0.23.1440.803@0.23.1440.803" />
-    <state x="416" y="222" width="810" height="531" key="Vcs.Push.Dialog.v2" />
-    <state x="416" y="222" key="Vcs.Push.Dialog.v2/0.23.1440.794@0.23.1440.794" />
-    <state x="416" y="223" key="Vcs.Push.Dialog.v2/0.23.1440.797@0.23.1440.797" />
-    <state x="416" y="224" key="Vcs.Push.Dialog.v2/0.23.1440.800@0.23.1440.800" />
-    <state x="416" y="224" key="Vcs.Push.Dialog.v2/0.23.1440.803@0.23.1440.803" />
-    <state x="555" y="294" width="810" height="531" key="Vcs.Push.Dialog.v2/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" />
-    <state x="555" y="294" width="810" height="531" key="Vcs.Push.Dialog.v2/0.31.1920.1049@0.31.1920.1049" />
-    <state x="559" y="379" width="404" height="158" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" />
-    <state x="559" y="379" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" />
-    <state x="559" y="357" width="404" height="158" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1440.794@0.23.1440.794" />
-    <state x="745" y="472" width="430" height="175" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.31.1920.1049@0.31.1920.1049" />
-    <state x="893" y="245" width="964" height="717" key="search.everywhere.popup" />
-    <state x="893" y="245" width="964" height="717" key="search.everywhere.popup/0.0.2752.1109@0.0.2752.1109" />
-    <state x="623" y="263" width="672" height="678" key="search.everywhere.popup/0.31.1920.1049@0.31.1920.1049" />
+    <state x="688" y="277" width="960" height="533" key="#PSD" timestamp="1621365499347" />
+    <state x="688" y="277" key="#PSD/0.0.2752.1109@0.0.2752.1109" timestamp="1621365499347" />
+    <state x="480" y="293" key="#PSD/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1621365499347" />
+    <state x="480" y="293" width="960" height="533" key="#PSD/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
+    <state x="193" y="82" width="1071" height="700" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1621366117438">
+      <screen x="0" y="23" width="1440" height="794" />
+    </state>
+    <state x="193" y="82" width="1071" height="700" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.794@0.23.1440.794" timestamp="1621366117438" />
+    <state x="768" y="264" width="384" height="590" key="#com.intellij.ide.util.MemberChooser" timestamp="1621365499347" />
+    <state x="768" y="264" width="384" height="590" key="#com.intellij.ide.util.MemberChooser/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
+    <state x="589" y="276" key="#com.intellij.refactoring.memberPullUp.PullUpDialog" timestamp="1621365499347" />
+    <state x="589" y="276" key="#com.intellij.refactoring.memberPullUp.PullUpDialog/0.23.1440.794@0.23.1440.794" timestamp="1621365499347" />
+    <state x="693" y="306" width="534" height="506" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1621365499347" />
+    <state x="693" y="306" width="534" height="506" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
+    <state x="100" y="123" width="1240" height="594" key="AVDManager" timestamp="1621365499347" />
+    <state x="100" y="123" width="1240" height="594" key="AVDManager/0.23.1440.794@0.23.1440.794" timestamp="1621365499347" />
+    <state x="308" y="181" width="824" height="472" key="AndroidCreateResourceFileDialog" timestamp="1621413660399">
+      <screen x="0" y="23" width="1440" height="797" />
+    </state>
+    <state x="308" y="180" key="AndroidCreateResourceFileDialog/0.23.1440.794@0.23.1440.794" timestamp="1621410059594" />
+    <state x="308" y="181" width="824" height="472" key="AndroidCreateResourceFileDialog/0.23.1440.797@0.23.1440.797" timestamp="1621413660399" />
+    <state x="308" y="182" key="AndroidCreateResourceFileDialog/0.23.1440.800@0.23.1440.800" timestamp="1621365499347" />
+    <state x="1065" y="301" width="434" height="487" key="FileChooserDialogImpl" timestamp="1621365499347" />
+    <state x="1065" y="301" key="FileChooserDialogImpl/0.0.2752.1109@0.0.2752.1109" timestamp="1621365499347" />
+    <state x="743" y="316" width="434" height="487" key="FileChooserDialogImpl/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1621365499347" />
+    <state width="1395" height="563" key="GridCell.Tab.0.bottom" timestamp="1621416324005">
+      <screen x="0" y="23" width="1440" height="797" />
+    </state>
+    <state width="2709" height="346" key="GridCell.Tab.0.bottom/0.0.2752.1109@0.0.2752.1109" timestamp="1621365499347" />
+    <state width="1375" height="110" key="GridCell.Tab.0.bottom/0.23.1440.794@0.23.1440.794" timestamp="1621409957012" />
+    <state width="1395" height="563" key="GridCell.Tab.0.bottom/0.23.1440.797@0.23.1440.797" timestamp="1621416324005" />
+    <state width="1398" height="542" key="GridCell.Tab.0.bottom/0.23.1440.800@0.23.1440.800" timestamp="1621365499347" />
+    <state width="1398" height="205" key="GridCell.Tab.0.bottom/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
+    <state width="1874" height="277" key="GridCell.Tab.0.bottom/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1621365499347" />
+    <state width="1874" height="277" key="GridCell.Tab.0.bottom/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
+    <state width="1395" height="563" key="GridCell.Tab.0.center" timestamp="1621416324004">
+      <screen x="0" y="23" width="1440" height="797" />
+    </state>
+    <state width="2709" height="346" key="GridCell.Tab.0.center/0.0.2752.1109@0.0.2752.1109" timestamp="1621365499347" />
+    <state width="1375" height="110" key="GridCell.Tab.0.center/0.23.1440.794@0.23.1440.794" timestamp="1621409957011" />
+    <state width="1395" height="563" key="GridCell.Tab.0.center/0.23.1440.797@0.23.1440.797" timestamp="1621416324004" />
+    <state width="1398" height="542" key="GridCell.Tab.0.center/0.23.1440.800@0.23.1440.800" timestamp="1621365499347" />
+    <state width="1398" height="205" key="GridCell.Tab.0.center/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
+    <state width="1874" height="277" key="GridCell.Tab.0.center/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1621365499347" />
+    <state width="1874" height="277" key="GridCell.Tab.0.center/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
+    <state width="1395" height="563" key="GridCell.Tab.0.left" timestamp="1621416324003">
+      <screen x="0" y="23" width="1440" height="797" />
+    </state>
+    <state width="2709" height="346" key="GridCell.Tab.0.left/0.0.2752.1109@0.0.2752.1109" timestamp="1621365499347" />
+    <state width="1375" height="110" key="GridCell.Tab.0.left/0.23.1440.794@0.23.1440.794" timestamp="1621409957011" />
+    <state width="1395" height="563" key="GridCell.Tab.0.left/0.23.1440.797@0.23.1440.797" timestamp="1621416324003" />
+    <state width="1398" height="542" key="GridCell.Tab.0.left/0.23.1440.800@0.23.1440.800" timestamp="1621365499347" />
+    <state width="1398" height="205" key="GridCell.Tab.0.left/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
+    <state width="1874" height="277" key="GridCell.Tab.0.left/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1621365499347" />
+    <state width="1874" height="277" key="GridCell.Tab.0.left/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
+    <state width="1395" height="563" key="GridCell.Tab.0.right" timestamp="1621416324005">
+      <screen x="0" y="23" width="1440" height="797" />
+    </state>
+    <state width="2709" height="346" key="GridCell.Tab.0.right/0.0.2752.1109@0.0.2752.1109" timestamp="1621365499347" />
+    <state width="1375" height="110" key="GridCell.Tab.0.right/0.23.1440.794@0.23.1440.794" timestamp="1621409957011" />
+    <state width="1395" height="563" key="GridCell.Tab.0.right/0.23.1440.797@0.23.1440.797" timestamp="1621416324005" />
+    <state width="1398" height="542" key="GridCell.Tab.0.right/0.23.1440.800@0.23.1440.800" timestamp="1621365499347" />
+    <state width="1398" height="205" key="GridCell.Tab.0.right/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
+    <state width="1874" height="277" key="GridCell.Tab.0.right/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1621365499347" />
+    <state width="1874" height="277" key="GridCell.Tab.0.right/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
+    <state width="1398" height="2" key="GridCell.Tab.1.bottom" timestamp="1621365499347" />
+    <state width="1398" height="2" key="GridCell.Tab.1.bottom/0.23.1440.794@0.23.1440.794" timestamp="1621365499347" />
+    <state width="1398" height="2" key="GridCell.Tab.1.bottom/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
+    <state width="1398" height="2" key="GridCell.Tab.1.center" timestamp="1621365499347" />
+    <state width="1398" height="2" key="GridCell.Tab.1.center/0.23.1440.794@0.23.1440.794" timestamp="1621365499347" />
+    <state width="1398" height="2" key="GridCell.Tab.1.center/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
+    <state width="1398" height="2" key="GridCell.Tab.1.left" timestamp="1621365499347" />
+    <state width="1398" height="2" key="GridCell.Tab.1.left/0.23.1440.794@0.23.1440.794" timestamp="1621365499347" />
+    <state width="1398" height="2" key="GridCell.Tab.1.left/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
+    <state width="1398" height="2" key="GridCell.Tab.1.right" timestamp="1621365499347" />
+    <state width="1398" height="2" key="GridCell.Tab.1.right/0.23.1440.794@0.23.1440.794" timestamp="1621365499347" />
+    <state width="1398" height="2" key="GridCell.Tab.1.right/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
+    <state x="416" y="222" width="810" height="531" key="Vcs.Push.Dialog.v2" timestamp="1621409940271">
+      <screen x="0" y="23" width="1440" height="794" />
+    </state>
+    <state x="416" y="222" key="Vcs.Push.Dialog.v2/0.23.1440.794@0.23.1440.794" timestamp="1621409940271" />
+    <state x="416" y="223" key="Vcs.Push.Dialog.v2/0.23.1440.797@0.23.1440.797" timestamp="1621365499347" />
+    <state x="416" y="224" key="Vcs.Push.Dialog.v2/0.23.1440.800@0.23.1440.800" timestamp="1621365499347" />
+    <state x="416" y="224" key="Vcs.Push.Dialog.v2/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
+    <state x="555" y="294" width="810" height="531" key="Vcs.Push.Dialog.v2/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1621365499347" />
+    <state x="555" y="294" width="810" height="531" key="Vcs.Push.Dialog.v2/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
+    <state x="559" y="357" width="404" height="158" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1621409814888">
+      <screen x="0" y="23" width="1440" height="794" />
+    </state>
+    <state x="559" y="379" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1621365499347" />
+    <state x="559" y="357" width="404" height="158" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1440.794@0.23.1440.794" timestamp="1621409814888" />
+    <state x="745" y="472" width="430" height="175" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
+    <state x="893" y="245" width="964" height="717" key="search.everywhere.popup" timestamp="1621365499347" />
+    <state x="893" y="245" width="964" height="717" key="search.everywhere.popup/0.0.2752.1109@0.0.2752.1109" timestamp="1621365499347" />
+    <state x="623" y="263" width="672" height="678" key="search.everywhere.popup/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
   </component>
 </project>

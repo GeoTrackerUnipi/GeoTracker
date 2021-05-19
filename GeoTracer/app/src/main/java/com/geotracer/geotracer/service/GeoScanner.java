@@ -127,7 +127,7 @@ public class GeoScanner
      advParser.schedule(new AdvParserTask(),0,650);
 
      isScanning = true;
-     Log.i(TAG,"Bluetooth Scanning Started");
+     Log.d(TAG,"Bluetooth Scanning Started");
      return true;
     }
   }
@@ -161,7 +161,7 @@ public class GeoScanner
      advTable.clear();
 
      isScanning = false;
-     Log.i(TAG,"Bluetooth Scanning Stopped");
+     Log.d(TAG,"Bluetooth Scanning Stopped");
      return true;
     }
   }
@@ -185,7 +185,7 @@ public class GeoScanner
    else
     {
      isProximityNotificationEnabled = true;
-     Log.i(TAG,"Proximity Warning Enabled");
+     Log.d(TAG,"Proximity Warning Enabled");
      return true;
     }
   }
@@ -201,7 +201,7 @@ public class GeoScanner
    else
     {
      isProximityNotificationEnabled = false;
-     Log.i(TAG,"Proximity Warning Disabled");
+     Log.d(TAG,"Proximity Warning Disabled");
      return true;
     }
   }
@@ -368,7 +368,7 @@ public class GeoScanner
   class AdvParserTask extends TimerTask
    {
     /* =================== Constants =================== */
-    private static final String TAG = "AdvParser Task";              // TAG used for logging purposes
+    private static final String TAG = "AdvParserTask";              // TAG used for logging purposes
 
     // Filters the RSSIs of a distance estimation window by using their median value
     private int filterRSSIMedian(List<Integer> RSSIList)
@@ -441,7 +441,7 @@ public class GeoScanner
         if(dbResult != OpStatus.OK)
          Log.e(TAG,"\"Error in adding an external signature into the keyValue Database: "+dbResult);
         else
-         Log.i(TAG,"Added external signature into the keyValue database (" + key + ")");
+         Log.d(TAG,"Added external signature into the keyValue database (" + key + ")");
        }
       else
        Log.e(TAG,"Cannot add external signature, the KeyValue database service is not alive!");
@@ -547,7 +547,10 @@ public class GeoScanner
               // Compute the contact time with the device by averaging the timestamps of the first and last advertisements in the window
               long contactTime = (samples.get(i).time + samples.get(j-1).time)/2;
 
-              Log.i(TAG,"Estimated distance from device \"" + key + "\": " + contactDistance + " (time = " +
+              /*
+              QUESTO LOG NON VA TOCCATO!!!!!!
+               */
+              Log.i("ExperimentAnalysis","Estimated distance from device \"" + key + "\": " + contactDistance + " (time = " +
                       new SimpleDateFormat("dd-MM-yyyy HH:mm:ss",Locale.getDefault()).format(new Date(contactTime)) + ")");
 
               // If this is a signature, insert it into the "Other Signatures" into the keyValue database (which takes care of redundancy checks),
@@ -583,7 +586,7 @@ public class GeoScanner
          {
           addOtherSignature(key,1000000);
           advList.addedToDB = true;
-          Log.i(TAG,"Signature \""+key+"\" added into the database as a sighting");
+          Log.d(TAG,"Signature \""+key+"\" added into the database as a sighting");
          }
 
         // If at least an outdated sample was found during the main cycle, find the index of the first sample recent enough to

@@ -3,6 +3,7 @@ package com.geotracer.geotracer.testingapp;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -13,6 +14,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.geotracer.geotracer.R;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -21,10 +24,13 @@ public class LogService extends Service {
 
     public static final String ACTION_BROADCAST = LogService.class.getName();
     private static final String TESTING_ACTIVITY_LOG = "TestingActivity";
+    private static final String LOGSERVICE = "LogService";
     private static final String GEOTRACER_SERVICE = "Geotracer Service";
     private static final String GEOTRACER_SCANNER = "GeoScanner";
     private static final String GEOTRACER_LOCATION = "GeoLocation";
     private static final String GEOTRACER_ADV = "GeoAdvertiser";
+    private static final String ADV_PARSER = "ExperimentAnalysis";
+
     // Binder given to clients
     private final IBinder binder = new LocalBinder();
 
@@ -47,7 +53,6 @@ public class LogService extends Service {
         super.onCreate();
         Log.d(this.getClass().getName(), "Service Created");
 
-
         /*
         HANDLER USED TO CALL THE listenToLog FUNCTION EVERY delay SECONDS.
          */
@@ -57,7 +62,9 @@ public class LogService extends Service {
         }, delay);
 
 
+
     }
+
 
     public void onDestroy(){
         super.onDestroy();
@@ -114,33 +121,34 @@ public class LogService extends Service {
             //clean the previous log messages.
             Runtime.getRuntime().exec("logcat -c");
 
+
             //takes only the specified tag logs.
 
             /*
             TESTING_ACTIVITY_LOG is not required to be displayed in the log_window. Can be removed afterwards
              */
-            //String cmd = "logcat -d " + TESTING_ACTIVITY_LOG + ":D" + " *:S";
 
-            String cmd = "logcat -d " +
-                    GEOTRACER_SERVICE + ":I" +
-                    GEOTRACER_SCANNER + ":E"+
-                    GEOTRACER_LOCATION + ":E" +
-                    GEOTRACER_ADV + ":E" +
-                    " *:S";
+
+            //String cmd = "logcat -d " + LOGSERVICE + ":D" + TESTING_ACTIVITY_LOG + ":D"+ " *:S";
+
+            String cmd = "logcat -d " + ADV_PARSER + ":I" + " *:S";
+
 
 
             logcat = Runtime.getRuntime().exec(cmd);
+
             BufferedReader br = new BufferedReader(new InputStreamReader(logcat.getInputStream()));
             String line;
             String separator = System.getProperty("line.separator");
+
 
             while ((line = br.readLine()) != null) {
                 i++;
                 log.append(line);
                 log.append(separator);
             }
-
-            //Log.i(TESTING_ACTIVITY_LOG, String.valueOf(i) + "VALUE " + log.toString());
+            
+            //Log.i(TESTING_ACTIVITY_LOG, String.valueOf(i) + "LOG WINDOW FOUND " + log.toString());
 
             /*
             if i == 1 it prints only a system message we don't care about
