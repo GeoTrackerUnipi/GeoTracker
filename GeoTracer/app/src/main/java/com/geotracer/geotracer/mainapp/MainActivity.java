@@ -2,6 +2,9 @@ package com.geotracer.geotracer.mainapp;
 
 import android.Manifest;
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -30,6 +33,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -97,6 +101,9 @@ public class MainActivity extends AppCompatActivity {
                         TextView contact_text = findViewById(R.id.contact_text);
                         contact_text.setText(getResources().getString(R.string.contacts));
                         ((UserStatus) MainActivity.this.getApplication()).setContacts(true);
+
+                        //notify user with a notification
+                        sendNotificationToUser();
                     }
                 },new IntentFilter(NotificationSender.ACTION_BROADCAST)
 
@@ -112,6 +119,32 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
 
         initBottomMenu();
+
+    }
+
+    private void sendNotificationToUser(){
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        String channelId = "InfectionChannel";
+
+        NotificationCompat.Builder builder = new  NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.drawable.geotracer_icon)
+                .setContentTitle(getResources().getString(R.string.titleInfectionAlarm))
+                .setContentText(getResources().getString(R.string.contacts))
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId, "Default channel", NotificationManager.IMPORTANCE_DEFAULT);
+            manager.createNotificationChannel(channel);
+        }
+
+        manager.notify(0, builder.build());
+
     }
 
     private void initBottomMenu() {
