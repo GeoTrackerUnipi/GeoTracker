@@ -59,12 +59,6 @@ public class GeoLocator implements LocationListener
  |                                                    PACKAGE-VISIBILITY METHODS                                                                |
  *=============================================================================================================================================*/
 
- public GeoLocator (){
-  this.geoLocatorListener = null;
-  locationManager = null;
-  this.aggregator = new LocationAggregator();
- }
-
  // Constructor (the android dynamic location permission check is disabled for it was already checked in the main service)
  @SuppressLint("MissingPermission")
  GeoLocator(GeotracerService geotracerService,LocationManager locationManager)
@@ -285,7 +279,9 @@ public class GeoLocator implements LocationListener
  private BaseLocation locToBaseLoc(Location loc)
   { return new BaseLocation(new GeoPoint(loc.getLatitude(),loc.getLongitude())); }
 
-
+ /*=============================================================================================================================================*
+ |                                                                Other                                                                         |
+ *=============================================================================================================================================*/
 
  public interface GeoLocatorListener {
   void onPositionReady(Location location);
