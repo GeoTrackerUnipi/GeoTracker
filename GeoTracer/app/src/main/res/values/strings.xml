@@ -59,4 +59,6 @@
     <string name="show_log">Show Log</string>
     <string name="set_distance">Set Distance</string>
 
+    <string name="titleInfectionAlarm">infection alert</string>
+
 </resources>
