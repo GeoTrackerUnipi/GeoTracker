@@ -8,6 +8,7 @@
     <item
         android:id="@+id/from_main_to_info"
         android:title="@string/menu_info_item"/>
+
     <item
         android:id="@+id/from_main_to_db"
         android:title="DB"/>

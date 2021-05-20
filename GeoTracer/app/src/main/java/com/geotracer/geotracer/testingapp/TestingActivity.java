@@ -64,10 +64,9 @@ public class TestingActivity extends AppCompatActivity {
     private FirestoreManagement firestore;
     private KeyValueManagement keyValueManagement;
     private GeotracerService geotracerMainService;
-    private GeoLocator geoLocation;
     private String physical_distance = null;
 
-    public static final String TESTING_ACTIVITY_LOG = "TestingActivityOld";
+    public static final String TESTING_ACTIVITY_LOG = "TestingActivity";
 
 
     @Override
@@ -95,8 +94,9 @@ public class TestingActivity extends AppCompatActivity {
 
                         //Log.d(TESTING_ACTIVITY_LOG, "LogService BROADCAST LISTENER");
                         String toLog = intent.getStringExtra("LogMessage");
-
+                    /*
                         if(physical_distance != null) {
+
                             LogParsing logParsing = new LogParsing(toLog, physical_distance);
                             ArrayList<TestData> test_data = logParsing.getLog_values();
 
@@ -107,7 +107,7 @@ public class TestingActivity extends AppCompatActivity {
                             }
                             Log.d(TESTING_ACTIVITY_LOG, "Collected data stored");
                         }
-
+                        */
 
                         tv.append(toLog);
                         ScrollView sv = (ScrollView) findViewById(R.id.scrollview);
@@ -1089,6 +1089,11 @@ public class TestingActivity extends AppCompatActivity {
     public void gpsStatus(View view) {
         if(geotracerMainService.isGPSEnabled()){
             String s = "GPS is Enabled";
+            Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.BOTTOM, 0, 0);
+            toast.show();
+        }else{
+            String s = "GPS is OFF";
             Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.BOTTOM, 0, 0);
             toast.show();

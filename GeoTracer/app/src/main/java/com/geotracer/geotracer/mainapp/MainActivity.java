@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                         i = new Intent(getApplicationContext(), UsageTestActivity.class);
                         startActivity(i);
                         return true;
-                    case R.id.from_main_to_topicMessagesScreen:
+                    case R.id.from_info_to_topic:
                         i = new Intent(getApplicationContext(), TopicMessagesActivity.class);
                         startActivity(i);
                         return true;
