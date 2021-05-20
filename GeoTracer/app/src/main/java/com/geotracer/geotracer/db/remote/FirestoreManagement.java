@@ -209,7 +209,6 @@ public class FirestoreManagement extends Service {
                         Log.d(TAG, "Near Location collected: " + locations.size() + " data points obtained");
                         if( firestoreCallbackListener!= null)
                             firestoreCallbackListener.onDataCollected(locations);
-                        firestoreCallbackListener = null;
                     });
             return OpStatus.OK;
 
