@@ -253,7 +253,8 @@ public class HeatMap extends Fragment implements OnMapReadyCallback {
                 @Override
                 public void onDataCollected(List<ExtLocation> location) {
                     Log.d("HeatMap", "data collected");
-                    addHeatMap(location);
+                    if( location.size() >0 )
+                        addHeatMap(location);
 
                 }
             });
