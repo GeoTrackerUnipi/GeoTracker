@@ -19,7 +19,6 @@ import com.geotracer.geotracer.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.messaging.FirebaseMessagingService;
 
 public class TopicMessagesActivity extends AppCompatActivity {
 

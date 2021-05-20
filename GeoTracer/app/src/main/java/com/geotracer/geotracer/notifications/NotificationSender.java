@@ -137,12 +137,15 @@ public class NotificationSender extends Service {
     //  the local database and send them on all the registered buckets
     public void infectionAlert(){
 
-        WorkManager
-                .getInstance(this.getBaseContext())
-                .enqueue(
-                        new OneTimeWorkRequest.Builder(InfectionAlarm.class).build()
-                );
-
+        try {
+            WorkManager
+                    .getInstance(this.getBaseContext())
+                    .enqueue(
+                            new OneTimeWorkRequest.Builder(InfectionAlarm.class).build()
+                    );
+        }catch(RuntimeException e){
+            e.printStackTrace();
+        }
     }
 
     //  adds a new bucket to the key-value store and allocate a new listener to receive updates
@@ -191,12 +194,17 @@ public class NotificationSender extends Service {
     //           - OpStatus.OK: all the bucket correctly removed locally
     //           - OpStatus.ERROR: an error has occurred during the request management
     public OpStatus removeAllBuckets(){
-        RetStatus<List<String>> buckets = keyValueStore.buckets.getBuckets();
-        if( buckets.getStatus() != OpStatus.OK)
-            return buckets.getStatus();
+        try {
+            RetStatus<List<String>> buckets = keyValueStore.buckets.getBuckets();
+            if (buckets.getStatus() != OpStatus.OK)
+                return buckets.getStatus();
 
-        buckets.getValue().forEach(this::removeBucket);
-        return OpStatus.OK;
+            buckets.getValue().forEach(this::removeBucket);
+            return OpStatus.OK;
+        }catch(RuntimeException e){
+            e.printStackTrace();
+            return OpStatus.ERROR;
+        }
     }
 
     //  removes a single bucket and its listener
@@ -206,18 +214,23 @@ public class NotificationSender extends Service {
     //           - OpStatus.ERROR: an error has occurred during the request management
     public OpStatus removeBucket(String bucket){
 
-        if( bucket == null || bucket.length() == 0 )
-            return OpStatus.ILLEGAL_ARGUMENT;
+        try {
+            if (bucket == null || bucket.length() == 0)
+                return OpStatus.ILLEGAL_ARGUMENT;
 
-        OpStatus result = keyValueStore.buckets.removeBucket(bucket);
-        if( result == OpStatus.OK)
-            Objects.requireNonNull(listeners.get(bucket)).remove();
+            OpStatus result = keyValueStore.buckets.removeBucket(bucket);
+            if (result == OpStatus.OK)
+                Objects.requireNonNull(listeners.get(bucket)).remove();
 
-        if( listeners.containsKey(bucket)) {
-            Objects.requireNonNull(listeners.get(bucket)).remove();
-            listeners.remove(bucket);
+            if (listeners.containsKey(bucket)) {
+                Objects.requireNonNull(listeners.get(bucket)).remove();
+                listeners.remove(bucket);
+            }
+            return result;
+        }catch(RuntimeException e){
+            e.printStackTrace();
+            return OpStatus.ERROR;
         }
-        return result;
     }
 
     //  verification of the user status[Infected/Not Infected]
@@ -227,9 +240,11 @@ public class NotificationSender extends Service {
     //           - OpStatus.ERROR: an error has occurred during the request management
     public OpStatus canIbeInfected(){
 
+        try {
+            Paper.init(getBaseContext());
         //  we verify the presence of an infection alert stored on the local database
-        if(Paper.book("notification_state").contains("application_state")){
-            try {
+            if(Paper.book("notification_state").contains("application_state"))
+
                 //  if present we verify if it is expired and in the case, we remove it
                 if(Objects
                         .requireNonNull(new SimpleDateFormat("EEE MMM dd hh:mm:ss zzzz yyyy", Locale.ENGLISH)
@@ -238,11 +253,11 @@ public class NotificationSender extends Service {
                     return OpStatus.INFECTED;
                 else
                     Paper.book("notification_state").delete("application_state");
-            } catch (ParseException e) {
+        } catch (ParseException e) {
                 e.printStackTrace();
                 return OpStatus.ERROR;
-            }
         }
+
         return OpStatus.NOT_INFECTED;
     }
 
@@ -251,17 +266,18 @@ public class NotificationSender extends Service {
     //           - OpStatus.ERROR: an error has occurred during the request management
     public OpStatus forceNotInfected(){
 
-        //  if a flag of infection is stored we remove it
-        if(Paper.book("notification_state").contains("application_state")){
-            try {
-                Paper.book("notification_state").delete("application_state");
-
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-                return OpStatus.ERROR;
-            }
+        try{
+            Paper.init(getBaseContext());
+            //  if a flag of infection is stored we remove it
+            if(Paper.book("notification_state").contains("application_state"))
+                    Paper.book("notification_state").delete("application_state");
+            return OpStatus.OK;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return OpStatus.ERROR;
         }
-        return OpStatus.OK;
+
+
     }
 
     //  function called after the identification of an infection. Sends a broadcast to update all
@@ -273,7 +289,7 @@ public class NotificationSender extends Service {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             calendar.add(Calendar.DAY_OF_MONTH, 14);
-
+            Paper.init(getBaseContext());
             //  if the user has stored information we update them in order to increase the expire
             if (Paper.book("notification_state").contains("application_state"))
                 Paper.book("notification_state").delete("application_state");
