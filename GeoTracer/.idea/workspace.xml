@@ -33,9 +33,19 @@
   <component name="ChangeListManager">
     <list default="true" id="6ea0b472-2ab6-4806-a1a1-f1653b5edd79" name="Default Changelist" comment="Fixed some small bugs. Problem origin not found yet.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/UsageTestActivity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/db/remote/FirestoreManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/db/remote/FirestoreManagement.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/mainapp/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/mainapp/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/info_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/info_menu.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/LogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/LogService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/TestingActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/TestingActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/utils/LogParsing.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/utils/data/TestData.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/utils/services/GeocoderManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/utils/services/GeocoderManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_testing.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_testing.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/testing_main.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/db_menu.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/main_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/main_menu.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -452,7 +462,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621518770105</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Minor fix.">
+      <created>1621523993164</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1621523993164</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -480,7 +497,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Ho commentato delle cose" />
     <MESSAGE value="Connected the positivity button" />
     <MESSAGE value="Implemented functionality and layout to show the contact with an infected people in all the activities once the notification has been received." />
     <MESSAGE value="Add saving state for SettingActivity" />
@@ -505,7 +521,8 @@
     <MESSAGE value="Layout has been modified." />
     <MESSAGE value="Some changes to the layout." />
     <MESSAGE value="Fixed some small bugs. Problem origin not found yet." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed some small bugs. Problem origin not found yet." />
+    <MESSAGE value="Minor fix." />
+    <option name="LAST_COMMIT_MESSAGE" value="Minor fix." />
   </component>
   <component name="WindowStateProjectService">
     <state x="438" y="251" key="#Notifications" timestamp="1621501105096">
@@ -527,10 +544,10 @@
     <state x="768" y="264" width="384" height="590" key="#com.intellij.ide.util.MemberChooser/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
     <state x="589" y="276" key="#com.intellij.refactoring.memberPullUp.PullUpDialog" timestamp="1621365499347" />
     <state x="589" y="276" key="#com.intellij.refactoring.memberPullUp.PullUpDialog/0.23.1440.794@0.23.1440.794" timestamp="1621365499347" />
-    <state x="693" y="306" width="534" height="506" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1621442124337">
+    <state x="693" y="306" width="534" height="506" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1621577932589">
       <screen x="0" y="23" width="1440" height="794" />
     </state>
-    <state x="693" y="306" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.23.1440.794@0.23.1440.794" timestamp="1621442124337" />
+    <state x="693" y="306" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.23.1440.794@0.23.1440.794" timestamp="1621577932589" />
     <state x="693" y="306" width="534" height="506" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
     <state x="100" y="123" width="1240" height="594" key="AVDManager" timestamp="1621365499347" />
     <state x="100" y="123" width="1240" height="594" key="AVDManager/0.23.1440.794@0.23.1440.794" timestamp="1621365499347" />
@@ -599,20 +616,24 @@
     <state width="1398" height="2" key="GridCell.Tab.1.right" timestamp="1621365499347" />
     <state width="1398" height="2" key="GridCell.Tab.1.right/0.23.1440.794@0.23.1440.794" timestamp="1621365499347" />
     <state width="1398" height="2" key="GridCell.Tab.1.right/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
-    <state x="416" y="222" width="810" height="531" key="Vcs.Push.Dialog.v2" timestamp="1621518774319">
+    <state x="298" y="170" key="IDE.errors.dialog" timestamp="1621579606212">
       <screen x="0" y="23" width="1440" height="794" />
     </state>
-    <state x="416" y="222" key="Vcs.Push.Dialog.v2/0.23.1440.794@0.23.1440.794" timestamp="1621518774319" />
+    <state x="298" y="170" key="IDE.errors.dialog/0.23.1440.794@0.23.1440.794" timestamp="1621579606212" />
+    <state x="416" y="222" width="810" height="531" key="Vcs.Push.Dialog.v2" timestamp="1621524002223">
+      <screen x="0" y="23" width="1440" height="794" />
+    </state>
+    <state x="416" y="222" key="Vcs.Push.Dialog.v2/0.23.1440.794@0.23.1440.794" timestamp="1621524002223" />
     <state x="416" y="223" key="Vcs.Push.Dialog.v2/0.23.1440.797@0.23.1440.797" timestamp="1621416438145" />
     <state x="416" y="224" key="Vcs.Push.Dialog.v2/0.23.1440.800@0.23.1440.800" timestamp="1621365499347" />
     <state x="416" y="224" key="Vcs.Push.Dialog.v2/0.23.1440.803@0.23.1440.803" timestamp="1621365499347" />
     <state x="555" y="294" width="810" height="531" key="Vcs.Push.Dialog.v2/0.31.1920.1049/1920.0.1920.1080@0.31.1920.1049" timestamp="1621365499347" />
     <state x="555" y="294" width="810" height="531" key="Vcs.Push.Dialog.v2/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
-    <state x="559" y="357" width="404" height="158" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1621435005693">
+    <state x="559" y="357" width="404" height="158" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1621577598213">
       <screen x="0" y="23" width="1440" height="794" />
     </state>
     <state x="559" y="379" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1621365499347" />
-    <state x="559" y="357" width="404" height="158" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1440.794@0.23.1440.794" timestamp="1621435005693" />
+    <state x="559" y="357" width="404" height="158" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1440.794@0.23.1440.794" timestamp="1621577598213" />
     <state x="745" y="472" width="430" height="175" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.31.1920.1049@0.31.1920.1049" timestamp="1621365499347" />
     <state x="770" y="245" width="964" height="717" key="search.everywhere.popup" timestamp="1621521897054">
       <screen x="0" y="23" width="1440" height="794" />

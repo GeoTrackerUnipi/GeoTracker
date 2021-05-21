@@ -28,7 +28,6 @@
         android:theme="@style/Theme.GeotracerApp">
         <activity android:name=".testingapp.TestingActivity"></activity>
         <activity android:name=".topicMessagesBroadcast.TopicMessagesActivity" />
-        <activity android:name=".UsageTestActivity" />
         <activity android:name=".infoapp.InfoActivity" /> <!-- GeotracerAutostart Broadcast Receiver -->
         <activity android:name=".mainapp.MainActivity">
             <intent-filter>

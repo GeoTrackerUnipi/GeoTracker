@@ -10,10 +10,6 @@
         android:title="@string/menu_info_item"/>
 
     <item
-        android:id="@+id/from_main_to_db"
-        android:title="DB"/>
-
-    <item
         android:id="@+id/from_info_to_topic"
         android:title="Topics and Subscriptions"/>
 </menu>

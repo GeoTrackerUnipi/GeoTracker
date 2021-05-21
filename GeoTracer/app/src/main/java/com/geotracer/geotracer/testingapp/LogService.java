@@ -23,13 +23,7 @@ import java.text.SimpleDateFormat;
 public class LogService extends Service {
 
     public static final String ACTION_BROADCAST = LogService.class.getName();
-    private static final String TESTING_ACTIVITY_LOG = "TestingActivityOld";
-    private static final String LOGSERVICE = "LogService";
-    private static final String GEOTRACER_SERVICE = "Geotracer Service";
-    private static final String GEOTRACER_SCANNER = "GeoScanner";
-    private static final String GEOTRACER_LOCATION = "GeoLocation";
-    private static final String GEOTRACER_ADV = "GeoAdvertiser";
-    private static final String ADV_PARSER = "ExperimentAnalysis";
+   private static final String ADV_PARSER = "ExperimentAnalysis";
 
     // Binder given to clients
     private final IBinder binder = new LocalBinder();
@@ -83,24 +77,6 @@ public class LogService extends Service {
         return binder;
     }
 
-    /*
-    METHOD USED BY CLIENT TO PRINT LOG MESSAGES PROVIDING A STRING AND A "TAG"
-     */
-
-    public void printLog(String class_name, String message){
-
-        Log.d(this.getClass().getName(), "printLog function");
-        //SHOW ONLY THE TIME
-        Timestamp ts = new Timestamp(System.currentTimeMillis());
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-
-        String log = "> [" + class_name + "]" +" [" + sdf.format(ts) + "]: " + message;
-        Intent intent = new Intent(ACTION_BROADCAST);
-        intent.putExtra("LogMessage", log);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-
-
-    }
 
     /*
     THIS FUNCTION TAKES THE SYSTEM LOGS AND PRINT THEM IN THE LOG WINDOW OF THE TESTING ACTIVITY
@@ -125,11 +101,9 @@ public class LogService extends Service {
             //takes only the specified tag logs.
 
             /*
-            TESTING_ACTIVITY_LOG is not required to be displayed in the log_window. Can be removed afterwards
+            ONLY THE ESTIMATED DISTANCE IS DISPLAYED IN THE LOG WINDOW
              */
 
-
-            //String cmd = "logcat -d " + LOGSERVICE + ":D" + TESTING_ACTIVITY_LOG + ":D"+ " *:S";
 
             String cmd = "logcat -d " + ADV_PARSER + ":I" + " *:S";
 
@@ -147,8 +121,6 @@ public class LogService extends Service {
                 log.append(line);
                 log.append(separator);
             }
-            
-            //Log.i(TESTING_ACTIVITY_LOG, String.valueOf(i) + "LOG WINDOW FOUND " + log.toString());
 
             /*
             if i == 1 it prints only a system message we don't care about

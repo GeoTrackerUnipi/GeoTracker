@@ -19,7 +19,7 @@ import java.util.List;
 /*
         This class provides static methods for manipulating locations.
         To check the logs use the string "GeocoderManager".
- */
+*/
 public class GeocoderManager {
 
     //what is the maximum distance allowed before an update between the current location and the last location registered

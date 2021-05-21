@@ -38,7 +38,6 @@ import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.geotracer.geotracer.R;
-import com.geotracer.geotracer.UsageTestActivity;
 
 import com.geotracer.geotracer.UserStatus;
 import com.geotracer.geotracer.infoapp.InfoActivity;
@@ -83,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
 
         //---------
 
+        /*
+        Broadcast listener for contact notifications
+         */
 
         LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(
                 notificationReceiver = new BroadcastReceiver() {
@@ -161,10 +163,6 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.from_main_to_info:
                         i = new Intent(getApplicationContext(), InfoActivity.class);
-                        startActivity(i);
-                        return true;
-                    case R.id.from_main_to_db:
-                        i = new Intent(getApplicationContext(), UsageTestActivity.class);
                         startActivity(i);
                         return true;
                     case R.id.from_info_to_topic:

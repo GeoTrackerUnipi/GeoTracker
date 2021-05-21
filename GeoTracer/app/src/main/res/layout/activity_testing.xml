@@ -428,29 +428,13 @@
         android:layout_marginHorizontal="15dp"
         android:layout_weight="1"
         android:backgroundTint="#FF91ACD3"
+        android:onClick="emptyLog"
         android:padding="2dp"
         android:text="@string/empty"
-        android:onClick="emptyLog"
-        app:layout_constraintTop_toTopOf="@+id/log_buttons"
-        app:layout_constraintEnd_toStartOf="@+id/setDistance"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/guideline18"/>
-
-
-    <Button
-        android:id="@+id/setDistance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="15dp"
-        android:layout_weight="1"
-        android:backgroundTint="#FF91ACD3"
-        android:paddingHorizontal="0dp"
-        android:text="@string/set_distance"
-        android:onClick="setDistance"
-        app:layout_constraintTop_toTopOf="@+id/log_buttons"
+        app:layout_constraintBottom_toTopOf="@+id/guideline18"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/clean_log"
-        app:layout_constraintBottom_toTopOf="@+id/guideline18"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/log_buttons" />
 
 
     <androidx.constraintlayout.widget.Guideline
