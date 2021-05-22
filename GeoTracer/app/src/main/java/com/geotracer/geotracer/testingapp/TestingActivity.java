@@ -1004,11 +1004,20 @@ public class TestingActivity extends AppCompatActivity {
 
     public void getPosition(View view) {
         Location location = geotracerMainService.getLastLocation();
-        String lat = String.valueOf(location.getLatitude());
-        String longitude = String.valueOf(location.getLongitude());
-        Toast toast = Toast.makeText(getApplicationContext(), "Latitude: " + lat + ", Longitude: " + longitude, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.BOTTOM, 0, 0);
-        toast.show();
+        if(location != null)
+            {
+                String lat = String.valueOf(location.getLatitude());
+                String longitude = String.valueOf(location.getLongitude());
+                Toast toast = Toast.makeText(getApplicationContext(),"Latitude: "+lat+", Longitude: "+longitude,Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.BOTTOM,0,0);
+                toast.show();
+            }
+        else
+            {
+                Toast toast = Toast.makeText(getApplicationContext(),"Unknown",Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.BOTTOM,0,0);
+                toast.show();
+            }
     }
 
     public void gpsStatus(View view) {

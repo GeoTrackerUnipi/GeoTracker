@@ -37,16 +37,16 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ea0b472-2ab6-4806-a1a1-f1653b5edd79" name="Default Changelist" comment="Last fixes. Removed unused methods and classes.">
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/service/AdvList.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/service/AdvList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/service/GeoLocator.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/service/GeoLocator.java" afterDir="false" />
+    <list default="true" id="6ea0b472-2ab6-4806-a1a1-f1653b5edd79" name="Default Changelist" comment="Aligned parameters names to the documentation, final cleanup">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/TestingActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/geotracer/geotracer/testingapp/TestingActivity.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[VirtualDevicePath@C:\Users\Riccardo\.android\avd\Pixel_4_XL_API_30.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[SerialNumber@ce011711a34434680c]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -470,7 +470,14 @@
       <option name="project" value="LOCAL" />
       <updated>1621580427474</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="Aligned parameters names to the documentation, final cleanup">
+      <created>1621679005678</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1621679005678</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -498,7 +505,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Implemented functionality and layout to show the contact with an infected people in all the activities once the notification has been received." />
     <MESSAGE value="Add saving state for SettingActivity" />
     <MESSAGE value="Read from db the initial status." />
     <MESSAGE value="Added a menu to delete something from the DB. The connections with the deleting functions still be absent." />
@@ -523,7 +529,8 @@
     <MESSAGE value="Fixed some small bugs. Problem origin not found yet." />
     <MESSAGE value="Minor fix." />
     <MESSAGE value="Last fixes. Removed unused methods and classes." />
-    <option name="LAST_COMMIT_MESSAGE" value="Last fixes. Removed unused methods and classes." />
+    <MESSAGE value="Aligned parameters names to the documentation, final cleanup" />
+    <option name="LAST_COMMIT_MESSAGE" value="Aligned parameters names to the documentation, final cleanup" />
   </component>
   <component name="WindowStateProjectService">
     <state x="438" y="251" key="#Notifications" timestamp="1621501105096">
@@ -621,9 +628,10 @@
       <screen x="0" y="23" width="1440" height="794" />
     </state>
     <state x="298" y="170" key="IDE.errors.dialog/0.23.1440.794@0.23.1440.794" timestamp="1621579606212" />
-    <state x="416" y="222" width="810" height="531" key="Vcs.Push.Dialog.v2" timestamp="1621580537417">
-      <screen x="0" y="23" width="1440" height="794" />
+    <state x="795" y="278" width="810" height="531" key="Vcs.Push.Dialog.v2" timestamp="1621679017153">
+      <screen x="0" y="0" width="2752" height="1109" />
     </state>
+    <state x="795" y="278" key="Vcs.Push.Dialog.v2/0.0.2752.1109@0.0.2752.1109" timestamp="1621679017153" />
     <state x="416" y="222" key="Vcs.Push.Dialog.v2/0.23.1440.794@0.23.1440.794" timestamp="1621580537417" />
     <state x="416" y="223" key="Vcs.Push.Dialog.v2/0.23.1440.797@0.23.1440.797" timestamp="1621416438145" />
     <state x="416" y="224" key="Vcs.Push.Dialog.v2/0.23.1440.800@0.23.1440.800" timestamp="1621365499347" />
