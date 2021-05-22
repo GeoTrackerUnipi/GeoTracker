@@ -31,8 +31,12 @@ public class GeoLocator implements LocationListener
 
  // ------------- GPS Sampling Parameters -------------
  private static final long LOC_MIN_TIME_INTERVAL = 15*1000;     // The minimum time interval for GPS readings to be reported by the OS
- private static final long LOC_MIN_DIST_CHANGE = 0;             // The minimum estimated distance of the user in meters
-                                                                // for GPS readings to be reported by the OS TODO: set to 15 meters after testing
+ private static final long LOC_MIN_DIST_CHANGE = 0;             // The minimum estimated displacement of the user in meter
+                                                                // for an updated GPS reading to be reported by the OS
+                                                                // for GPS readings to be reported by the OS
+                                                                // TODO: In the application official release these value would be
+                                                                //       set to 15 meters: here it was left disabled for an easier
+                                                                //       evaluation and testing of the service's functionalities
 
  // Other Devices Positions Accuracy Policy
  // ---------------------------------------------------

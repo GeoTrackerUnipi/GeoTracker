@@ -46,7 +46,7 @@ public class GeoScanner
  private static final long WINDOW_MAX_TIME = 10000;             // Maximum time interval for samples to be aggregated in the same window (ms)
 
  // ---------- Distance Estimation parameters ----------
- private static final int TX_POW_METER = -81;                   // The supposed RSSI at 1 meter from the transmitter
+ private static final int RSSI_REF = -81;                       // The supposed RSSI at 1 meter from the transmitter
  // to be used in the distance estimation formula
  private static final double N = 2.5;                           // The path-loss exponent to be used in the distance estimation formula
 
@@ -394,38 +394,26 @@ public class GeoScanner
       From the literature[1] the distance from a device broadcasting a bluetooth signal
       can be approximated via the following formula:
 
-                                d = 10^((txPowMeter-RSSI)/10n))
+                                d = 10^((RSSI_REF-RSSI)/10n))
 
       Where:
-        - txPowMeter: The average RSSI measured at 1 meter from the transmitting device (dBm)
+        - RESSI_REF: The average RSSI measured at 1 meter from the transmitting device (dBm)
         - RSSI: The received signal strength (or more in general, its filtered value) (dBm)
         - n: The current path loss exponent
 
-      Given the fact that the "txPowMeter" and "n" variables cannot be known a priori (even
-      if the former could be somewhat approximated by collecting the "txPowMeter" readings of
+      Given the fact that the "RSSI_REF" and "n" variables cannot be known a priori (even
+      if the former could be somewhat approximated by collecting the "RSSI_REF" readings of
       known bluetooth chipsets in a look-up table), their values have been tuned within the
       development environment using the available devices so to produce meaningful results as:
 
-        - txPowMeter = -81
+        - RSSI_REF = -81
         - n = 2.5
-
-      It should also be noted that a further approximation of such formula, referring to
-      txPowMeter measured from a Nexus 4 device[2] was also tested, even if lead in average
-      to worse distance estimates:
-
-      if (RSSI == 0)    // If RSSI == 0 the distance cannot be computed
-       return -1.0;
-      double ratio = RSSI*1.0/txPowMeter;
-      if (ratio < 1.0)
-       return Math.pow(ratio,10);
-      else
-      return (0.89976)*Math.pow(ratio,7.7095) + 0.111;
 
       References:
         [1] https://dl.acm.org/doi/10.1145/3356995.3364541
         [2] http://www.davidgyoungtech.com/2020/05/15/how-far-can-you-go */
 
-      return Math.pow(10,((double)(TX_POW_METER-RSSI)/(10*N)));
+      return Math.pow(10,((double)(RSSI_REF-RSSI)/(10*N)));
      }
 
     // Adds an external signature into the local KeyValue Database
